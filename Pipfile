@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-dsfr = "*"
+python-dotenv = "*"
+dj-database-url = "*"
+django-referrer-policy = "*"
+django-csp = "*"
+psycopg2-binary = "*"
+
+[dev-packages]
+pre-commit = "*"
+black = "*"
+ruff = "*"
+django-extensions = "*"
+django-debug-toolbar = "*"
+djlint = "*"
+ipython = "*"
+
+[requires]
+python_version = "3.12"
