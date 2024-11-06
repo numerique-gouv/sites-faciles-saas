@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-06 18:38+0100\n"
+"PO-Revision-Date: 2024-11-06 18:40+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: instances/forms.py:6
+msgid "Your email"
+msgstr "Votre email"
+
+#: instances/forms.py:7
+msgid "Instance name"
+msgstr "Nom de l’instance"
+
+#: instances/models.py:6
+msgid "name"
+msgstr "nom"
+
+#: instances/models.py:7
+msgid "slug"
+msgstr "slug"
+
+#: instances/models.py:8
+msgid "admin email"
+msgstr "email de l’admin"
+
+#: instances/models.py:9
+msgid "created at"
+msgstr "date de création"
+
+#: instances/models.py:10
+msgid "updated at"
+msgstr "date de mise à jour"
+
+#: instances/models.py:13
+msgid "instance"
+msgstr "instance"

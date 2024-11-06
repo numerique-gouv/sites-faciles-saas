@@ -49,8 +49,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "csp",
+    "widget_tweaks",
     "dsfr",
     "core",
+    "instances",
 ]
 
 # Only add these on a dev machine, outside of tests
@@ -90,6 +92,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "dsfr.context_processors.site_config",
             ],
         },
     },
@@ -155,6 +158,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# User account management
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"
 
 # CSP-related options
 SECURE_HSTS_SECONDS = 2592000

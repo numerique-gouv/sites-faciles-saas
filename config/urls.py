@@ -29,8 +29,10 @@ urlpatterns = [
             url=staticfiles_storage.url("dsfr/dist/favicon/favicon.ico")
         ),
     ),
-    path("", include("core.urls")),
+    path("instances/", include("instances.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
+    path("", include("core.urls")),
 ]
 
 # Only add this on a dev machine, outside of tests

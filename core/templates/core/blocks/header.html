@@ -5,33 +5,42 @@
 {% block brand %}
   {% translate "Home page" as home_page %}
   <a href="{{ home_url }}"
-     title="{{ home_page }} — {{ SITE_CONFIG.site_title }}">
+     title="Sites faciles - Gestion des demandes d’instances">
     <p class="fr-logo">
-      {{ SITE_CONFIG.header_brand_html|default:"république<br />française" | safe }}
+      république
+      <br />
+      française
     </p>
   </a>
 {% endblock brand %}
 
 {% block service_title %}
-  <a href="{{ home_url }}" title="Accueil — {{ SITE_CONFIG.site_title }}">
+  <a href="{{ home_url }}" title="Accueil — Sites faciles">
     <p class="fr-header__service-title">
-      {{ SITE_CONFIG.site_title|default:"Titre du site" }}
-      {% if SITE_CONFIG.beta_tag %}
-        <span class="fr-badge fr-badge--sm fr-badge--green-emeraude">BETA</span>
-      {% endif %}
+      Sites faciles
+      <span class="fr-badge fr-badge--sm fr-badge--green-emeraude">BETA</span>
     </p>
   </a>
 {% endblock service_title %}
 
-{% block header_tools %}
-{% endblock header_tools %}
-
-{# Leave burger_menu and main_menu blocks empty if the main menu is not used #}
-{# block burger_menu #}
-{# endblock burger_menu #}
-
-{# block main_menu #}
-{# endblock main_menu #}
+{% block main_menu %}
+  {% include "core/blocks/main_menu.html" %}
+{% endblock main_menu %}
 
 {% block header_search %}
 {% endblock header_search %}
+
+{% block header_tools %}
+  <li>
+    {% if user.is_authenticated %}
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button class="fr-icon-logout-box-r-line fr-btn" type="submit">
+          {% translate "Log out" %}
+        </button>
+      </form>
+    {% else %}
+      <a class="fr-icon-lock-line fr-btn" href="{% url 'login' %}">{% translate "Log in" %}</a>
+    {% endif %}
+  </li>
+{% endblock header_tools %}

@@ -10,7 +10,7 @@ checkfiles:
 
 .PHONY: messages
 messages:
-	pipenv run django-admin makemessages -l fr --ignore=manage.py
+	pipenv run django-admin makemessages -l fr --ignore=manage.py --ignore=config
 
 .PHONY: test
 test:
