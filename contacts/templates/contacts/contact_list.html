@@ -1,0 +1,83 @@
+{% extends "core/base.html" %}
+{% load i18n static dsfr_tags %}
+
+{% block content %}
+  <h1>
+    Gestion des contacts
+  </h1>
+
+  {% dsfr_django_messages %}
+
+  <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-sm">
+    <li>
+      <a href="{% url 'contacts:create' %}"
+         class="fr-btn fr-icon-add-circle-line">Créer un contact</a>
+    </li>
+  </ul>
+
+  <div class="fr-table" id="table-instances">
+    <div class="fr-table__wrapper">
+      <div class="fr-table__container">
+        <div class="fr-table__content">
+          <table id="table-md">
+            <caption>
+              Liste des contacts
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">
+                  Nom
+                </th>
+                <th scope="col">
+                  Organisation
+                </th>
+                <th scope="col">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in object_list %}
+                <tr id="table-md-row-key-1" data-row-key="1">
+                  <td id="contact-{{ entry.pk }}">
+                    {{ entry.full_name }}
+                    <br />
+                    {{ entry.email }}
+                  </td>
+                  <td>
+                    {{ entry.organization }}
+                  </td>
+                  <td>
+                    <ul class="fr-btns-group fr-btns-group--inline-md">
+                      <li>
+                        <a class="fr-btn fr-icon-edit-line"
+                           href="{% url 'contacts:update' entry.pk %}"
+                           title="Modifier le contact"
+                           aria-describedby="contact-{{ entry.pk }}">Modifier le contact</a>
+                      </li>
+                      <li>
+                        <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
+                           href="{% url 'contacts:delete' entry.pk %}"
+                           title="Supprimer le contact"
+                           aria-describedby="contact-{{ entry.pk }}">Supprimer le contact</a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">
+                    Il n’y a aucun contact actuellement.
+                  </td>
+                </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "core/blocks/pagination.html" %}
+
+{% endblock content %}

@@ -3,75 +3,75 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
+from contacts.forms import ContactForm
 from core.mixins import StaffOrAdminMixin
+from contacts.models import Contact
 from core.utils import init_context
-from instances.forms import InstanceForm
-from instances.models import Instance
 
 
-class InstanceListView(StaffOrAdminMixin, ListView):
-    model = Instance
+class ContactListView(StaffOrAdminMixin, ListView):
+    model = Contact
     paginate_by = 25
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
-        return init_context(context=context, title="Gestion des instances")
+        return init_context(context=context, title="Gestion des contacts")
 
 
-INSTANCES_LINKS = [
+CONTACTS_LINKS = [
     {
-        "title": "Instances",
+        "title": "Contacts",
         "url": reverse_lazy(
-            "instances:list",
+            "contacts:list",
         ),
     }
 ]
 
 
-class InstanceCreateView(StaffOrAdminMixin, CreateView):
-    model = Instance
-    form_class = InstanceForm
+class ContactCreateView(StaffOrAdminMixin, CreateView):
+    model = Contact
+    form_class = ContactForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return init_context(
-            context=context, title="Créer une instance", links=INSTANCES_LINKS
+            context=context, title="Créer un contact", links=CONTACTS_LINKS
         )
 
     def form_valid(self, form):
-        messages.success(self.request, "Instance créée avec succès.")
+        messages.success(self.request, "Contact créé avec succès.")
         return super().form_valid(form)
 
 
-class InstanceUpdateView(StaffOrAdminMixin, UpdateView):
-    model = Instance
-    form_class = InstanceForm
+class ContactUpdateView(StaffOrAdminMixin, UpdateView):
+    model = Contact
+    form_class = ContactForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return init_context(
             context=context,
-            title=f"Instance : {self.object.name}",
-            links=INSTANCES_LINKS,
+            title=f"{self.object.first_name} {self.object.last_name}",
+            links=CONTACTS_LINKS,
         )
 
     def form_valid(self, form):
-        messages.success(self.request, "Instance mise à jour avec succès.")
+        messages.success(self.request, "Contact modifié avec succès.")
         return super().form_valid(form)
 
 
-class InstanceDeleteView(StaffOrAdminMixin, DeleteView):
-    model = Instance
-    success_url = reverse_lazy("instances:list")
+class ContactDeleteView(StaffOrAdminMixin, DeleteView):
+    model = Contact
+    success_url = reverse_lazy("contacts:list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return init_context(
             context=context,
-            title=f"Suppression de l’instance {self.object.name}",
-            links=INSTANCES_LINKS,
+            title=f"Suppression de {self.object.first_name} {self.object.last_name}",
+            links=CONTACTS_LINKS,
         )
 
     def form_valid(self, form):
-        messages.success(self.request, "Instance supprimée.")
+        messages.success(self.request, "Contact supprimé.")
         return super().form_valid(form)

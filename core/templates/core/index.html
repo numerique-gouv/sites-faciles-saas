@@ -9,7 +9,10 @@
   {% if user.is_authenticated %}
     <ul>
       <li>
-        Créer une instance
+        <a href="{% url 'instances:list' %}">Gérer les instances de Sites faciles</a>
+      </li>
+      <li>
+        <a href="{% url 'contacts:list' %}">Gérer les contacts</a>
       </li>
     </ul>
   {% else %}

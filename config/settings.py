@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "dsfr",
     "core",
+    "contacts",
     "instances",
 ]
 
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
@@ -160,7 +162,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # User account management
-LOGIN_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "instances:index"
 LOGOUT_REDIRECT_URL = "index"
 
 # CSP-related options

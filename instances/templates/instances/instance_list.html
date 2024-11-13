@@ -1,0 +1,89 @@
+{% extends "core/base.html" %}
+{% load i18n static dsfr_tags %}
+
+{% block content %}
+  <h1>
+    Gestion des instances
+  </h1>
+
+  {% dsfr_django_messages %}
+
+  <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-sm">
+    <li>
+      <a href="{% url 'instances:create' %}"
+         class="fr-btn fr-icon-add-circle-line">Créer une instance</a>
+    </li>
+  </ul>
+
+  <div class="fr-table" id="table-instances">
+    <div class="fr-table__wrapper">
+      <div class="fr-table__container">
+        <div class="fr-table__content">
+          <table id="table-md">
+            <caption>
+              Liste des instances
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">
+                  Nom
+                </th>
+                <th scope="col">
+                  Contact
+                </th>
+                <th scope="col">
+                  Statut
+                </th>
+                <th scope="col">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in object_list %}
+                <tr id="table-md-row-key-1" data-row-key="1">
+                  <td id="instance-{{ entry.pk }}">
+                    {{ entry.name }}
+                  </td>
+                  <td>
+                    {{ entry.main_contact }}
+                  </td>
+                  <td>
+                    <p class="fr-badge fr-badge--{{ entry.status_badge.color_class }}">
+                      {{ entry.status_badge.label }}
+                    </p>
+                  </td>
+                  <td>
+                    <ul class="fr-btns-group fr-btns-group--inline-md">
+                      <li>
+                        <a class="fr-btn fr-icon-edit-line"
+                           href="{% url 'instances:update' entry.pk %}"
+                           title="Modifier l’instance"
+                           aria-describedby="instance-{{ entry.pk }}">Modifier l’instance</a>
+                      </li>
+                      <li>
+                        <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
+                           href="{% url 'instances:delete' entry.pk %}"
+                           title="Supprimer l’instance"
+                           aria-describedby="instance-{{ entry.pk }}">Supprimer l’instance</a>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td>
+                    Il n’y a aucune instance actuellement.
+                  </td>
+                </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "core/blocks/pagination.html" %}
+{% endblock content %}

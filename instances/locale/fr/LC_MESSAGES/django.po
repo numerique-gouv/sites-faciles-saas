@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-06 18:38+0100\n"
-"PO-Revision-Date: 2024-11-06 18:40+0100\n"
+"POT-Creation-Date: 2024-11-13 17:45+0100\n"
+"PO-Revision-Date: 2024-11-13 17:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -19,34 +19,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: instances/forms.py:6
-msgid "Your email"
-msgstr "Votre email"
+#: instances/constants.py:5
+msgid "Instance creation requested"
+msgstr "Création de l’instance demandée"
 
-#: instances/forms.py:7
-msgid "Instance name"
-msgstr "Nom de l’instance"
+#: instances/constants.py:9
+msgid "Scalingo app created"
+msgstr "Application Scalingo créée"
 
-#: instances/models.py:6
+#: instances/models.py:10
 msgid "name"
 msgstr "nom"
 
-#: instances/models.py:7
+#: instances/models.py:11
 msgid "slug"
 msgstr "slug"
 
-#: instances/models.py:8
-msgid "admin email"
-msgstr "email de l’admin"
+#: instances/models.py:13
+msgid "Main contact"
+msgstr "Contact principal"
 
-#: instances/models.py:9
+#: instances/models.py:16
+msgid "status"
+msgstr "statut"
+
+#: instances/models.py:19
+msgid "Scalingo application name"
+msgstr "Nom de l’application Scalingo"
+
+#: instances/models.py:20
+msgid "If empty, will default to sf-&lt;slug&gt;."
+msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
+
+#: instances/models.py:25
 msgid "created at"
 msgstr "date de création"
 
-#: instances/models.py:10
+#: instances/models.py:26
 msgid "updated at"
 msgstr "date de mise à jour"
 
-#: instances/models.py:13
+#: instances/models.py:29
 msgid "instance"
 msgstr "instance"
+
+#~ msgid "admin email"
+#~ msgstr "email de l’admin"
+
+#~ msgid "Your email"
+#~ msgstr "Votre email"

@@ -1,10 +1,10 @@
 from django.forms import ModelForm
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import Instance
+from contacts.models import Contact
 
 
-class InstanceForm(ModelForm, DsfrBaseForm):
+class ContactForm(ModelForm, DsfrBaseForm):
     class Meta:
-        model = Instance
+        model = Contact
         fields = "__all__"  # NOSONAR

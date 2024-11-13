@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% load static i18n dsfr_tags %}
+
+{% block content %}
+  <h1>
+    Supprimer le contact « {{ object.full_name }} »
+  </h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>
+      Voulez-vous vraiment supprimer le contact « {{ object.full_name }} » ?
+    </p>
+
+    <p>
+      Attention, cela supprimera toutes les instances associées à ce contact.
+    </p>
+
+    {{ form }}
+    <div class="fr-input-group fr-my-4w">
+      <button type="submit" class="fr-btn" title="Confirmer">
+        Confirmer la suppression
+      </button>
+      <a href="{% url 'contacts:list' %}"
+         class="fr-btn fr-btn--secondary"
+         title="Annuler">
+        Annuler
+      </a>
+    </div>
+  </form>
+{% endblock content %}
