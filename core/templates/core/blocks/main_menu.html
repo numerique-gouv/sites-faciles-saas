@@ -17,7 +17,11 @@
          aria-label="{{ main_menu_label }}">
       <ul class="fr-nav__list">
         <li class="fr-nav__item">
-          <a class="fr-nav__link" href="{% url 'index' %}" target="_self">Accueil</a>
+          {% url 'index' as home_url %}
+          <a class="fr-nav__link"
+             href="{{ home_url }}"
+             target="_self"
+             {% if request.path == home_url %}aria-current="true"{% endif %}>Accueil</a>
         </li>
         <li class="fr-nav__item">
           <a class="fr-nav__link"
