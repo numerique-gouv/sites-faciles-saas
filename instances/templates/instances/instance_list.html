@@ -42,30 +42,36 @@
             <tbody>
               {% for entry in object_list %}
                 <tr id="table-md-row-key-1" data-row-key="1">
-                  <td id="instance-{{ entry.pk }}">
+                  <td id="instance-{{ entry.slug }}">
                     {{ entry.name }}
                   </td>
                   <td>
                     {{ entry.main_contact }}
                   </td>
                   <td>
-                    <p class="fr-badge fr-badge--{{ entry.status_badge.color_class }}">
-                      {{ entry.status_badge.label }}
+                    <p class="fr-badge fr-badge--{{ entry.current_status.color_class }}">
+                      {{ entry.current_status.label }}
                     </p>
                   </td>
                   <td>
                     <ul class="fr-btns-group fr-btns-group--inline-md">
                       <li>
-                        <a class="fr-btn fr-icon-edit-line"
-                           href="{% url 'instances:update' entry.pk %}"
+                        <a class="fr-btn fr-icon-briefcase-line"
+                           href="{% url 'instances:detail' entry.slug %}"
+                           title="Gérer l’instance"
+                           aria-describedby="instance-{{ entry.slug }}">Gérer l’instance</a>
+                      </li>
+                      <li>
+                        <a class="fr-btn fr-icon-edit-line  fr-btn--tertiary"
+                           href="{% url 'instances:update' entry.slug %}"
                            title="Modifier l’instance"
-                           aria-describedby="instance-{{ entry.pk }}">Modifier l’instance</a>
+                           aria-describedby="instance-{{ entry.slug }}">Modifier l’instance</a>
                       </li>
                       <li>
                         <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
-                           href="{% url 'instances:delete' entry.pk %}"
+                           href="{% url 'instances:delete' entry.slug %}"
                            title="Supprimer l’instance"
-                           aria-describedby="instance-{{ entry.pk }}">Supprimer l’instance</a>
+                           aria-describedby="instance-{{ entry.slug }}">Supprimer l’instance</a>
                       </li>
                     </ul>
                   </td>

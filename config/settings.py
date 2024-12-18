@@ -162,8 +162,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # User account management
-LOGIN_REDIRECT_URL = "instances:index"
-LOGOUT_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "instances:list"
+LOGOUT_REDIRECT_URL = "core:index"
 
 # CSP-related options
 SECURE_HSTS_SECONDS = 2592000
@@ -178,3 +178,5 @@ CSP_STYLE_SRC = "'self'"
 CSP_IMG_SRC = "'self' data:"
 
 REFERRER_POLICY = "same-origin"
+
+SCALINGO_API_TOKEN = os.getenv("SCALINGO_API_TOKEN", "")
