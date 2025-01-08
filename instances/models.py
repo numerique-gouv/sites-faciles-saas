@@ -29,6 +29,9 @@ class Instance(models.Model):
         blank=True,
         unique=True,
     )
+    scalingo_db_id = models.CharField(
+        _("Scalingo database ID"), max_length=100, blank=True
+    )
     use_secnumcloud = models.BooleanField(_("Use SecNumCloud?"), default=False)  # type: ignore
 
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
@@ -92,7 +95,6 @@ class Instance(models.Model):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
 
         result = sc.app_create(app_name=str(self.scalingo_application_name))
-        print(result)
 
         if "errors" in result.keys():
             return {
@@ -117,7 +119,7 @@ class Instance(models.Model):
 
     def scalingo_app_status(self):
         """
-        Returns the status of the app in Scalingo (if the status is not REQUEST)
+        Returns the status of the app in Scalingo
         """
 
         if self.status == "REQUEST":
@@ -133,3 +135,51 @@ class Instance(models.Model):
             if status == "new":
                 return '<p class="fr-badge">Nouvelle application</p>'
             return f'<p class="fr-badge fr-badge--info">{result["app"]["status"]}</p>'
+
+    def scalingo_provision_db(self):
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_addon_provision(app_name=str(self.scalingo_application_name))
+
+        if "errors" in result.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result['errors']}</code>",
+            }
+        else:
+            self.status = "SCALINGO_DB_PROVISIONED"
+            self.scalingo_db_id = result["addon"]["id"]
+            self.save()
+
+            return {
+                "status": "success",
+                "message": "Base de donnée ajouée avec succès à l’instance Scalingo.",
+            }
+
+    def scalingo_db_status(self):
+        """
+        Returns the status of the database in Scalingo
+        """
+
+        if self.status in ["REQUEST", "SCALINGO_APP_CREATED"]:
+            return ""
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_addon_detail(
+            app_name=str(self.scalingo_application_name),
+            addon_id=str(self.scalingo_db_id),
+        )
+
+        if "error" in result.keys():
+            return f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
+        else:
+            status = result["addon"]["status"]
+            if status == "provisioning":
+                return '<p class="fr-badge">En cours de provisionnement</p>'
+            elif status == "running":
+                return '<p class="fr-badge fr-badge--success">En cours d’exécution</p>'
+            else:
+                return f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
+
+    def scalingo_set_env(self):
+        pass

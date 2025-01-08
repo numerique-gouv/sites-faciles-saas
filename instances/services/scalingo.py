@@ -3,6 +3,8 @@ from django.utils import timezone
 import requests
 import re
 
+from instances.constants import POSTGRESQL_PLAN
+
 AGENT = "Sites faciles SAAS"
 STANDARD_ENDPOINT = "api.osc-fr1.scalingo.com"
 SECNUMCLOUD_ENDPOINT = "api.osc-secnum-fr1.scalingo.com"
@@ -45,7 +47,7 @@ class Scalingo:
             self.bearer_token_time = timezone.now()
 
     ## HTTP methods
-    def delete(self, query_path: str, params: dict) -> int:
+    def delete(self, query_path: str, params: dict = {}) -> int:
         """
         Makes a DELETE query to the endpoint and returns the result
         """
@@ -114,7 +116,7 @@ class Scalingo:
 
         return response.json()
 
-    ## App-related methods
+    ## App related methods
     def apps_list(self):
         apps = self.get("apps/")
 
@@ -150,3 +152,56 @@ class Scalingo:
 
     def app_detail(self, app_name: str) -> dict:
         return self.get(f"apps/{app_name}")
+
+    ## App / addon related methods
+    def app_addon_detail(self, app_name: str, addon_id: str) -> dict:
+        return self.get(f"apps/{app_name}/addons/{addon_id}")
+
+    def app_addon_list(self, app_name: str) -> dict:
+        return self.get(f"apps/{app_name}/addons")
+
+    def app_addon_provision(self, app_name: str, plan="starter_plan") -> dict:
+        json_data = {
+            "addon": {
+                "addon_provider_id": POSTGRESQL_PLAN["provider_id"],
+                "plan_id": POSTGRESQL_PLAN[plan]["id"],
+            }
+        }
+
+        new_addon = self.post(f"apps/{app_name}/addons", json_data=json_data)
+        return new_addon
+
+    def app_addon_remove(self, app_name: str, addon_id: str) -> dict:
+        result = self.delete(f"apps/{app_name}/addons/{addon_id}")
+
+        if result == 204:
+            return {"success": "addon successfully removed"}
+        else:
+            return {"error": "error when removing addon"}
+
+    ## App / environment related methods
+    def app_variables(self, app_name: str) -> dict:
+        return self.get(f"apps/{app_name}/variables")
+
+    def app_variables_bulk_update(self, app_name: str, variables: list = []) -> dict:
+        """
+        Takes a list of dicts formatted like:
+        [
+            {
+                "name":"RAILS_ENV",
+                "value":"production"
+            },{
+                "name":"RACK_ENV",
+                "value":"production"
+            }
+        ]
+        """
+        json_data = {"variables": variables}
+        result = self.post(f"apps/{app_name}/variables", json_data=json_data)
+        return result
+
+    ## User related methods
+    def user_info(self):
+        user_data = self.get("users/self")
+
+        return user_data

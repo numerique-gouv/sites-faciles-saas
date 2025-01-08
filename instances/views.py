@@ -81,8 +81,6 @@ class InstanceActionView(StaffOrAdminMixin, UpdateView):
                 messages.success(self.request, result["message"])
             else:
                 messages.error(self.request, result["message"])
-        else:
-            print("Houston we have a problem")
 
         return super().form_valid(form)
 

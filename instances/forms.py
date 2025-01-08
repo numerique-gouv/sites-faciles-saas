@@ -28,3 +28,7 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
         action = self.cleaned_data["action"]
         if action == "scalingo_create_app":
             return self.instance.scalingo_create_app()
+        elif action == "scalingo_provision_db":
+            return self.instance.scalingo_provision_db()
+        elif action == "scalingo_set_env":
+            return self.instance.scalingo_set_env()
