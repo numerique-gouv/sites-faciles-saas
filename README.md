@@ -1,17 +1,6 @@
-# Beta x Django
+# Gestionnaire de déploiements pour Sites Faciles
 
-## Introduction
-
-Ce repo est un kit de démarrage pour vos projets en Django. Il intègre :
-
-- le [Design System de l’État](https://www.systeme-de-design.gouv.fr/) (DSFR) avec [django-dsfr](https://pypi.org/project/django-dsfr/)
-- des Content Security Policies avec django-csp
-- les paramètres pour se connecter à une base de données PostgreSQL
-- Pre-commit, pour formater votre code à chaque commit
-- une ébauche de CI pour vos tests automatiques
-- une ébauche de Makefile pour gérer les commandes fréquentes
-- Pipenv pour la gestion des dépendances
-- les modules django-extensions et django-debug-toolbar pour faciliter le développement
+Cet outil permet de déployer simplement une instance de [Sites faciles](https://github.com/numerique-gouv/sites-faciles) sur [https://dashboard.scalingo.com/](Scalingo).
 
 ## Use
 
@@ -28,6 +17,10 @@ Copier les variables d’environnement :
 cp .env.example .env
 ```
 puis modifier en le contenu pour correspondre à votre configuration.
+
+Variable `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+
+Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
 
 ### Installer l’environnement et les dépendances
 
@@ -82,3 +75,7 @@ make test
 ```bash
 pipenv run python manage.py shell_plus
 ```
+
+## Documentation tierce
+- [API Alwaysdata](https://help.alwaysdata.com/en/api/)
+- [API Scalingo](https://developers.scalingo.com/)
