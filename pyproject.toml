@@ -12,6 +12,7 @@ dependencies = [
     "django-referrer-policy>=1.0",
     "django-csp>=3.8",
     "psycopg2-binary>=2.9.10",
+    "gunicorn>=23.0.0",
 ]
 
 [dependency-groups]
