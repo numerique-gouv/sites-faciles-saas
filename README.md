@@ -36,7 +36,7 @@ pipenv install --dev
 ### Configurer la base de données
 
 Installer PostgreSQL en fonction de votre OS : https://www.postgresql.org/download/
-puis créer une base de données et configurer les paramètres correspondants dans DATABASE_URI de votre fichier .env.
+puis créer une base de données et configurer les paramètres correspondants dans DATABASE_URL de votre fichier .env.
 
 ### Remplir la base de données et collecter les fichiers statiques
 ```bash
