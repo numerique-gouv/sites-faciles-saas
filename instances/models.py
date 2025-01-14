@@ -1,3 +1,7 @@
+import csv
+
+from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -6,6 +10,74 @@ from django.utils.translation import gettext_lazy as _
 from contacts.models import Contact
 from instances.constants import STATUS_CHOICES, STATUS_DETAILED
 from instances.services.scalingo import Scalingo
+from instances.utils import decode_secrets
+
+
+class EmailConfig(models.Model):
+    """
+    Secrets are stored in an environment variable
+    """
+
+    default_from_email = models.EmailField(_("Default from"), unique=True)
+    email_host = models.CharField(
+        _("Host domain"),
+        max_length=100,
+        help_text=_("Can only contain a domain name, without the https://"),
+    )
+    email_port = models.PositiveSmallIntegerField(_("Port"), default=25)  # type: ignore
+    email_secrets_id = models.PositiveSmallIntegerField(_("Email secrets ID"))  # type: ignore
+
+    email_use_tls = models.BooleanField(_("Use TLS"), default=False)  # type: ignore
+    email_use_ssl = models.BooleanField(_("Use SSL"), default=False)  # type: ignore
+    email_timeout = models.PositiveSmallIntegerField(
+        _("Timeout delay"),
+        validators=[MinValueValidator(1), MaxValueValidator(120)],
+        default=25,  # type: ignore
+    )
+    email_ssl_keyfile = models.CharField(
+        _("SSL keyfile"),
+        max_length=500,
+        help_text=_(
+            "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
+        ),
+        blank=True,
+    )
+    email_ssl_certfile = models.CharField(
+        _("SSL certfile"),
+        max_length=500,
+        help_text=_(
+            "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
+        ),
+        blank=True,
+    )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("updated at"), auto_now=True)
+
+    class Meta:
+        verbose_name = _("instance")
+        ordering = ["default_from_email"]
+
+    def __str__(self):
+        return str(self.default_from_email)
+
+    def get_absolute_url(self):
+        return reverse("instances:emailconfig_create", kwargs={"slug": self.pk})
+
+    def get_secrets(self):
+        # Email secrets are base64 encoded to fit several configs in a single env variable
+        # due to a limit in Scalingo https://doc.scalingo.com/platform/app/environment
+        # See utils.py/encode_secrets() for encoding function
+        # Format: """1;email;password\n2;email;password"""
+
+        secrets = {}
+        secrets_raw = decode_secrets(settings.EMAIL_SECRETS)
+        secrets_csv = csv.reader(secrets_raw.splitlines(), delimiter=";")
+
+        for row in secrets_csv:
+            row_id = row[0]
+            secrets[row_id] = {"email": row[1], "password": row[2]}
+
+        return secrets[str(self.email_secrets_id)]
 
 
 class Instance(models.Model):
@@ -36,6 +108,30 @@ class Instance(models.Model):
 
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
+
+    # Env variables
+    host_url = models.CharField(
+        _("Main URL domain"),
+        max_length=100,
+        blank=True,
+        help_text=_("Can only contain a domain name without the https://"),
+    )
+    allowed_hosts = models.CharField(
+        _("All allowed domains"),
+        max_length=500,
+        blank=True,
+        help_text=_(
+            "Can only contain a list of domain names without the https://, separated by commas"
+        ),
+    )
+    email_config = models.ForeignKey(
+        EmailConfig,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name=_("Email configuration"),
+    )
+    wagtail_password_reset_enabled = models.BooleanField(_("Allow users to reset their password"), default=False)  # type: ignore
 
     class Meta:
         verbose_name = _("instance")
@@ -182,4 +278,5 @@ class Instance(models.Model):
                 return f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
 
     def scalingo_set_env(self):
+        # TO DO implement
         pass

@@ -2,7 +2,13 @@ from django import forms
 from django.forms import ModelForm
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import Instance
+from instances.models import EmailConfig, Instance
+
+
+class EmailConfigForm(ModelForm, DsfrBaseForm):
+    class Meta:
+        model = EmailConfig
+        fields = "__all__"  # NOSONAR
 
 
 class InstanceForm(ModelForm, DsfrBaseForm):

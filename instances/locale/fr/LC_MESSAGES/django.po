@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-18 17:27+0100\n"
-"PO-Revision-Date: 2024-12-18 17:29+0100\n"
+"POT-Creation-Date: 2025-01-13 17:08+0100\n"
+"PO-Revision-Date: 2025-01-13 17:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -28,56 +28,144 @@ msgid "Scalingo app created"
 msgstr "Application Scalingo créée"
 
 #: instances/constants.py:13
+msgid "Scalingo database provisioned"
+msgstr "Base de données provisionnée dans Scalingo"
+
+#: instances/constants.py:17
 msgid "Environment variables set in Scalingo"
 msgstr "Variables d’environnement créées dans Scalingo"
 
-#: instances/models.py:12
-msgid "name"
-msgstr "nom"
-
-#: instances/models.py:14
-msgid "identifiant"
-msgstr "identifiant"
-
-#: instances/models.py:15
-msgid "If empty, will be generated from the instance name."
-msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
-
 #: instances/models.py:21
-msgid "Main contact"
-msgstr "Contact principal"
+msgid "Default from"
+msgstr "Expéditeur par défaut"
 
-#: instances/models.py:24
-msgid "status"
-msgstr "statut"
+#: instances/models.py:23
+msgid "Host domain"
+msgstr "Domaine de l’hôte"
+
+#: instances/models.py:25
+msgid "Can only contain a domain name, without the https://"
+msgstr "Ne peut contenir qu’un nom de domaine, sans le https://"
 
 #: instances/models.py:27
-msgid "Scalingo application name"
-msgstr "Nom de l’application Scalingo"
+msgid "Port"
+msgstr "Port"
 
 #: instances/models.py:28
-msgid "If empty, will default to sf-&lt;slug&gt;."
-msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
+msgid "Email secrets ID"
+msgstr "Identifiant des secrets Email"
 
-#: instances/models.py:32
-msgid "Use SecNumCloud?"
-msgstr "Utiliser SecNumCloud ?"
+#: instances/models.py:30
+msgid "Use TLS"
+msgstr "Utiliser TLS"
 
-#: instances/models.py:34
+#: instances/models.py:31
+msgid "Use SSL"
+msgstr "Utiliser SSL"
+
+#: instances/models.py:33
+msgid "Timeout delay"
+msgstr "Délai d’expiration"
+
+#: instances/models.py:38
+msgid "SSL keyfile"
+msgstr "SSL keyfile"
+
+#: instances/models.py:41 instances/models.py:49
+msgid "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
+msgstr ""
+"Optionnel, peut être utilisé si EMAIL_USE_SSL ou EMAIL_USE_TLS est vrai."
+
+#: instances/models.py:46
+msgid "SSL certfile"
+msgstr "SSL certfile"
+
+#: instances/models.py:53 instances/models.py:108
 msgid "created at"
 msgstr "date de création"
 
-#: instances/models.py:35
+#: instances/models.py:54 instances/models.py:109
 msgid "updated at"
 msgstr "date de mise à jour"
 
-#: instances/models.py:38
+#: instances/models.py:57 instances/models.py:136
 msgid "instance"
 msgstr "instance"
 
-#: instances/models.py:100
+#: instances/models.py:83
+msgid "name"
+msgstr "nom"
+
+#: instances/models.py:85
+msgid "identifiant"
+msgstr "identifiant"
+
+#: instances/models.py:86
+msgid "If empty, will be generated from the instance name."
+msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
+
+#: instances/models.py:92
+msgid "Main contact"
+msgstr "Contact principal"
+
+#: instances/models.py:95
+msgid "status"
+msgstr "statut"
+
+#: instances/models.py:98
+msgid "Scalingo application name"
+msgstr "Nom de l’application Scalingo"
+
+#: instances/models.py:99
+msgid "If empty, will default to sf-&lt;slug&gt;."
+msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
+
+#: instances/models.py:104
+msgid "Scalingo database ID"
+msgstr "Identifiant base de données dans Scalingo"
+
+#: instances/models.py:106
+msgid "Use SecNumCloud?"
+msgstr "Utiliser SecNumCloud ?"
+
+#: instances/models.py:113
+msgid "Main URL domain"
+msgstr "Domaine principal"
+
+#: instances/models.py:116
+msgid "Can only contain a domain name without the https://"
+msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
+
+#: instances/models.py:119
+msgid "All allowed domains"
+msgstr "Tous les domaines autorisés"
+
+#: instances/models.py:123
+msgid ""
+"Can only contain a list of domain names without the https://, separated by "
+"commas"
+msgstr ""
+"Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
+"par des virgules"
+
+#: instances/models.py:131
+msgid "Email configuration"
+msgstr "Configuration email"
+
+#: instances/models.py:133
+msgid "Allow users to reset their password"
+msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
+
+#: instances/models.py:197 instances/models.py:241
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
+
+#: instances/templates/instances/emailconfig_detail.html:21
+msgid "Default sender domain"
+msgstr "Domaine d’envoi par défaut"
+
+#~ msgid "Email port"
+#~ msgstr "Port du serveur de messagerie"
 
 #~ msgid "slug"
 #~ msgstr "slug"

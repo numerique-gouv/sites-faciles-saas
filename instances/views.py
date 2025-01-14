@@ -6,8 +6,93 @@ from django.urls import reverse_lazy
 
 from core.mixins import StaffOrAdminMixin
 from core.utils import init_context
-from instances.forms import InstanceForm, InstanceActionForm
-from instances.models import Instance
+from instances.forms import EmailConfigForm, InstanceForm, InstanceActionForm
+from instances.models import EmailConfig, Instance
+
+
+class EmailConfigListView(StaffOrAdminMixin, ListView):
+    model = EmailConfig
+    paginate_by = 25
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        return init_context(
+            context=context, title="Gestion des configurations d’envoi de mails"
+        )
+
+
+EMAILCONFIG_LINKS = [
+    {
+        "title": "Configurations email",
+        "url": reverse_lazy(
+            "instances:emailconfig_list",
+        ),
+    }
+]
+
+
+class EmailConfigCreateView(StaffOrAdminMixin, CreateView):
+    model = EmailConfig
+    form_class = EmailConfigForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title="Créer une configuration email",
+            links=EMAILCONFIG_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, "Configuration email créée avec succès.")
+        return super().form_valid(form)
+
+
+class EmailConfigDetailView(DetailView):
+    model = EmailConfig
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=f"Configuration email {self.object.default_from_email}",
+            links=EMAILCONFIG_LINKS,
+        )
+
+
+class EmailConfigUpdateView(StaffOrAdminMixin, UpdateView):
+    model = EmailConfig
+    form_class = EmailConfigForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=f"Configuration email {self.object.default_from_email}",
+            links=EMAILCONFIG_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, "Configuration email modifiée avec succès.")
+        return super().form_valid(form)
+
+
+class EmailConfigDeleteView(StaffOrAdminMixin, DeleteView):
+    model = EmailConfig
+    success_url = reverse_lazy("instances:emailconfig_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=f"Suppression de {self.object.first_name} {self.object.last_name}",
+            links=EMAILCONFIG_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, "Configuration email supprimée.")
+        return super().form_valid(form)
 
 
 class InstanceListView(StaffOrAdminMixin, ListView):

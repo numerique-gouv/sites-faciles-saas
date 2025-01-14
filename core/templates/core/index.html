@@ -17,6 +17,9 @@
       <li>
         <a href="{% url 'contacts:list' %}">Gérer les contacts</a>
       </li>
+      <li>
+        <a href="{% url 'instances:emailconfig_list' %}">Gérer les configurations d’envoi d’emails</a>
+      </li>
     </ul>
   {% else %}
     <div role="alert" class="fr-alert fr-alert--error">
