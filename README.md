@@ -34,6 +34,9 @@ puis modifier en le contenu pour correspondre à votre configuration.
 
 Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
 
+- Optionnels:
+  - `SCALINGO_APPLICATION_PREFIX` : permet de remplacer le préfixe par défaut ajouté au nom des applications Scalingo (par défaut, "sf")
+
 ### Installer l’environnement et les dépendances
 
 ```bash

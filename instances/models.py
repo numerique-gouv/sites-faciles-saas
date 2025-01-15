@@ -1,4 +1,5 @@
 import csv
+import secrets
 
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -176,16 +177,57 @@ class Instance(models.Model):
         return f"https://dashboard.scalingo.com/apps/{self.scalingo_region}/{self.scalingo_application_name}"
 
     @property
+    def scalingo_instance_host(self) -> str:
+        return f"{self.scalingo_application_name}.{self.scalingo_region}.scalingo.io"
+
+    @property
     def scalingo_instance_url(self) -> str:
-        return f"https://{self.scalingo_application_name}.{self.scalingo_region}.scalingo.io/"
+        return f"https://{self.scalingo_instance_host}/"
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         if not self.scalingo_application_name:
-            self.scalingo_application_name = f"sf-{self.slug}"
+            self.scalingo_application_name = (
+                f"{settings.SCALINGO_APPLICATION_PREFIX}-{self.slug}"
+            )
+        if not self.host_url:
+            self.host_url = self.scalingo_instance_host
+
+        if not self.allowed_hosts:
+            self.host_url = self.scalingo_instance_host
 
         super().save(*args, **kwargs)
+
+    def generate_secret_key(self):
+        return secrets.token_hex(50)
+
+    def list_env_variables(self):
+        if self.allowed_hosts:
+            allowed_hosts = self.allowed_hosts
+        else:
+            allowed_hosts = ""
+
+        if self.host_url:
+            host_url = self.host_url
+            if not allowed_hosts:
+                allowed_hosts = self.host_url, self.scalingo_instance_host
+        else:
+            host_url = self.scalingo_instance_host
+            if not allowed_hosts:
+                allowed_hosts = self.scalingo_instance_host
+
+        env_variables = [
+            {"name": "HOST_URL", "value": host_url},
+            {"name": "ALLOWED_HOSTS", "value": allowed_hosts},
+            {
+                "name": "SECRET_KEY",
+                # "value": self.generate_secret_key()
+                "value": _("(The value will be generated automatically.)"),
+            },
+        ]
+
+        return env_variables
 
     def scalingo_create_app(self):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))

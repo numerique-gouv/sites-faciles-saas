@@ -168,6 +168,17 @@
           Avant de continuer, attendre que la base de données soit marquée « En cours d’exécution » et rafraîchir de temps en temps.
         </p>
 
+        <p>
+          Les variables d’environnement suivantes vont être définies :
+        </p>
+        <ul>
+          {% for var in object.list_env_variables %}
+            <li>
+              {{ var.name }} : {{ var.value }}
+            </li>
+          {% endfor %}
+        </ul>
+
         <form method="post" action="{% url 'instances:action' object.slug %}">
           <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
             {% csrf_token %}

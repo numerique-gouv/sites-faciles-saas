@@ -20,7 +20,6 @@ from django.contrib import admin
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views.generic import RedirectView
-from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path(
@@ -38,4 +37,6 @@ urlpatterns = [
 
 # Only add this on a dev machine, outside of tests
 if not settings.TESTING and settings.DEBUG and "localhost" in settings.HOST_URL:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
     urlpatterns += debug_toolbar_urls()
