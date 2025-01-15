@@ -162,3 +162,6 @@ cython_debug/
 
 # VS Code/Codium
 .vscode/
+
+# Projet specific
+emailconfig.txt

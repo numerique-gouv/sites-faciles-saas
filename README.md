@@ -18,19 +18,32 @@ cp .env.example .env
 ```
 puis modifier en le contenu pour correspondre à votre configuration.
 
-Variable `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+- `HOST_URL` : le nom de domaine de l’URL principale de votre site, par exemple « mon-site.osc-fr1.scalingo.io »
+- `ALLOWED_HOSTS` : le ou les domaines autorisés à accéder au site, séparés par des virgules s’il y en a plusieurs. On peut déjà entrer le domaine définitif si on le connaît, donc : « mon-site.osc-fr1.scalingo.io,mon-site.beta.gouv.fr »
+- `SECRET_KEY` : clé secrète, par exemple générée dans un terminal avec la commande « `openssl rand -hex 32` »
+- `DATABASE_URL` : pré-remplie sur Scalingo
+- `DEBUG` : True en développement, False en production
+- `HOST_PORT` : le port sur lequel tourne le site (8000 par défaut)
+- `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+- `EMAIL_SECRETS`:
+  - Créer un fichier `emailconfig.txt` avec le format suivant : """
+   1;email;password
+   2;email;password
+   """
+  - Lancer la commande `uv run python manage.py encode_email_secrets` et copier-coller le résultat
 
 Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
 
 ### Installer l’environnement et les dépendances
 
-```
-pipenv install
+```bash
+uv sync --no-dev
 ```
 
 Pour une installation de dev en local, installer aussi les dépendances devs
-```
-pipenv install --dev
+
+```bash
+uv sync
 ```
 
 ### Configurer la base de données
@@ -40,10 +53,15 @@ puis créer une base de données et configurer les paramètres correspondants da
 
 ### Remplir la base de données et collecter les fichiers statiques
 ```bash
-make update
+just update
 ```
 
 Cette commande peut être passée à chaque mise à jour.
+
+### Créer le superuser
+```bash
+just createsuperuser
+```
 
 ### Installation de pre-commit
 
@@ -58,22 +76,22 @@ pre-commit install
 Vous pouvez effectuer un premier passage sur tous les fichiers du repo avec :
 
 ```bash
-make checkstyle
+just quality
 ```
 
 ### Internationalisation
 Le dépôt est prêt pour l’[internationalisation](https://docs.djangoproject.com/en/5.0/topics/i18n/translation/).
-Taper `make messages` pour générer les chaînes à traduire, et effectuer la traduction avec un outil tel que [Poedit](https://poedit.net/).
+Taper `just makemessages` pour générer les chaînes à traduire, et effectuer la traduction avec un outil tel que [Poedit](https://poedit.net/).
 
 ### Exécuter les tests manuellement
 
 ```bash
-make test
+just test
 ```
 
 ### Accéder au shell Django avancé
 ```bash
-pipenv run python manage.py shell_plus
+just shell
 ```
 
 ## Documentation tierce

@@ -5,15 +5,15 @@ description = "Gestionnaire de déploiement pour Sites Faciles"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "django-dsfr>=2.0.0",
-    "django>=5.1.4",
-    "python-dotenv>=1.0.1",
     "dj-database-url>=2.3.0",
-    "django-referrer-policy>=1.0",
-    "django-csp>=3.8",
-    "psycopg2-binary>=2.9.10",
-    "gunicorn>=23.0.0",
     "dj-static>=0.0.6",
+    "django>=5.1.4",
+    "django-csp>=3.8",
+    "django-dsfr>=2.0.0",
+    "django-referrer-policy>=1.0",
+    "gunicorn>=23.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.1",
 ]
 
 [dependency-groups]
