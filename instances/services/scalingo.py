@@ -3,9 +3,8 @@ from django.utils import timezone
 import requests
 import re
 
-from instances.constants import POSTGRESQL_PLAN
+from instances.constants import USER_AGENT, POSTGRESQL_PLAN, REQUEST_TIMEOUT
 
-AGENT = "Sites faciles SAAS"
 STANDARD_ENDPOINT = "api.osc-fr1.scalingo.com"
 SECNUMCLOUD_ENDPOINT = "api.osc-secnum-fr1.scalingo.com"
 
@@ -16,7 +15,7 @@ class Scalingo:
             self.endpoint_url = f"https://{SECNUMCLOUD_ENDPOINT}/v1/"
         else:
             self.endpoint_url = f"https://{STANDARD_ENDPOINT}/v1/"
-        self.agent = AGENT
+        self.agent = USER_AGENT
 
         self.bearer_token = self.connect_session()
         self.bearer_token_time = timezone.now()
@@ -34,7 +33,7 @@ class Scalingo:
             "https://auth.scalingo.com/v1/tokens/exchange",
             headers=headers,
             auth=("", settings.SCALINGO_API_TOKEN),
-            timeout=(3.05, 27),
+            timeout=REQUEST_TIMEOUT,
         )
         return response.json()["token"]
 
@@ -64,7 +63,7 @@ class Scalingo:
             self.endpoint_url + query_path,
             headers=headers,
             params=params,
-            timeout=(3.05, 27),
+            timeout=REQUEST_TIMEOUT,
         )
 
         # Returns 204 No Content
@@ -84,7 +83,7 @@ class Scalingo:
         }
 
         response = requests.get(
-            self.endpoint_url + query_path, headers=headers, timeout=(3.05, 27)
+            self.endpoint_url + query_path, headers=headers, timeout=REQUEST_TIMEOUT
         )
 
         return response.json()
@@ -107,11 +106,38 @@ class Scalingo:
                 self.endpoint_url + query_path,
                 headers=headers,
                 json=json_data,
-                timeout=(3.05, 27),
+                timeout=REQUEST_TIMEOUT,
             )
         else:
             response = requests.post(
-                self.endpoint_url + query_path, headers=headers, timeout=(3.05, 27)
+                self.endpoint_url + query_path, headers=headers, timeout=REQUEST_TIMEOUT
+            )
+
+        return response.json()
+
+    def put(self, query_path: str, json_data: dict | None = None) -> dict:
+        """
+        Makes a PUT query to the endpoint and returns the result
+        """
+        self.check_session()
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "user-agent": self.agent,
+            "Authorization": f"Bearer {self.bearer_token}",
+        }
+
+        if json_data:
+            response = requests.put(
+                self.endpoint_url + query_path,
+                headers=headers,
+                json=json_data,
+                timeout=REQUEST_TIMEOUT,
+            )
+        else:
+            response = requests.put(
+                self.endpoint_url + query_path, headers=headers, timeout=REQUEST_TIMEOUT
             )
 
         return response.json()
@@ -179,9 +205,34 @@ class Scalingo:
         else:
             return {"error": "error when removing addon"}
 
+    def app_deployment_list(self, app_name: str):
+        return self.get(f"apps/{app_name}/deployments")
+
+    def app_deployment_trigger(self, app_name: str, git_ref: str, source_url: str):
+        # Deploy from a git repository
+        json_data = {
+            "deployment": {
+                "git_ref": git_ref,
+                "source_url": source_url,
+            }
+        }
+
+        return self.post(f"apps/{app_name}/deployments", json_data=json_data)
+
     ## App / environment related methods
     def app_variables(self, app_name: str) -> dict:
         return self.get(f"apps/{app_name}/variables")
+
+    def app_variables_dict(self, app_name: str) -> dict:
+        raw_variables = self.get(f"apps/{app_name}/variables")
+        variables_dict = {}
+
+        for ev in raw_variables["variables"]:
+            k = ev["name"]
+            v = ev["value"]
+            variables_dict[k] = v
+
+        return variables_dict
 
     def app_variables_bulk_update(self, app_name: str, variables: list = []) -> dict:
         """
@@ -197,7 +248,7 @@ class Scalingo:
         ]
         """
         json_data = {"variables": variables}
-        result = self.post(f"apps/{app_name}/variables", json_data=json_data)
+        result = self.put(f"apps/{app_name}/variables", json_data=json_data)
         return result
 
     ## User related methods

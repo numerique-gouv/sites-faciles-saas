@@ -185,6 +185,7 @@ class InstanceDeleteView(StaffOrAdminMixin, DeleteView):
     def form_valid(self, form):
         instance = self.get_object()
         instance.scalingo_app_delete()
+        instance.alwaysdata_subdomain_delete()
 
         messages.success(self.request, "Instance supprimée.")
         return super().form_valid(form)

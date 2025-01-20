@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import secrets
 
 from django.conf import settings
@@ -10,6 +11,11 @@ from django.utils.translation import gettext_lazy as _
 
 from contacts.models import Contact
 from instances.constants import STATUS_CHOICES, STATUS_DETAILED
+from instances.services.alwaysdata import (
+    domain_record_add,
+    domain_record_check,
+    domain_record_delete,
+)
 from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
 
@@ -107,6 +113,10 @@ class Instance(models.Model):
     )
     use_secnumcloud = models.BooleanField(_("Use SecNumCloud?"), default=False)  # type: ignore
 
+    alwaysdata_subdomain = models.CharField(
+        _("Scaleway subdomain"), max_length=100, blank=True
+    )
+
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
@@ -132,7 +142,7 @@ class Instance(models.Model):
         null=True,
         verbose_name=_("Email configuration"),
     )
-    wagtail_password_reset_enabled = models.BooleanField(_("Allow users to reset their password"), default=False)  # type: ignore
+    wagtail_password_reset_enabled = models.BooleanField(_("Allow users to reset their password"), default=True)  # type: ignore
 
     class Meta:
         verbose_name = _("instance")
@@ -195,39 +205,137 @@ class Instance(models.Model):
             self.host_url = self.scalingo_instance_host
 
         if not self.allowed_hosts:
-            self.host_url = self.scalingo_instance_host
+            self.allowed_hosts = self.scalingo_instance_host
 
         super().save(*args, **kwargs)
+
+        if self.current_status["rank"] >= 3:
+            self.scalingo_set_env()
 
     def generate_secret_key(self):
         return secrets.token_hex(50)
 
-    def list_env_variables(self):
-        if self.allowed_hosts:
-            allowed_hosts = self.allowed_hosts
-        else:
-            allowed_hosts = ""
-
-        if self.host_url:
-            host_url = self.host_url
-            if not allowed_hosts:
-                allowed_hosts = self.host_url, self.scalingo_instance_host
-        else:
-            host_url = self.scalingo_instance_host
-            if not allowed_hosts:
-                allowed_hosts = self.scalingo_instance_host
-
+    def get_env_variables(self):
         env_variables = [
-            {"name": "HOST_URL", "value": host_url},
-            {"name": "ALLOWED_HOSTS", "value": allowed_hosts},
+            {"name": "HOST_URL", "value": self.host_url},
+            {"name": "ALLOWED_HOSTS", "value": self.allowed_hosts},
+        ]
+
+        if self.email_config:
+            env_variables += [
+                {
+                    "name": "DEFAULT_FROM_EMAIL",
+                    "value": self.email_config.default_from_email,
+                },
+                {
+                    "name": "EMAIL_HOST",
+                    "value": self.email_config.email_host,
+                },
+                {
+                    "name": "EMAIL_PORT",
+                    "value": self.email_config.email_port,
+                },
+                {
+                    "name": "EMAIL_USE_TLS",
+                    "value": self.email_config.email_use_tls,
+                },
+                {
+                    "name": "EMAIL_USE_SSL",
+                    "value": self.email_config.email_use_ssl,
+                },
+                {
+                    "name": "EMAIL_TIMEOUT",
+                    "value": self.email_config.email_timeout,
+                },
+                {
+                    "name": "EMAIL_SSL_KEYFILE",
+                    "value": self.email_config.email_ssl_keyfile,
+                },
+                {
+                    "name": "EMAIL_SSL_CERTFILE",
+                    "value": self.email_config.email_ssl_certfile,
+                },
+                {
+                    "name": "WAGTAIL_PASSWORD_RESET_ENABLED",
+                    "value": self.wagtail_password_reset_enabled,
+                },
+            ]
+        else:
+            env_variables += [
+                {
+                    "name": "WAGTAIL_PASSWORD_RESET_ENABLED",
+                    "value": "False",
+                }
+            ]
+
+        return env_variables
+
+    def list_env_variables(self):
+        env_variables = self.get_env_variables()
+
+        env_variables += [
             {
                 "name": "SECRET_KEY",
-                # "value": self.generate_secret_key()
                 "value": _("(The value will be generated automatically.)"),
             },
         ]
 
-        return env_variables
+        if self.email_config:
+            env_variables += [
+                {
+                    "name": "EMAIL_HOST_USER",
+                    "value": "xxx",
+                },
+                {
+                    "name": "EMAIL_HOST_PASSWORD",
+                    "value": "xxx",
+                },
+            ]
+
+        return sorted(env_variables, key=lambda d: d["name"])
+
+    @property
+    def alwaysdata_sites_beta_host(self) -> str:
+        return f"{self.slug}.sites.beta.gouv.fr"
+
+    @property
+    def alwaysdata_sites_beta_url(self) -> str:
+        return f"https://{self.alwaysdata_sites_beta_host}/"
+
+    def alwaysdata_subdomain_delete(self):
+        if self.alwaysdata_subdomain:
+            domain_record_delete(str(self.alwaysdata_subdomain))
+
+    def alwaysdata_set_subdomain(self):
+        result = domain_record_add(
+            record_type="CNAME", name=str(self.slug), value=self.scalingo_instance_host
+        )
+
+        if "success" in result:
+            self.alwaysdata_subdomain = self.alwaysdata_sites_beta_host
+            self.host_url = self.alwaysdata_subdomain
+
+            if str(self.alwaysdata_subdomain) not in str(self.allowed_hosts):
+                self.allowed_hosts = f"{self.allowed_hosts},{self.alwaysdata_subdomain}"
+
+            self.save()
+
+    def alwaysdata_subdomain_badge(self):
+        """
+        Returns a badge showing if the subdomain exists in Alwaysdata
+        """
+
+        domain_exists = len(domain_record_check(str(self.slug)))
+        if domain_exists:
+            return {
+                "status": True,
+                "badge": '<p class="fr-badge fr-badge--success">Entrée présente dans Alwaysdata</p>',
+            }
+        else:
+            return {
+                "status": False,
+                "badge": '<p class="fr-badge fr-badge--warning">Entrée absente dans Alwaysdata</p>',
+            }
 
     def scalingo_create_app(self):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
@@ -320,5 +428,104 @@ class Instance(models.Model):
                 return f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
 
     def scalingo_set_env(self):
-        # TO DO implement
-        pass
+        env_variables = self.get_env_variables()
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+
+        current_vars = sc.app_variables_dict(
+            app_name=str(self.scalingo_application_name)
+        )
+
+        if "SECRET_KEY" not in current_vars:
+            env_variables += [
+                {"name": "SECRET_KEY", "value": self.generate_secret_key()},
+            ]
+
+        if self.email_config:
+            env_variables += [
+                {
+                    "name": "EMAIL_HOST_USER",
+                    "value": self.email_config.get_secrets()["email"],
+                },
+                {
+                    "name": "EMAIL_HOST_PASSWORD",
+                    "value": self.email_config.get_secrets()["password"],
+                },
+            ]
+
+        # Remove empty variables
+        env_variables = [{**row} for row in env_variables if row["value"]]
+
+        result = sc.app_variables_bulk_update(
+            app_name=str(self.scalingo_application_name), variables=env_variables
+        )
+
+        if "error" in result.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result['error']}</code>",
+            }
+        else:
+            # Only do it the first time
+            if self.status == "SCALINGO_DB_PROVISIONED":
+                self.status = "SCALINGO_ENV_VARS_SET"
+                self.save()
+
+            return {
+                "status": "success",
+                "message": "Variables d’environnements mises à jour avec succès dans Scalingo.",
+            }
+
+    def scalingo_deploy_code(self):
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_deployment_trigger(
+            app_name=str(self.scalingo_application_name),
+            git_ref="main",
+            source_url="https://github.com/numerique-gouv/sites-faciles/archive/main.tar.gz",
+        )
+
+        if "error" in result.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result['errors']}</code>",
+            }
+        else:
+            self.status = "SF_CODE_DEPLOYED"
+            self.save()
+
+            return {
+                "status": "success",
+                "message": "Code déployé avec succès sur l’instance Scalingo.",
+            }
+
+    def scalingo_deployment_status(self):
+        """
+        Returns the status of the app in Scalingo
+        """
+
+        if self.status == "REQUEST":
+            return ""
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_deployment_list(app_name=str(self.scalingo_application_name))
+
+        if "error" in result.keys():
+            badge = f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
+            date = _("Unknown")
+        else:
+            status = result["deployments"][0]["status"]
+            date = datetime.strptime(
+                result["deployments"][0]["created_at"], "%Y-%m-%dT%H:%M:%S.%f%z"
+            )
+            if status == "pushing":
+                badge = '<span class="fr-badge">En cours</span>'
+            elif status == "success":
+                badge = '<span class="fr-badge fr-badge--success">Réussi</span>'
+            elif status in ["build-error", "timeout-error", "crashed-error", "aborted"]:
+                badge = f'<span class="fr-badge fr-badge--error">{status}</span>'
+            else:
+                badge = f'<span>{date}</span> <span class="fr-badge fr-badge--info">{status}</span>'
+
+        return {"date": date, "badge": badge}

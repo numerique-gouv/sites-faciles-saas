@@ -18,8 +18,12 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "name",
             "slug",
             "scalingo_application_name",
-            "use_secnumcloud",
+            # "use_secnumcloud",
             "main_contact",
+            "host_url",
+            "allowed_hosts",
+            "email_config",
+            "wagtail_password_reset_enabled",
         ]
 
 
@@ -38,3 +42,5 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_provision_db()
         elif action == "scalingo_set_env":
             return self.instance.scalingo_set_env()
+        elif action == "scalingo_deploy_code":
+            return self.instance.scalingo_deploy_code()

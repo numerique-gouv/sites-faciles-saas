@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load static dsfr_tags %}
+{% load humanize static dsfr_tags %}
 
 {% block content %}
   <h1>
@@ -28,6 +28,24 @@
             </dd>
             <dt>
               <strong>
+                <span class="fr-icon-link" aria-hidden="true"></span> Sous-domaine
+              </strong>
+            </dt>
+            <dd>
+              <ul>
+                <li>
+                  Nom :
+                  <a target="_blank"
+                     rel="noopener external"
+                     href="{{ object.alwaysdata_sites_beta_url }}">{{ object.alwaysdata_sites_beta_host }}</a>
+                </li>
+                <li>
+                  État : {{ object.alwaysdata_subdomain_badge.badge|safe }}
+                </li>
+              </ul>
+            </dd>
+            <dt>
+              <strong>
                 <span class="fr-icon-server-line" aria-hidden="true"></span> Application Scalingo
               </strong>
             </dt>
@@ -52,6 +70,10 @@
                   </li>
                   <li>
                     État : {{ object.scalingo_app_status|safe }}
+                  </li>
+                  <li>
+                    Dernier déploiement: {{ object.scalingo_deployment_status.date|naturaltime }}
+                    {{ object.scalingo_deployment_status.badge|safe }}
                   </li>
                 </ul>
               {% endif %}
@@ -190,6 +212,23 @@
                       title="Définir les variables d’environnement"
                       aria-describedby="instance-{{ object.slug }}">
                 Définir les variables d’environnement
+              </button>
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SCALINGO_ENV_VARS_SET" %}
+
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_deploy_code">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              <button class="fr-btn fr-icon-checkbox-line"
+                      type="submit"
+                      title="Déployer le code source"
+                      aria-describedby="instance-{{ object.slug }}">
+                Déployer le code source
               </button>
             </li>
           </ul>
