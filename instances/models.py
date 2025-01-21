@@ -319,10 +319,26 @@ class Instance(models.Model):
                 self.allowed_hosts = f"{self.allowed_hosts},{self.alwaysdata_subdomain}"
 
             self.save()
+            return {
+                "status": "success",
+                "message": "Application Scalingo créée avec succès.",
+            }
+        elif "warning" in result:
+            return {
+                "status": "warning",
+                "message": _("Alwaysdata returned the following warning: ")
+                + f"<code>{result['warning']}</code>",
+            }
+        else:
+            return {
+                "status": "error",
+                "message": _("Alwaysdata returned the following error: ")
+                + f"<code>{result['errors']}</code>",
+            }
 
-    def alwaysdata_subdomain_badge(self):
+    def alwaysdata_subdomain_status(self):
         """
-        Returns a badge showing if the subdomain exists in Alwaysdata
+        Returns a Boolean as well as a badge showing if the subdomain exists in Alwaysdata
         """
 
         domain_exists = len(domain_record_check(str(self.slug)))
@@ -427,6 +443,27 @@ class Instance(models.Model):
             else:
                 return f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
 
+    def scalingo_env_status(self) -> dict:
+        """
+        Checks the presence of the SECRET_KEY variable as a way to verify if env variables have been set
+        """
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+
+        current_vars = sc.app_variables_dict(
+            app_name=str(self.scalingo_application_name)
+        )
+
+        if "SECRET_KEY" in current_vars:
+            return {
+                "status": True,
+                "badge": '<p class="fr-badge fr-badge--success">Variables d’environnement présentes dans Scalingo</p>',
+            }
+        else:
+            return {
+                "status": False,
+                "badge": '<p class="fr-badge fr-badge--warning">Variables d’environnement absentes dans Scalingo</p>',
+            }
+
     def scalingo_set_env(self):
         env_variables = self.get_env_variables()
 
@@ -497,7 +534,7 @@ class Instance(models.Model):
 
             return {
                 "status": "success",
-                "message": "Code déployé avec succès sur l’instance Scalingo.",
+                "message": "Déploiement lancé avec succès sur l’instance Scalingo.",
             }
 
     def scalingo_deployment_status(self):

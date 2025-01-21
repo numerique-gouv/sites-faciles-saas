@@ -164,6 +164,8 @@ class InstanceActionView(StaffOrAdminMixin, UpdateView):
 
             if result["status"] == "success":
                 messages.success(self.request, result["message"])
+            elif result["status"] == "warning":
+                messages.warning(self.request, result["message"])
             else:
                 messages.error(self.request, result["message"])
 

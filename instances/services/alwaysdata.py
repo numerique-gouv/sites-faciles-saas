@@ -57,7 +57,7 @@ def domain_record_add(record_type: str, name: str, value: str) -> dict:
     if response.status_code == 201:
         return {"success": "subdomain successfully created"}
     else:
-        return {"error": response}
+        return {"errors": response}
 
 
 def domain_record_delete(name: str) -> dict:
