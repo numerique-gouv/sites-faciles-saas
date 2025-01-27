@@ -13,4 +13,4 @@ class Command(BaseCommand):
                 self.style.SUCCESS("Operation successful:")  # type: ignore
             )
 
-            print(encode_secrets(secrets))
+            self.stdout.write(encode_secrets(secrets))

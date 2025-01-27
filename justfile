@@ -38,7 +38,7 @@ runserver:
     uv run python manage.py runserver $HOST_URL:$HOST_PORT
 
 shell:
-    uv run python manage.py shell_plus
+  uv run python manage.py {{ if env_var("DEBUG") == "True" { "shell_plus" } else { "shell" } }}
 
 test app="":
     uv run python manage.py test {{app}}

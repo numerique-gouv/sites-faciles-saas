@@ -219,6 +219,47 @@ class Scalingo:
 
         return self.post(f"apps/{app_name}/deployments", json_data=json_data)
 
+    def app_run(
+        self,
+        app_name: str,
+        command: str,
+        variables: dict = {},
+        size: str = "M",
+        is_detached: bool = True,
+    ):
+        """
+        Runs a command in a one-off container
+
+        """
+        json_data = {
+            "command": command,
+            "env": variables,
+            "size": size,
+            "detached": is_detached,
+        }
+
+        return self.post(f"apps/{app_name}/run", json_data=json_data)
+
+    ## Domain related methods
+    def app_domain_add(
+        self,
+        app_name: str,
+        domain_name: str,
+        is_canonical: bool = False,
+        is_letsencrypt_enabled: bool = True,
+    ):
+        # Add a domain name to the app
+
+        json_data = {
+            "domain": {
+                "name": domain_name,
+                "canonical": is_canonical,
+                "letsencrypt_enabled": is_letsencrypt_enabled,
+            }
+        }
+
+        return self.post(f"apps/{app_name}/domains", json_data=json_data)
+
     ## App / environment related methods
     def app_variables(self, app_name: str) -> dict:
         return self.get(f"apps/{app_name}/variables")

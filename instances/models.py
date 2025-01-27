@@ -34,8 +34,8 @@ class EmailConfig(models.Model):
     email_port = models.PositiveSmallIntegerField(_("Port"), default=25)  # type: ignore
     email_secrets_id = models.PositiveSmallIntegerField(_("Email secrets ID"))  # type: ignore
 
-    email_use_tls = models.BooleanField(_("Use TLS"), default=False)  # type: ignore
-    email_use_ssl = models.BooleanField(_("Use SSL"), default=False)  # type: ignore
+    email_use_tls = models.BooleanField(_("Use TLS"), blank=True, null=True)
+    email_use_ssl = models.BooleanField(_("Use SSL"), blank=True, null=True)
     email_timeout = models.PositiveSmallIntegerField(
         _("Timeout delay"),
         validators=[MinValueValidator(1), MaxValueValidator(120)],
@@ -68,7 +68,7 @@ class EmailConfig(models.Model):
         return str(self.default_from_email)
 
     def get_absolute_url(self):
-        return reverse("instances:emailconfig_create", kwargs={"slug": self.pk})
+        return reverse("instances:emailconfig_detail", kwargs={"pk": self.pk})
 
     def get_secrets(self):
         # Email secrets are base64 encoded to fit several configs in a single env variable
@@ -304,9 +304,9 @@ class Instance(models.Model):
 
     def alwaysdata_subdomain_delete(self):
         if self.alwaysdata_subdomain:
-            domain_record_delete(str(self.alwaysdata_subdomain))
+            return domain_record_delete(str(self.slug))
 
-    def alwaysdata_set_subdomain(self):
+    def alwaysdata_scalingo_set_subdomain(self):
         result = domain_record_add(
             record_type="CNAME", name=str(self.slug), value=self.scalingo_instance_host
         )
@@ -319,9 +319,18 @@ class Instance(models.Model):
                 self.allowed_hosts = f"{self.allowed_hosts},{self.alwaysdata_subdomain}"
 
             self.save()
+
+            sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+
+            sc.app_domain_add(
+                app_name=str(self.scalingo_application_name),
+                domain_name=self.alwaysdata_subdomain,
+                is_canonical=True,
+            )
+
             return {
                 "status": "success",
-                "message": "Application Scalingo créée avec succès.",
+                "message": _("Domain added"),
             }
         elif "warning" in result:
             return {
@@ -566,3 +575,57 @@ class Instance(models.Model):
                 badge = f'<span>{date}</span> <span class="fr-badge fr-badge--info">{status}</span>'
 
         return {"date": date, "badge": badge}
+
+    def scalingo_create_superusers(self):
+        # Not using env var as they do not seem to be read
+        command = " ".join(
+            [
+                f"DJANGO_SUPERUSER_USERNAME={self.main_contact.email}",
+                f"DJANGO_SUPERUSER_EMAIL={self.main_contact.email}",
+                "DJANGO_SUPERUSER_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 42`",
+                "python manage.py createsuperuser --noinput",
+            ]
+        )
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result_main_contact = sc.app_run(
+            app_name=str(self.scalingo_application_name),
+            command=command,
+            variables={},
+        )
+
+        sf_infra_email = settings.SF_INFRA_EMAIL
+        command = " ".join(
+            [
+                f"DJANGO_SUPERUSER_USERNAME={sf_infra_email}",
+                f"DJANGO_SUPERUSER_EMAIL={sf_infra_email}",
+                "DJANGO_SUPERUSER_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 42`",
+                "python manage.py createsuperuser --noinput",
+            ]
+        )
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result_sf_infra = sc.app_run(
+            app_name=str(self.scalingo_application_name),
+            command=command,
+            variables={},
+        )
+
+        if "error" in result_main_contact.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result_main_contact['error']}</code>",
+            }
+        if "error" in result_sf_infra.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result_sf_infra['error']}</code>",
+            }
+        else:
+
+            return {
+                "status": "success",
+                "message": f"{_('Account creation requested for users:')} {self.main_contact.email}, {sf_infra_email}.",
+            }

@@ -127,7 +127,7 @@
             <li>
               <form method="post" action="{% url 'instances:action' object.slug %}">
                 {% csrf_token %}
-                <input type="hidden" name="action" value="alwaysdata_set_subdomain">
+                <input type="hidden" name="action" value="alwaysdata_scalingo_set_subdomain">
                 <input type="hidden" name="name" value="{{ object.name }}">
                 <button class="fr-btn fr-icon-checkbox-line fr-btn--secondary"
                         type="submit"

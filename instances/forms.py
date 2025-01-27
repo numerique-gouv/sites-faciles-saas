@@ -37,13 +37,14 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
     def take_action(self):
         action = self.cleaned_data["action"]
         if action == "create_app_and_subdomain":
-            self.instance.alwaysdata_set_subdomain()
-            return self.instance.scalingo_create_app()
+            main_command = self.instance.scalingo_create_app()
+            self.instance.alwaysdata_scalingo_set_subdomain()
+            return main_command
         elif action == "scalingo_provision_db":
             return self.instance.scalingo_provision_db()
         elif action == "scalingo_set_env":
             return self.instance.scalingo_set_env()
         elif action == "scalingo_deploy_code":
             return self.instance.scalingo_deploy_code()
-        elif action == "alwaysdata_set_subdomain":
-            return self.instance.alwaysdata_set_subdomain()
+        elif action == "alwaysdata_scalingo_set_subdomain":
+            return self.instance.alwaysdata_scalingo_set_subdomain()
