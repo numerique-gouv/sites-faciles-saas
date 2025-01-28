@@ -5,7 +5,7 @@ Cet outil permet de déployer simplement une instance de [Sites faciles](https:/
 ## Use
 
 ```bash
-make runserver
+just runserver
 ```
 
 ## Installation

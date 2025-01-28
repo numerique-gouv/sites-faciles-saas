@@ -16,7 +16,7 @@ coverage app="":
     firefox htmlcov/index.html
 
 createsuperuser:
-    uv run run python manage.py createsuperuser
+    uv run python manage.py createsuperuser
 
 makemessages:
     uv run django-admin makemessages -l fr --ignore=manage.py
