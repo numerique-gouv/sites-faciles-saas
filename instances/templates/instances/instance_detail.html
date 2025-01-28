@@ -89,7 +89,7 @@
                 </strong>
               </dt>
               <dd>
-                État : {{ object.scalingo_db_status|safe }}
+                État : {{ object.scalingo_db_status.badge|safe }}
               </dd>
             {% endif %}
             <dt>
@@ -202,10 +202,6 @@
           </ul>
         </form>
       {% elif object.status == "SCALINGO_APP_CREATED" %}
-        <p>
-          Voir l’instance sur Scalingo :
-        </p>
-
         <form method="post" action="{% url 'instances:action' object.slug %}">
           <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
             {% csrf_token %}
@@ -259,11 +255,61 @@
             <input type="hidden" name="action" value="scalingo_deploy_code">
             <input type="hidden" name="name" value="{{ object.name }}">
             <li>
+              {% if object.scalingo_db_status.status == "running" %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        type="submit"
+                        title="Déployer le code source"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Déployer le code source
+                </button>
+              {% else %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        title="Base de donnée non prête, attendre"
+                        aria-describedby="instance-{{ object.slug }}"
+                        disabled>
+                  Base de donnée non prête, attendre
+                </button>
+              {% endif %}
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SF_CODE_DEPLOYED" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_load_initial_data">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              {% if object.scalingo_deployment_status.status == "success" %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        type="submit"
+                        title="Charger les données initiales"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Charger les données initiales
+                </button>
+              {% else %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        title="Déploiement non terminé, attendre"
+                        aria-describedby="instance-{{ object.slug }}"
+                        disabled>
+                  Déploiement non terminé, attendre
+                </button>
+              {% endif %}
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SF_INITIAL_DATA_DEPLOYED" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_create_superusers">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
               <button class="fr-btn fr-icon-checkbox-line"
                       type="submit"
-                      title="Déployer le code source"
+                      title="Créer les comptes administrateurs"
                       aria-describedby="instance-{{ object.slug }}">
-                Déployer le code source
+                Créer les comptes administrateurs
               </button>
             </li>
           </ul>

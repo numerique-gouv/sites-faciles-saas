@@ -31,8 +31,18 @@ STATUS_DETAILED = {
     },
     "SF_INITIAL_DATA_DEPLOYED": {
         "label": _("Sites Faciles initial data deployed"),
-        "color_class": "green-bourgeon",
+        "color_class": "blue-cumulus",
         "rank": 5,
+    },
+    "SF_SUPERUSERS_CREATED": {
+        "label": _("Superusers created"),
+        "color_class": "blue-cumulus",
+        "rank": 6,
+    },
+    "FINISHED": {
+        "label": _("Deployment complete"),
+        "color_class": "green-bourgeon",
+        "rank": 7,
     },
 }
 

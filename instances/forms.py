@@ -48,3 +48,7 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_deploy_code()
         elif action == "alwaysdata_scalingo_set_subdomain":
             return self.instance.alwaysdata_scalingo_set_subdomain()
+        elif action == "scalingo_load_initial_data":
+            return self.instance.scalingo_load_initial_data()
+        elif action == "scalingo_create_superusers":
+            return self.instance.scalingo_create_superusers()

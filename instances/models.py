@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from contacts.models import Contact
+from instances.abstract import BaseModel
 from instances.constants import STATUS_CHOICES, STATUS_DETAILED
 from instances.services.alwaysdata import (
     domain_record_add,
@@ -20,7 +21,7 @@ from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
 
 
-class EmailConfig(models.Model):
+class EmailConfig(BaseModel):
     """
     Secrets are stored in an environment variable
     """
@@ -57,11 +58,9 @@ class EmailConfig(models.Model):
         ),
         blank=True,
     )
-    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
     class Meta:
-        verbose_name = _("instance")
+        verbose_name = _("email config")
         ordering = ["default_from_email"]
 
     def __str__(self):
@@ -87,7 +86,7 @@ class EmailConfig(models.Model):
         return secrets[str(self.email_secrets_id)]
 
 
-class Instance(models.Model):
+class Instance(BaseModel):
     name = models.CharField(_("name"), max_length=100, null=False, unique=True)
     slug = models.SlugField(
         _("identifiant"),
@@ -116,9 +115,6 @@ class Instance(models.Model):
     alwaysdata_subdomain = models.CharField(
         _("Scaleway subdomain"), max_length=100, blank=True
     )
-
-    created_at = models.DateTimeField(_("created at"), auto_now_add=True)
-    updated_at = models.DateTimeField(_("updated at"), auto_now=True)
 
     # Env variables
     host_url = models.CharField(
@@ -446,11 +442,16 @@ class Instance(models.Model):
         else:
             status = result["addon"]["status"]
             if status == "provisioning":
-                return '<p class="fr-badge">En cours de provisionnement</p>'
+                badge = '<p class="fr-badge">En cours de provisionnement</p>'
             elif status == "running":
-                return '<p class="fr-badge fr-badge--success">En cours d’exécution</p>'
+                badge = '<p class="fr-badge fr-badge--success">En cours d’exécution</p>'
             else:
-                return f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
+                badge = f'<p class="fr-badge fr-badge--info">{result["addon"]["status"]}</p>'
+
+            return {
+                "status": status,
+                "badge": badge,
+            }
 
     def scalingo_env_status(self) -> dict:
         """
@@ -560,6 +561,7 @@ class Instance(models.Model):
         if "error" in result.keys():
             badge = f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
             date = _("Unknown")
+            status = "error"
         else:
             status = result["deployments"][0]["status"]
             date = datetime.strptime(
@@ -574,7 +576,28 @@ class Instance(models.Model):
             else:
                 badge = f'<span>{date}</span> <span class="fr-badge fr-badge--info">{status}</span>'
 
-        return {"date": date, "badge": badge}
+        return {"date": date, "status": status, "badge": badge}
+
+    def scalingo_load_initial_data(self):
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_run(
+            app_name=str(self.scalingo_application_name),
+            command="make first-deploy",
+            variables={},
+        )
+
+        if "error" in result.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result['error']}</code>",
+            }
+        else:
+            self.status = "SF_INITIAL_DATA_DEPLOYED"
+            return {
+                "status": "success",
+                "message": _("Initial data deployment requested"),
+            }
 
     def scalingo_create_superusers(self):
         # Not using env var as they do not seem to be read
@@ -624,7 +647,7 @@ class Instance(models.Model):
                 + f"<code>{result_sf_infra['error']}</code>",
             }
         else:
-
+            self.status = "FINISHED"
             return {
                 "status": "success",
                 "message": f"{_('Account creation requested for users:')} {self.main_contact.email}, {sf_infra_email}.",
