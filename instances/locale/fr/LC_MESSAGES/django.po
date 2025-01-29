@@ -1,0 +1,235 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-28 12:23+0100\n"
+"PO-Revision-Date: 2025-01-28 12:24+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: instances/abstract.py:6
+msgid "created at"
+msgstr "date de création"
+
+#: instances/abstract.py:7
+msgid "updated at"
+msgstr "date de mise à jour"
+
+#: instances/constants.py:8
+msgid "Instance creation requested"
+msgstr "Création de l’instance demandée"
+
+#: instances/constants.py:13
+msgid "Scalingo app created"
+msgstr "Application Scalingo créée"
+
+#: instances/constants.py:18
+msgid "Scalingo database provisioned"
+msgstr "Base de données provisionnée dans Scalingo"
+
+#: instances/constants.py:23
+msgid "Environment variables set in Scalingo"
+msgstr "Variables d’environnement créées dans Scalingo"
+
+#: instances/constants.py:28
+msgid "Sites Faciles code deployed"
+msgstr "Code de Sites Faciles déployé"
+
+#: instances/constants.py:33
+msgid "Sites Faciles initial data deployed"
+msgstr "Données initiales de Sites faciles chargées"
+
+#: instances/constants.py:38
+msgid "Superusers created"
+msgstr "Comptes administrateurs créés"
+
+#: instances/constants.py:43
+msgid "Deployment complete"
+msgstr "Déploiement terminé"
+
+#: instances/models.py:29
+#: instances/templates/instances/emailconfig_detail.html:21
+msgid "Default from"
+msgstr "Expéditeur par défaut"
+
+#: instances/models.py:31
+#: instances/templates/instances/emailconfig_detail.html:33
+msgid "Host domain"
+msgstr "Domaine de l’hôte"
+
+#: instances/models.py:33
+msgid "Can only contain a domain name, without the https://"
+msgstr "Ne peut contenir qu’un nom de domaine, sans le https://"
+
+#: instances/models.py:35
+#: instances/templates/instances/emailconfig_detail.html:43
+msgid "Port"
+msgstr "Port"
+
+#: instances/models.py:36
+#: instances/templates/instances/emailconfig_detail.html:53
+msgid "Email secrets ID"
+msgstr "Identifiant des secrets Email"
+
+#: instances/models.py:38
+#: instances/templates/instances/emailconfig_detail.html:63
+msgid "Use TLS"
+msgstr "Utiliser TLS"
+
+#: instances/models.py:39
+#: instances/templates/instances/emailconfig_detail.html:73
+msgid "Use SSL"
+msgstr "Utiliser SSL"
+
+#: instances/models.py:41
+#: instances/templates/instances/emailconfig_detail.html:83
+msgid "Timeout delay"
+msgstr "Délai d’expiration"
+
+#: instances/models.py:46
+#: instances/templates/instances/emailconfig_detail.html:93
+msgid "SSL keyfile"
+msgstr "SSL keyfile"
+
+#: instances/models.py:49 instances/models.py:57
+msgid "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
+msgstr ""
+"Optionnel, peut être utilisé si EMAIL_USE_SSL ou EMAIL_USE_TLS est vrai."
+
+#: instances/models.py:54
+#: instances/templates/instances/emailconfig_detail.html:103
+msgid "SSL certfile"
+msgstr "SSL certfile"
+
+#: instances/models.py:63
+msgid "email config"
+msgstr "configuration e-mail"
+
+#: instances/models.py:90
+msgid "name"
+msgstr "nom"
+
+#: instances/models.py:92
+msgid "identifiant"
+msgstr "identifiant"
+
+#: instances/models.py:93
+msgid "If empty, will be generated from the instance name."
+msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
+
+#: instances/models.py:99
+msgid "Main contact"
+msgstr "Contact principal"
+
+#: instances/models.py:102
+msgid "status"
+msgstr "statut"
+
+#: instances/models.py:105
+msgid "Scalingo application name"
+msgstr "Nom de l’application Scalingo"
+
+#: instances/models.py:106
+msgid "If empty, will default to sf-&lt;slug&gt;."
+msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
+
+#: instances/models.py:111
+msgid "Scalingo database ID"
+msgstr "Identifiant base de données dans Scalingo"
+
+#: instances/models.py:113
+msgid "Use SecNumCloud?"
+msgstr "Utiliser SecNumCloud ?"
+
+#: instances/models.py:116
+msgid "Scaleway subdomain"
+msgstr "Sous-domaine Scaleway"
+
+#: instances/models.py:121
+msgid "Main URL domain"
+msgstr "Domaine principal"
+
+#: instances/models.py:124
+msgid "Can only contain a domain name without the https://"
+msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
+
+#: instances/models.py:127
+msgid "All allowed domains"
+msgstr "Tous les domaines autorisés"
+
+#: instances/models.py:131
+msgid ""
+"Can only contain a list of domain names without the https://, separated by "
+"commas"
+msgstr ""
+"Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
+"par des virgules"
+
+#: instances/models.py:139
+msgid "Email configuration"
+msgstr "Configuration email"
+
+#: instances/models.py:141
+msgid "Allow users to reset their password"
+msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
+
+#: instances/models.py:144
+msgid "instance"
+msgstr "instance"
+
+#: instances/models.py:275
+msgid "(The value will be generated automatically.)"
+msgstr "(La valeur sera générée automatiquement.)"
+
+#: instances/models.py:329
+msgid "Domain added"
+msgstr "Domaine ajouté"
+
+#: instances/models.py:334
+msgid "Alwaysdata returned the following warning: "
+msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
+
+#: instances/models.py:340
+msgid "Alwaysdata returned the following error: "
+msgstr "Alwaysdata a renvoyé l’erreur suivante : "
+
+#: instances/models.py:369 instances/models.py:413 instances/models.py:513
+#: instances/models.py:538 instances/models.py:592 instances/models.py:640
+#: instances/models.py:646
+msgid "Scalingo returned the following error: "
+msgstr "Scalingo a renvoyé l’erreur suivante : "
+
+#: instances/models.py:563
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: instances/models.py:599
+msgid "Initial data deployment requested"
+msgstr "Chargement des données initiales demandé"
+
+#~ msgid "Default sender domain"
+#~ msgstr "Domaine d’envoi par défaut"
+
+#~ msgid "Email port"
+#~ msgstr "Port du serveur de messagerie"
+
+#~ msgid "slug"
+#~ msgstr "slug"
+
+#~ msgid "admin email"
+#~ msgstr "email de l’admin"
+
+#~ msgid "Your email"
+#~ msgstr "Votre email"

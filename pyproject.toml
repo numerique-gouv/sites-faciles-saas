@@ -1,5 +1,39 @@
+[project]
+name = "sites-faciles-saas"
+version = "0.2.0"
+description = "Gestionnaire de déploiement pour Sites Faciles"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dj-database-url>=2.3.0",
+    "dj-static>=0.0.6",
+    "django>=5.1.4",
+    "django-csp>=3.8",
+    "django-dsfr>=2.0.0",
+    "django-referrer-policy>=1.0",
+    "gunicorn>=23.0.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.0.1",
+    "rust-just>=1.39.0",
+]
+
+[dependency-groups]
+dev = [
+    "black>=24.10.0",
+    "django-debug-toolbar>=4.4.6",
+    "django-extensions>=3.2.3",
+    "djlint>=1.36.4",
+    "ipython>=8.31.0",
+    "pre-commit>=4.0.1",
+    "ruff>=0.9.0",
+]
+
 [tool.djlint]
 line_break_after_multiline_tag = true
 max_blank_lines = 1
 ignore = "H006"
 indent = 2
+
+[tool.pyright]
+    reportAttributeAccessIssue = false # too many false positives with Django models
+    reportIncompatibleVariableOverride = false # too many false positives with Django models

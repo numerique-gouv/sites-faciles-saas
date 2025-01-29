@@ -9,7 +9,7 @@ jobs:
   pre-commit:
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.13"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -1,0 +1,122 @@
+{% extends "core/base.html" %}
+{% load i18n static widget_tweaks dsfr_tags %}
+
+{% block content %}
+  <div class="fr-container fr-container--fluid fr-my-md-14v">
+    <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+      <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
+        <div class="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
+          <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
+            <div class="fr-col-12 fr-col-md-9 fr-col-lg-8">
+              <h1>
+                {% translate "Log in" %}
+              </h1>
+              <div>
+                <form id="login-form" method="post">
+                  <fieldset class="fr-fieldset"
+                            id="login-form-fieldset"
+                            aria-labelledby="login-form-fieldset-legend login-form-fieldset-messages">
+                    <legend class="fr-fieldset__legend" id="login-form-fieldset-legend">
+                      <h2>
+                        {% translate "Log in with your account" %}
+                      </h2>
+                    </legend>
+                    <div class="fr-fieldset__element">
+                      <p class="fr-text--sm">
+                        {% translate "Unless otherwise stated, all fields are mandatory." %}
+                      </p>
+                      <div class="fr-messages-group"
+                           id="login-form-fieldset-messages"
+                           aria-live="assertive">
+                        {% if form.errors %}
+                          <div class="fr-alert fr-alert--error fr-alert--sm">
+                            <p>
+                              {% translate "Error: Your username and password do not match, please try again." %}
+                            </p>
+                          </div>
+                        {% endif %}
+                        {% if next %}
+                          {% if user.is_authenticated %}
+                            <div class="fr-alert fr-alert--error fr-alert--sm">
+                              <p>
+                                {% translate "Error: Your account does not have access to this page. To continue, please log in with an authorized account." %}
+                              </p>
+                            </div>
+                          {% endif %}
+                        {% endif %}
+                        {% dsfr_django_messages %}
+                      </div>
+                    </div>
+                    <div class="fr-fieldset__element">
+                      {% csrf_token %}
+                      <div class="fr-input-group">
+                        <label class="fr-label" for="id_username">
+                          {% translate "Username:" %}
+                        </label>
+                        {{ form.username |add_class:"fr-input" }}
+                      </div>
+                    </div>
+                    <div class="fr-fieldset__element">
+                      <div class="fr-password">
+                        <label class="fr-label" for="id_password">
+                          {% translate "Password:" %}
+                        </label>
+                        {{ form.password |add_class:"fr-password__input fr-input" }}
+                        <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
+                          {% translate "Show password" as show_password %}
+                          <input aria-label="{{ show_password }}"
+                                 id="id_password-show"
+                                 type="checkbox"
+                                 aria-describedby="id_password-show-messages">
+                          <label class="fr-password__checkbox fr-label" for="id_password-show">
+                            {% translate "Show" %}
+                          </label>
+                          <div class="fr-messages-group"
+                               id="id_password-show-messages"
+                               aria-live="assertive">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="fr-fieldset__element">
+                      <ul class="fr-btns-group">
+                        <li>
+                          {% translate "Connect" as connect_label %}
+                          <input class="fr-btn" type="submit" value="{{ connect_label }}" />
+                        </li>
+                      </ul>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block breadcrumb %}
+  {% translate "you are here:" as you_are_here %}
+  <nav role="navigation"
+       class="fr-breadcrumb"
+       aria-label="{{ you_are_here }}">
+    <button type="button"
+            class="fr-breadcrumb__button"
+            aria-expanded="false"
+            aria-controls="breadcrumb-1">
+      {% translate "See breadcrumb" %}
+    </button>
+    <div class="fr-collapse" id="breadcrumb-1">
+      <ol class="fr-breadcrumb__list">
+        <li>
+          <a class="fr-breadcrumb__link" href="{% url 'core:index' %}">{% translate "Home page" %}</a>
+        </li>
+        <li>
+          <a class="fr-breadcrumb__link" aria-current="page">{% translate "Log in" %}</a>
+        </li>
+      </ol>
+    </div>
+  </nav>
+{% endblock breadcrumb %}

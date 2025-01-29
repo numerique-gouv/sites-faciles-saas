@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-09 15:39+0200\n"
-"PO-Revision-Date: 2024-09-09 15:40+0200\n"
+"POT-Creation-Date: 2025-01-13 17:01+0100\n"
+"PO-Revision-Date: 2025-01-14 11:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -28,5 +28,70 @@ msgid "Back to home page"
 msgstr "Retourner à l’accueil"
 
 #: core/templates/core/blocks/header.html:6
+#: core/templates/registration/login.html:114
 msgid "Home page"
+msgstr "Accueil"
+
+#: core/templates/core/blocks/header.html:39
+msgid "Log out"
+msgstr "Déconnexion"
+
+#: core/templates/core/blocks/header.html:43 core/templates/core/index.html:32
+#: core/templates/registration/login.html:12
+#: core/templates/registration/login.html:117
+msgid "Log in"
+msgstr "Connexion"
+
+#: core/templates/core/blocks/main_menu.html:13
+msgid "Main menu"
+msgstr "Menu principal"
+
+#: core/templates/registration/login.html:21
+msgid "Log in with your account"
+msgstr "Se connecter avec son compte"
+
+#: core/templates/registration/login.html:26
+msgid "Unless otherwise stated, all fields are mandatory."
+msgstr "Sauf mention contraire, tous les champs sont obligatoires."
+
+#: core/templates/registration/login.html:34
+msgid "Error: Your username and password do not match, please try again."
 msgstr ""
+"Erreur : Votre identifiant et mot de passe ne correspondent pas, merci de "
+"réessayer."
+
+#: core/templates/registration/login.html:42
+msgid ""
+"Error: Your account does not have access to this page. To continue, please "
+"log in with an authorized account."
+msgstr ""
+"Erreur : Votre compte n’a pas accès à cette page. Pour continuer, merci de "
+"vous connecter avec un compte autorisé."
+
+#: core/templates/registration/login.html:54
+msgid "Username:"
+msgstr "Identifiant :"
+
+#: core/templates/registration/login.html:62
+msgid "Password:"
+msgstr "Mot de passe :"
+
+#: core/templates/registration/login.html:66
+msgid "Show password"
+msgstr "Afficher le mot de passe"
+
+#: core/templates/registration/login.html:72
+msgid "Show"
+msgstr "Afficher"
+
+#: core/templates/registration/login.html:84
+msgid "Connect"
+msgstr "Se connecter"
+
+#: core/templates/registration/login.html:101
+msgid "you are here:"
+msgstr "vous êtes ici :"
+
+#: core/templates/registration/login.html:109
+msgid "See breadcrumb"
+msgstr "Voir le fil d’Ariane"

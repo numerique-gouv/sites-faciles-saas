@@ -1,0 +1,336 @@
+{% extends "core/base.html" %}
+{% load humanize static dsfr_tags %}
+
+{% block content %}
+  <h1>
+    Gérer l’instance « {{ object.name }} »
+  </h1>
+
+  {% dsfr_django_messages %}
+
+  <div class="fr-card fr-card--horizontal">
+    <div class="fr-card__body">
+      <div class="fr-card__content">
+        <h2 class="fr-card__title">
+          Informations de base
+        </h2>
+        <div class="fr-card__desc">
+          <dl>
+            <dt>
+              <strong>
+                <span class="fr-icon-community-line" aria-hidden="true"></span> Nom de l’instance
+              </strong>
+            </dt>
+            <dd>
+              <span id="instance-{{ object.slug }}">
+                {{ object.name }} ({{ object.slug }})
+              </span>
+            </dd>
+            <dt>
+              <strong>
+                <span class="fr-icon-link" aria-hidden="true"></span> Sous-domaine
+              </strong>
+            </dt>
+            <dd>
+              <ul>
+                <li>
+                  Nom :
+                  <a target="_blank"
+                     rel="noopener external"
+                     href="{{ object.alwaysdata_sites_beta_url }}">{{ object.alwaysdata_sites_beta_host }}</a>
+                </li>
+                {% if object.status != "REQUEST" %}
+                  <li>
+                    État : {{ object.alwaysdata_subdomain_status.badge|safe }}
+                  </li>
+                {% endif %}
+              </ul>
+            </dd>
+            <dt>
+              <strong>
+                <span class="fr-icon-server-line" aria-hidden="true"></span> Application Scalingo
+              </strong>
+            </dt>
+            <dd>
+              <ul>
+                {% if object.status == "REQUEST" %}
+                  <li>
+                    {{ object.scalingo_application_name }} {{ object.scalingo_app_status|safe }}
+                  </li>
+                {% else %}
+                  <li>
+                    Nom :
+                    <a target="_blank"
+                       rel="noopener external"
+                       href="{{ object.scalingo_app_url }}">{{ object.scalingo_application_name }}</a>
+                  </li>
+                  <li>
+                    Lien public :
+                    <a target="_blank"
+                       rel="noopener external"
+                       href="{{ object.scalingo_instance_url }}">Lien public de l’instance</a>
+                  </li>
+                  <li>
+                    État : {{ object.scalingo_app_status|safe }}
+                  </li>
+                  {% if object.current_status.rank >= 4 %}
+                    <li>
+                      Dernier déploiement :
+                      <a target="_blank"
+                         rel="noopener external"
+                         href="{{ object.scalingo_deployment_status.log_url }}">{{ object.scalingo_deployment_status.date|naturaltime }}</a>
+                      {{ object.scalingo_deployment_status.badge|safe }}
+                    </li>
+                  {% endif %}
+                </ul>
+              {% endif %}
+            </dd>
+            {% if object.status != "REQUEST" %}
+              <dt>
+                <strong>
+                  <span class="fr-icon-database-line" aria-hidden="true"></span> Base de données
+                </strong>
+              </dt>
+              <dd>
+                État : {{ object.scalingo_db_status.badge|safe }}
+              </dd>
+            {% endif %}
+            <dt>
+              <strong>
+                <span class="fr-icon-shield-line" aria-hidden="true"></span> SecNumCloud
+              </strong>
+            </dt>
+            <dd>
+              {% if object.use_secnumcloud %}
+                Oui
+              {% else %}
+                Non
+              {% endif %}
+            </dd>
+            <dt>
+              <strong>
+                <span class="fr-icon-user-line" aria-hidden="true"></span> Contact principal
+              </strong>
+            </dt>
+            <dd>
+              {{ object.main_contact }}
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="fr-card__footer">
+        <ul class="fr-btns-group fr-btns-group--inline-reverse fr-btns-group--icon-left fr-btns-group--inline-lg">
+          <li>
+            <a class="fr-btn fr-icon-edit-line"
+               href="{% url 'instances:update' object.slug %}"
+               title="Modifier les informations"
+               aria-describedby="instance-{{ object.slug }}">Modifier les informations</a>
+          </li>
+          {% if not object.alwaysdata_subdomain_status.status %}
+            <li>
+              <form method="post" action="{% url 'instances:action' object.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="alwaysdata_scalingo_set_subdomain">
+                <input type="hidden" name="name" value="{{ object.name }}">
+                <button class="fr-btn fr-icon-checkbox-line fr-btn--secondary"
+                        type="submit"
+                        title="Créer le sous-domaine"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Créer le sous-domaine
+                </button>
+              </form>
+            </li>
+          {% endif %}
+          {% if object.current_status.rank >= 4 %}
+            <li>
+              <form method="post" action="{% url 'instances:action' object.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="scalingo_deploy_code">
+                <input type="hidden" name="name" value="{{ object.name }}">
+                <button class="fr-btn fr-icon-checkbox-line fr-btn--secondary"
+                        type="submit"
+                        title="Relancer un déploiement"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Relancer un déploiement
+                </button>
+              </form>
+            </li>
+            <li>
+              <form method="post" action="{% url 'instances:action' object.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="scalingo_app_restart">
+                <input type="hidden" name="name" value="{{ object.name }}">
+                <button class="fr-btn fr-icon-refresh-line fr-btn--secondary"
+                        type="submit"
+                        title="Redémarrer l’instance"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Redémarrer l’instance
+                </button>
+              </form>
+            </li>
+          {% endif %}
+          <li>
+            <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
+               href="{% url 'instances:delete' object.slug %}"
+               title="Supprimer l’instance"
+               aria-describedby="instance-{{ object.slug }}">Supprimer l’instance</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="fr-mt-2w">
+    <h2>
+      Avancement
+    </h2>
+    <div class="fr-stepper">
+      <h2 class="fr-stepper__title">
+        {{ object.get_steps.current_step.label }}
+        <span class="fr-stepper__state">Étape {{ object.get_steps.current_count }} sur {{ object.get_steps.steps_count }}</span>
+      </h2>
+      <div class="fr-stepper__steps"
+           data-fr-current-step="{{ object.get_steps.current_count }}"
+           data-fr-steps="{{ object.get_steps.steps_count }}">
+      </div>
+      {% if object.get_steps.next_step %}
+        <p class="fr-stepper__details">
+          <span class="fr-text--bold">Étape suivante :</span> {{ object.get_steps.next_step.label }}
+        </p>
+      {% endif %}
+    </div>
+
+    <div>
+      {% if object.status == "REQUEST" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_app_and_subdomain">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              <button class="fr-btn fr-icon-checkbox-line"
+                      type="submit"
+                      title="Créer l’application dans Scalingo et le sous-domaine dans Alwaysdata"
+                      aria-describedby="instance-{{ object.slug }}">
+                Créer l’application dans Scalingo et le sous-domaine dans Alwaysdata
+              </button>
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SCALINGO_APP_CREATED" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_provision_db">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              <button class="fr-btn fr-icon-checkbox-line"
+                      type="submit"
+                      title="Provisionner la base de données"
+                      aria-describedby="instance-{{ object.slug }}">
+                Provisionner la base de données
+              </button>
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SCALINGO_DB_PROVISIONED" %}
+        <p>
+          Avant de continuer, attendre que la base de données soit marquée « En cours d’exécution » et rafraîchir de temps en temps.
+        </p>
+
+        <p>
+          Les variables d’environnement suivantes vont être définies :
+        </p>
+        <ul>
+          {% for var in object.list_env_variables %}
+            <li>
+              {{ var.name }} : {{ var.value }}
+            </li>
+          {% endfor %}
+        </ul>
+
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_set_env">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              <button class="fr-btn fr-icon-checkbox-line"
+                      type="submit"
+                      title="Définir les variables d’environnement"
+                      aria-describedby="instance-{{ object.slug }}">
+                Définir les variables d’environnement
+              </button>
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SCALINGO_ENV_VARS_SET" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_deploy_code">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              {% if object.scalingo_db_status.status == "running" %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        type="submit"
+                        title="Déployer le code source"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Déployer le code source
+                </button>
+              {% else %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        title="Base de donnée non prête, attendre"
+                        aria-describedby="instance-{{ object.slug }}"
+                        disabled>
+                  Base de donnée non prête, attendre
+                </button>
+              {% endif %}
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SF_CODE_DEPLOYED" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_load_initial_data">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              {% if object.scalingo_deployment_status.status == "success" %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        type="submit"
+                        title="Charger les données initiales"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Charger les données initiales
+                </button>
+              {% else %}
+                <button class="fr-btn fr-icon-checkbox-line"
+                        title="Déploiement non terminé, attendre"
+                        aria-describedby="instance-{{ object.slug }}"
+                        disabled>
+                  Déploiement non terminé, attendre
+                </button>
+              {% endif %}
+            </li>
+          </ul>
+        </form>
+      {% elif object.status == "SF_INITIAL_DATA_DEPLOYED" %}
+        <form method="post" action="{% url 'instances:action' object.slug %}">
+          <ul class="fr-btns-group fr-btns-group--right fr-btns-group--icon-left fr-btns-group--inline-md">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="scalingo_create_superusers">
+            <input type="hidden" name="name" value="{{ object.name }}">
+            <li>
+              <button class="fr-btn fr-icon-checkbox-line"
+                      type="submit"
+                      title="Créer les comptes administrateurs"
+                      aria-describedby="instance-{{ object.slug }}">
+                Créer les comptes administrateurs
+              </button>
+            </li>
+          </ul>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}

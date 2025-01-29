@@ -1,0 +1,6 @@
+{% load dsfr_tags %}
+{% if paginator.num_pages > 1 %}
+  <div class="fr-grid-row fr-grid-row--center fr-my-5w">
+    {% dsfr_pagination page_obj %}
+  </div>
+{% endif %}

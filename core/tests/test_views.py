@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class IndexTestCase(TestCase):
     def test_index_is_renderable(self):
-        response = self.client.get(reverse("index"))
-        self.assertEqual(response.status_code, 200)
+        response = self.client.get(reverse("core:index"))
+        self.assertEqual(response.status_code, 200)  # type: ignore
 
-        self.assertInHTML("<h1>Accueil</h1>", response.content.decode())
+        self.assertInHTML("<h1>Accueil</h1>", response.content.decode())  # type: ignore

@@ -1,22 +1,16 @@
-# Beta x Django
+# Gestionnaire de déploiements pour Sites Faciles
 
-## Introduction
+Cet outil permet de déployer simplement une instance de [Sites faciles](https://github.com/numerique-gouv/sites-faciles) sur [https://dashboard.scalingo.com/](Scalingo).
 
-Ce repo est un kit de démarrage pour vos projets en Django. Il intègre :
+## Architecture
+Le projet implémente des librairies d'interfaçage avec les APIs de Scalingo et Alwaysdata, respectivement situées dans `instances/service/scalingo.py` et `instances/service/alwaysdata.py`, normalisées de manière à toujours renvoyer un dictionnaire similaire.
 
-- le [Design System de l’État](https://www.systeme-de-design.gouv.fr/) (DSFR) avec [django-dsfr](https://pypi.org/project/django-dsfr/)
-- des Content Security Policies avec django-csp
-- les paramètres pour se connecter à une base de données PostgreSQL
-- Pre-commit, pour formater votre code à chaque commit
-- une ébauche de CI pour vos tests automatiques
-- une ébauche de Makefile pour gérer les commandes fréquentes
-- Pipenv pour la gestion des dépendances
-- les modules django-extensions et django-debug-toolbar pour faciliter le développement
+L’essentiel de la progression du déploiement se fait via un formulaire `instances/forms.py` > `InstanceActionForm` avec un champ caché `action` qui appelle la prochaine étape du déploiement, dont la logique est gérée dans le modèle `instances/models.py` > `Instance`.
 
-## Use
+## Utilisation
 
 ```bash
-make runserver
+just runserver
 ```
 
 ## Installation
@@ -29,28 +23,60 @@ cp .env.example .env
 ```
 puis modifier en le contenu pour correspondre à votre configuration.
 
+- `HOST_URL` : le nom de domaine de l’URL principale de votre site, par exemple « mon-site.osc-fr1.scalingo.io »
+- `ALLOWED_HOSTS` : le ou les domaines autorisés à accéder au site, séparés par des virgules s’il y en a plusieurs. On peut déjà entrer le domaine définitif si on le connaît, donc : « mon-site.osc-fr1.scalingo.io,mon-site.beta.gouv.fr »
+- `SECRET_KEY` : clé secrète, par exemple générée dans un terminal avec la commande « `openssl rand -hex 32` »
+- `DATABASE_URL` : pré-remplie sur Scalingo
+- `DEBUG` : True en développement, False en production
+- `HOST_PORT` : le port sur lequel tourne le site (8000 par défaut)
+- `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+- `EMAIL_SECRETS`:
+  - Créer un fichier `.secrets_email.txt` avec le format suivant : """
+   1;email;password
+   2;email;password
+   """
+  - Lancer la commande `just encode_secrets email` et copier-coller le résultat
+
+- `STORAGE_SECRETS`:
+  - Créer un fichier `.secrets_storage.txt` avec le format suivant : """
+   1;key_id;key_secret;commentaire (par ex: bucket_name@host)
+   2;key_id;key_secret;commentaire (par ex: bucket_name@host)
+   """
+  - Lancer la commande `just encode_secrets storage` et copier-coller le résultat
+
+Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
+
+- Optionnels:
+  - `SCALINGO_APPLICATION_PREFIX` : permet de remplacer le préfixe par défaut ajouté au nom des applications Scalingo (par défaut, "sf")
+
 ### Installer l’environnement et les dépendances
 
-```
-pipenv install
+```bash
+uv sync --no-dev
 ```
 
 Pour une installation de dev en local, installer aussi les dépendances devs
-```
-pipenv install --dev
+
+```bash
+uv sync
 ```
 
 ### Configurer la base de données
 
 Installer PostgreSQL en fonction de votre OS : https://www.postgresql.org/download/
-puis créer une base de données et configurer les paramètres correspondants dans DATABASE_URI de votre fichier .env.
+puis créer une base de données et configurer les paramètres correspondants dans DATABASE_URL de votre fichier .env.
 
 ### Remplir la base de données et collecter les fichiers statiques
 ```bash
-make update
+just update
 ```
 
 Cette commande peut être passée à chaque mise à jour.
+
+### Créer le superuser
+```bash
+just createsuperuser
+```
 
 ### Installation de pre-commit
 
@@ -65,20 +91,24 @@ pre-commit install
 Vous pouvez effectuer un premier passage sur tous les fichiers du repo avec :
 
 ```bash
-make checkstyle
+just quality
 ```
 
 ### Internationalisation
 Le dépôt est prêt pour l’[internationalisation](https://docs.djangoproject.com/en/5.0/topics/i18n/translation/).
-Taper `make messages` pour générer les chaînes à traduire, et effectuer la traduction avec un outil tel que [Poedit](https://poedit.net/).
+Taper `just makemessages` pour générer les chaînes à traduire, et effectuer la traduction avec un outil tel que [Poedit](https://poedit.net/).
 
 ### Exécuter les tests manuellement
 
 ```bash
-make test
+just test
 ```
 
 ### Accéder au shell Django avancé
 ```bash
-pipenv run python manage.py shell_plus
+just shell
 ```
+
+## Documentation tierce
+- [API Alwaysdata](https://help.alwaysdata.com/en/api/)
+- [API Scalingo](https://developers.scalingo.com/)

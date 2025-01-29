@@ -16,7 +16,7 @@
 
 {% block footer_brand %}
   {% translate "Back to home page" as back_to_home_label %}
-  {% url 'index' as home_url %}
+  {% url 'core:index' as home_url %}
   {% if SITE_CONFIG.operator_logo_file and SITE_CONFIG.operator_logo_alt %}
     <div class="fr-footer__brand fr-enlarge-link">
       <p class="fr-logo"

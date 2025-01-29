@@ -162,3 +162,7 @@ cython_debug/
 
 # VS Code/Codium
 .vscode/
+
+# Projet specific
+.secrets_email.txt
+.secrets_storage.txt

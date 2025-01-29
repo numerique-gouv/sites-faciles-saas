@@ -45,12 +45,16 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.humanize",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "csp",
+    "widget_tweaks",
     "dsfr",
     "core",
+    "contacts",
+    "instances",
 ]
 
 # Only add these on a dev machine, outside of tests
@@ -66,6 +70,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
@@ -90,6 +95,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "dsfr.context_processors.site_config",
             ],
         },
     },
@@ -101,17 +107,17 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASE_URI = os.getenv("DATABASE_URI")
-if DATABASE_URI:
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
-            DATABASE_URI,
+            DATABASE_URL,
             conn_max_age=600,
             conn_health_checks=True,
         )
     }
 else:
-    raise ValueError("Please set the DATABASE_URI environment variable")
+    raise ValueError("Please set the DATABASE_URL environment variable")
 
 
 # Password validation
@@ -156,6 +162,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# User account management
+LOGIN_REDIRECT_URL = "instances:list"
+LOGOUT_REDIRECT_URL = "core:index"
+
 # CSP-related options
 SECURE_HSTS_SECONDS = 2592000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -169,3 +179,13 @@ CSP_STYLE_SRC = "'self'"
 CSP_IMG_SRC = "'self' data:"
 
 REFERRER_POLICY = "same-origin"
+
+ALWAYSDATA_ACCOUNT = os.getenv("ALWAYSDATA_ACCOUNT", "")
+ALWAYSDATA_API_KEY = os.getenv("ALWAYSDATA_API_KEY", "")
+ALWAYSDATA_DOMAIN_ID = os.getenv("ALWAYSDATA_DOMAIN_ID", "")
+SCALINGO_API_TOKEN = os.getenv("SCALINGO_API_TOKEN", "")
+EMAIL_SECRETS = os.getenv("EMAIL_SECRETS", "")
+STORAGE_SECRETS = os.getenv("STORAGE_SECRETS", "")
+
+SCALINGO_APPLICATION_PREFIX = os.getenv("SCALINGO_APPLICATION_PREFIX", "sf")
+SF_INFRA_EMAIL = os.getenv("SF_INFRA_EMAIL", "")
