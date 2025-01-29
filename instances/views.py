@@ -111,7 +111,7 @@ class StorageConfigListView(StaffOrAdminMixin, ListView):
         )
 
 
-EMAILCONFIG_LINKS = [
+STORAGECONFIG_LINKS = [
     {
         "title": "Configurations de stockage",
         "url": reverse_lazy(
@@ -130,7 +130,7 @@ class StorageConfigCreateView(StaffOrAdminMixin, CreateView):
         return init_context(
             context=context,
             title="Créer une configuration email",
-            links=EMAILCONFIG_LINKS,
+            links=STORAGECONFIG_LINKS,
         )
 
     def form_valid(self, form):
@@ -147,7 +147,7 @@ class StorageConfigDetailView(DetailView):
         return init_context(
             context=context,
             title=f"Configuration de stockage {self.object.bucket_name}",
-            links=EMAILCONFIG_LINKS,
+            links=STORAGECONFIG_LINKS,
         )
 
 
@@ -160,7 +160,7 @@ class StorageConfigUpdateView(StaffOrAdminMixin, UpdateView):
         return init_context(
             context=context,
             title=f"Configuration de stockage {self.object.bucket_name}",
-            links=EMAILCONFIG_LINKS,
+            links=STORAGECONFIG_LINKS,
         )
 
     def form_valid(self, form):
@@ -179,7 +179,7 @@ class StorageConfigDeleteView(StaffOrAdminMixin, DeleteView):
         return init_context(
             context=context,
             title=f"Suppression de {self.object.bucket_name}",
-            links=EMAILCONFIG_LINKS,
+            links=STORAGECONFIG_LINKS,
         )
 
     def form_valid(self, form):

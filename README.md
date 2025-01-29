@@ -48,6 +48,7 @@ Note : pour pouvoir créer des instances SecNumCloud, l’authentification à de
 
 - Optionnels:
   - `SCALINGO_APPLICATION_PREFIX` : permet de remplacer le préfixe par défaut ajouté au nom des applications Scalingo (par défaut, "sf")
+  - `USE_UV` : mettre à `true` en mode développement pour préfixer les recettes `just` avec `env run`.
 
 ### Installer l’environnement et les dépendances
 

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-28 12:23+0100\n"
-"PO-Revision-Date: 2025-01-28 12:24+0100\n"
+"POT-Creation-Date: 2025-01-29 17:44+0100\n"
+"PO-Revision-Date: 2025-01-29 17:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -117,59 +117,79 @@ msgstr "SSL certfile"
 msgid "email config"
 msgstr "configuration e-mail"
 
-#: instances/models.py:90
+#: instances/models.py:95
+msgid "bucket name"
+msgstr "nom du bucket"
+
+#: instances/models.py:99
+msgid "bucket region"
+msgstr "région du bucket"
+
+#: instances/models.py:102
+msgid "host"
+msgstr "serveur"
+
+#: instances/models.py:104
+msgid "storage secrets ID"
+msgstr "identifiant des secrets de stockage"
+
+#: instances/models.py:107
+msgid "storage config"
+msgstr "configuration de stockage"
+
+#: instances/models.py:138
 msgid "name"
 msgstr "nom"
 
-#: instances/models.py:92
+#: instances/models.py:140
 msgid "identifiant"
 msgstr "identifiant"
 
-#: instances/models.py:93
+#: instances/models.py:141
 msgid "If empty, will be generated from the instance name."
 msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
 
-#: instances/models.py:99
+#: instances/models.py:147
 msgid "Main contact"
 msgstr "Contact principal"
 
-#: instances/models.py:102
+#: instances/models.py:150
 msgid "status"
 msgstr "statut"
 
-#: instances/models.py:105
+#: instances/models.py:153
 msgid "Scalingo application name"
 msgstr "Nom de l’application Scalingo"
 
-#: instances/models.py:106
+#: instances/models.py:154
 msgid "If empty, will default to sf-&lt;slug&gt;."
 msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
 
-#: instances/models.py:111
+#: instances/models.py:159
 msgid "Scalingo database ID"
 msgstr "Identifiant base de données dans Scalingo"
 
-#: instances/models.py:113
+#: instances/models.py:161
 msgid "Use SecNumCloud?"
 msgstr "Utiliser SecNumCloud ?"
 
-#: instances/models.py:116
+#: instances/models.py:164
 msgid "Scaleway subdomain"
 msgstr "Sous-domaine Scaleway"
 
-#: instances/models.py:121
+#: instances/models.py:169
 msgid "Main URL domain"
 msgstr "Domaine principal"
 
-#: instances/models.py:124
+#: instances/models.py:172
 msgid "Can only contain a domain name without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
 
-#: instances/models.py:127
+#: instances/models.py:175
 msgid "All allowed domains"
 msgstr "Tous les domaines autorisés"
 
-#: instances/models.py:131
+#: instances/models.py:179
 msgid ""
 "Can only contain a list of domain names without the https://, separated by "
 "commas"
@@ -177,47 +197,67 @@ msgstr ""
 "Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
 "par des virgules"
 
-#: instances/models.py:139
+#: instances/models.py:187
 msgid "Email configuration"
 msgstr "Configuration email"
 
-#: instances/models.py:141
+#: instances/models.py:189
 msgid "Allow users to reset their password"
 msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
 
-#: instances/models.py:144
+#: instances/models.py:195
+msgid "Storage configuration"
+msgstr "Configuration de stockage"
+
+#: instances/models.py:199
 msgid "instance"
 msgstr "instance"
 
-#: instances/models.py:275
+#: instances/models.py:350
 msgid "(The value will be generated automatically.)"
 msgstr "(La valeur sera générée automatiquement.)"
 
-#: instances/models.py:329
+#: instances/models.py:419
 msgid "Domain added"
 msgstr "Domaine ajouté"
 
-#: instances/models.py:334
+#: instances/models.py:424
 msgid "Alwaysdata returned the following warning: "
 msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
 
-#: instances/models.py:340
+#: instances/models.py:430
 msgid "Alwaysdata returned the following error: "
 msgstr "Alwaysdata a renvoyé l’erreur suivante : "
 
-#: instances/models.py:369 instances/models.py:413 instances/models.py:513
-#: instances/models.py:538 instances/models.py:592 instances/models.py:640
-#: instances/models.py:646
+#: instances/models.py:459 instances/models.py:512 instances/models.py:629
+#: instances/models.py:658 instances/models.py:718 instances/models.py:766
+#: instances/models.py:772
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
 
-#: instances/models.py:563
+#: instances/models.py:685
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: instances/models.py:599
+#: instances/models.py:725
 msgid "Initial data deployment requested"
 msgstr "Chargement des données initiales demandé"
+
+#: instances/templates/instances/storageconfig_detail.html:21
+msgid "Bucket name"
+msgstr "Nom du bucket"
+
+#: instances/templates/instances/storageconfig_detail.html:33
+msgid "Bucket region"
+msgstr "Région du bucket"
+
+#: instances/templates/instances/storageconfig_detail.html:43
+msgid "Host"
+msgstr "Serveur"
+
+#: instances/templates/instances/storageconfig_detail.html:53
+msgid "Storage secrets ID"
+msgstr "Identifiant des secrets de stockage"
 
 #~ msgid "Default sender domain"
 #~ msgstr "Domaine d’envoi par défaut"
