@@ -470,6 +470,8 @@ class Instance(BaseModel):
     def scalingo_app_restart(self):
         """
         Restart the app in Scalingo
+
+        This command can be repeated
         """
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         return sc.app_restart(app_name=str(self.scalingo_application_name))
@@ -572,6 +574,11 @@ class Instance(BaseModel):
             }
 
     def scalingo_set_env(self):
+        """
+        Set the env variables in Scalingo.
+
+        This command can be repeated
+        """
         env_variables = self.get_env_variables()
 
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
@@ -634,11 +641,15 @@ class Instance(BaseModel):
             }
 
     def scalingo_deploy_code(self):
+        """
+        Deploy the latest version of Sites Faciles
+        """
+        # This command can be repeated
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         result = sc.app_deployment_trigger(
             app_name=str(self.scalingo_application_name),
-            git_ref="main",
-            source_url="https://github.com/numerique-gouv/sites-faciles/archive/main.tar.gz",
+            git_ref="production",
+            source_url="https://github.com/numerique-gouv/sites-faciles/archive/production.tar.gz",
         )
 
         if "error" in result.keys():
@@ -648,8 +659,10 @@ class Instance(BaseModel):
                 + f"<code>{result['errors']}</code>",
             }
         else:
-            self.status = "SF_CODE_DEPLOYED"
-            self.save()
+            # Only do it the first time
+            if self.status == "SCALINGO_ENV_VARS_SET":
+                self.status = "SF_CODE_DEPLOYED"
+                self.save()
 
             return {
                 "status": "success",
