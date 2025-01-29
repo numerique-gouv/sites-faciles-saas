@@ -75,7 +75,10 @@
                   </li>
                   {% if object.current_status.rank >= 4 %}
                     <li>
-                      Dernier déploiement: {{ object.scalingo_deployment_status.date|naturaltime }}
+                      Dernier déploiement :
+                      <a target="_blank"
+                         rel="noopener external"
+                         href="{{ object.scalingo_deployment_status.log_url }}">{{ object.scalingo_deployment_status.date|naturaltime }}</a>
                       {{ object.scalingo_deployment_status.badge|safe }}
                     </li>
                   {% endif %}
@@ -149,6 +152,19 @@
                         title="Relancer un déploiement"
                         aria-describedby="instance-{{ object.slug }}">
                   Relancer un déploiement
+                </button>
+              </form>
+            </li>
+            <li>
+              <form method="post" action="{% url 'instances:action' object.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="scalingo_app_restart">
+                <input type="hidden" name="name" value="{{ object.name }}">
+                <button class="fr-btn fr-icon-refresh-line fr-btn--secondary"
+                        type="submit"
+                        title="Redémarrer l’instance"
+                        aria-describedby="instance-{{ object.slug }}">
+                  Redémarrer l’instance
                 </button>
               </form>
             </li>

@@ -35,6 +35,9 @@ class Scalingo:
             auth=("", settings.SCALINGO_API_TOKEN),
             timeout=REQUEST_TIMEOUT,
         )
+
+        if "token" not in response.json():
+            raise ValueError("Token not found. Response contains: ", response.json())
         return response.json()["token"]
 
     def check_session(self):
@@ -88,7 +91,12 @@ class Scalingo:
 
         return response.json()
 
-    def post(self, query_path: str, json_data: dict | None = None) -> dict:
+    def post(
+        self,
+        query_path: str,
+        json_data: dict | None = None,
+        empty_response: bool = False,
+    ) -> dict:
         """
         Makes a POST query to the endpoint and returns the result
         """
@@ -113,7 +121,10 @@ class Scalingo:
                 self.endpoint_url + query_path, headers=headers, timeout=REQUEST_TIMEOUT
             )
 
-        return response.json()
+        if empty_response:
+            return {"status_code": response.status_code}
+        else:
+            return response.json()
 
     def put(self, query_path: str, json_data: dict | None = None) -> dict:
         """
@@ -218,6 +229,32 @@ class Scalingo:
         }
 
         return self.post(f"apps/{app_name}/deployments", json_data=json_data)
+
+    def app_restart(
+        self,
+        app_name: str,
+        scope: list = ["web"],
+    ):
+        """
+        Runs a command in a one-off container
+
+        """
+        json_data = {"scope": scope}
+
+        result = self.post(
+            f"apps/{app_name}/restart", json_data=json_data, empty_response=True
+        )
+
+        if result["status_code"] == 202:
+            return {
+                "status": "success",
+                "message": "application successfully restarted",
+            }
+        else:
+            return {
+                "status": "error",
+                "message": "error when restarting appication",
+            }
 
     def app_run(
         self,

@@ -2,7 +2,12 @@
 
 Cet outil permet de déployer simplement une instance de [Sites faciles](https://github.com/numerique-gouv/sites-faciles) sur [https://dashboard.scalingo.com/](Scalingo).
 
-## Use
+## Architecture
+Le projet implémente des librairies d'interfaçage avec les APIs de Scalingo et Alwaysdata, respectivement situées dans `instances/service/scalingo.py` et `instances/service/alwaysdata.py`, normalisées de manière à toujours renvoyer un dictionnaire similaire.
+
+L’essentiel de la progression du déploiement se fait via un formulaire `instances/forms.py` > `InstanceActionForm` avec un champ caché `action` qui appelle la prochaine étape du déploiement, dont la logique est gérée dans le modèle `instances/models.py` > `Instance`.
+
+## Utilisation
 
 ```bash
 just runserver
@@ -26,11 +31,18 @@ puis modifier en le contenu pour correspondre à votre configuration.
 - `HOST_PORT` : le port sur lequel tourne le site (8000 par défaut)
 - `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
 - `EMAIL_SECRETS`:
-  - Créer un fichier `emailconfig.txt` avec le format suivant : """
+  - Créer un fichier `.secrets_email.txt` avec le format suivant : """
    1;email;password
    2;email;password
    """
-  - Lancer la commande `uv run python manage.py encode_email_secrets` et copier-coller le résultat
+  - Lancer la commande `just encode_secrets email` et copier-coller le résultat
+
+- `STORAGE_SECRETS`:
+  - Créer un fichier `.secrets_storage.txt` avec le format suivant : """
+   1;key_id;key_secret;commentaire (par ex: bucket_name@host)
+   2;key_id;key_secret;commentaire (par ex: bucket_name@host)
+   """
+  - Lancer la commande `just encode_secrets storage` et copier-coller le résultat
 
 Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
 

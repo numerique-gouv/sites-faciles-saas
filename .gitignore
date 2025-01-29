@@ -164,4 +164,5 @@ cython_debug/
 .vscode/
 
 # Projet specific
-emailconfig.txt
+.secrets_email.txt
+.secrets_storage.txt

@@ -70,7 +70,7 @@ class EmailConfig(BaseModel):
         return reverse("instances:emailconfig_detail", kwargs={"pk": self.pk})
 
     def get_secrets(self):
-        # Email secrets are base64 encoded to fit several configs in a single env variable
+        # Secrets are base64 encoded to fit several configs in a single env variable
         # due to a limit in Scalingo https://doc.scalingo.com/platform/app/environment
         # See utils.py/encode_secrets() for encoding function
         # Format: """1;email;password\n2;email;password"""
@@ -84,6 +84,54 @@ class EmailConfig(BaseModel):
             secrets[row_id] = {"email": row[1], "password": row[2]}
 
         return secrets[str(self.email_secrets_id)]
+
+
+class StorageConfig(BaseModel):
+    """
+    Storage are shared between instances through the use of the S3_LOCATION parameter
+    """
+
+    bucket_name = models.CharField(
+        _("bucket name"), max_length=100, null=False, unique=True
+    )
+
+    bucket_region = models.CharField(
+        _("bucket region"), max_length=100, null=False, unique=True
+    )
+
+    host = models.CharField(_("host"), max_length=200, null=False, unique=True)
+
+    storage_secrets_id = models.PositiveSmallIntegerField(_("storage secrets ID"))  # type: ignore
+
+    class Meta:
+        verbose_name = _("storage config")
+        ordering = ["bucket_name"]
+
+    def __str__(self):
+        return str(self.bucket_name)
+
+    def get_absolute_url(self):
+        return reverse("instances:storageconfig_detail", kwargs={"pk": self.pk})
+
+    def get_secrets(self):
+        # Secrets are base64 encoded to fit several configs in a single env variable
+        # due to a limit in Scalingo https://doc.scalingo.com/platform/app/environment
+        # See utils.py/encode_secrets() for encoding function
+        # Format: """1;key_id;key_secret\n2;key_id;key_secret;comment"""
+
+        secrets = {}
+        secrets_raw = decode_secrets(settings.STORAGE_SECRETS)
+        secrets_csv = csv.reader(secrets_raw.splitlines(), delimiter=";")
+
+        for row in secrets_csv:
+            row_id = row[0]
+            secrets[row_id] = {
+                "key_id": row[1],
+                "key_secret": row[2],
+                "comment": row[3],
+            }
+
+        return secrets[str(self.storage_secrets_id)]
 
 
 class Instance(BaseModel):
@@ -139,6 +187,13 @@ class Instance(BaseModel):
         verbose_name=_("Email configuration"),
     )
     wagtail_password_reset_enabled = models.BooleanField(_("Allow users to reset their password"), default=True)  # type: ignore
+    storage_config = models.ForeignKey(
+        StorageConfig,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name=_("Storage configuration"),
+    )
 
     class Meta:
         verbose_name = _("instance")
@@ -264,6 +319,26 @@ class Instance(BaseModel):
                 }
             ]
 
+        if self.storage_config:
+            env_variables += [
+                {
+                    "name": "S3_BUCKET_NAME",
+                    "value": self.storage_config.bucket_name,
+                },
+                {
+                    "name": "S3_BUCKET_REGION",
+                    "value": self.storage_config.bucket_region,
+                },
+                {
+                    "name": "S3_HOST",
+                    "value": self.storage_config.host,
+                },
+                {
+                    "name": "S3_LOCATION",
+                    "value": self.scalingo_application_name,
+                },
+            ]
+
         return env_variables
 
     def list_env_variables(self):
@@ -287,6 +362,21 @@ class Instance(BaseModel):
                     "value": "xxx",
                 },
             ]
+
+        if self.storage_config:
+            env_variables += [
+                {
+                    "name": "S3_KEY_ID",
+                    "value": "xxx",
+                },
+                {
+                    "name": "S3_KEY_SECRET",
+                    "value": "xxx",
+                },
+            ]
+
+        # Remove empty variables
+        env_variables = [{**row} for row in env_variables if row["value"]]
 
         return sorted(env_variables, key=lambda d: d["name"])
 
@@ -376,6 +466,13 @@ class Instance(BaseModel):
                 "status": "success",
                 "message": "Application Scalingo créée avec succès.",
             }
+
+    def scalingo_app_restart(self):
+        """
+        Restart the app in Scalingo
+        """
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        return sc.app_restart(app_name=str(self.scalingo_application_name))
 
     def scalingo_app_delete(self):
         """
@@ -500,6 +597,18 @@ class Instance(BaseModel):
                 },
             ]
 
+        if self.storage_config:
+            env_variables += [
+                {
+                    "name": "S3_KEY_ID",
+                    "value": self.storage_config.get_secrets()["key_id"],
+                },
+                {
+                    "name": "S3_KEY_SECRET",
+                    "value": self.storage_config.get_secrets()["key_secret"],
+                },
+            ]
+
         # Remove empty variables
         env_variables = [{**row} for row in env_variables if row["value"]]
 
@@ -562,8 +671,10 @@ class Instance(BaseModel):
             badge = f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
             date = _("Unknown")
             status = "error"
+            log_url = None
         else:
             status = result["deployments"][0]["status"]
+            deployment_id = result["deployments"][0]["id"]
             date = datetime.strptime(
                 result["deployments"][0]["created_at"], "%Y-%m-%dT%H:%M:%S.%f%z"
             )
@@ -576,7 +687,9 @@ class Instance(BaseModel):
             else:
                 badge = f'<span>{date}</span> <span class="fr-badge fr-badge--info">{status}</span>'
 
-        return {"date": date, "status": status, "badge": badge}
+            log_url = f"{self.scalingo_app_url}/deploy/{deployment_id}"
+
+        return {"date": date, "status": status, "badge": badge, "log_url": log_url}
 
     def scalingo_load_initial_data(self):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))

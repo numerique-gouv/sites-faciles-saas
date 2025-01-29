@@ -18,6 +18,9 @@ coverage app="":
 createsuperuser:
     uv run python manage.py createsuperuser
 
+encode_secrets type="":
+    uv run python manage.py encode_secrets --type {{type}}
+
 makemessages:
     uv run django-admin makemessages -l fr --ignore=manage.py
 

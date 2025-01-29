@@ -2,12 +2,18 @@ from django import forms
 from django.forms import ModelForm
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import EmailConfig, Instance
+from instances.models import EmailConfig, Instance, StorageConfig
 
 
 class EmailConfigForm(ModelForm, DsfrBaseForm):
     class Meta:
         model = EmailConfig
+        fields = "__all__"  # NOSONAR
+
+
+class StorageConfigForm(ModelForm, DsfrBaseForm):
+    class Meta:
+        model = StorageConfig
         fields = "__all__"  # NOSONAR
 
 
@@ -24,6 +30,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "allowed_hosts",
             "email_config",
             "wagtail_password_reset_enabled",
+            "storage_config",
         ]
 
 
@@ -52,3 +59,5 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_load_initial_data()
         elif action == "scalingo_create_superusers":
             return self.instance.scalingo_create_superusers()
+        elif action == "scalingo_app_restart":
+            return self.instance.scalingo_app_restart()
