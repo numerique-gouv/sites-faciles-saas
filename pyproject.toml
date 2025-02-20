@@ -1,6 +1,6 @@
 [project]
 name = "sites-faciles-saas"
-version = "1.0.1"
+version = "1.0.2"
 description = "Gestionnaire de déploiement pour Sites Faciles"
 readme = "README.md"
 requires-python = ">=3.10"
