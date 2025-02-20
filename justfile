@@ -52,6 +52,6 @@ update:
     {{uv_run}} python manage.py collectstatic --noinput
     {{uv_run}} python manage.py migrate
 
-update-deps:
+upgrade:
     uv lock --upgrade
     uv export --no-dev -q -o requirements.txt
