@@ -17,6 +17,11 @@ just test
 just shell
 ```
 
+## Mettre à jour les dépendances
+```bash
+just upgrade
+```
+
 ## Documentation tierce
 - [API Alwaysdata](https://help.alwaysdata.com/en/api/)
 - [API Scalingo](https://developers.scalingo.com/)
