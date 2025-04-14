@@ -91,6 +91,28 @@ class Scalingo:
 
         return response.json()
 
+    def patch(self, query_path: str, json_data: dict) -> dict:
+        """
+        Makes a PATCH query to the endpoint and returns the result
+        """
+        self.check_session()
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "user-agent": self.agent,
+            "Authorization": f"Bearer {self.bearer_token}",
+        }
+
+        response = requests.patch(
+            self.endpoint_url + query_path,
+            headers=headers,
+            json=json_data,
+            timeout=REQUEST_TIMEOUT,
+        )
+
+        return {"status_code": response.status_code}
+
     def post(
         self,
         query_path: str,
@@ -189,6 +211,11 @@ class Scalingo:
 
     def app_detail(self, app_name: str) -> dict:
         return self.get(f"apps/{app_name}")
+
+    def app_settings_update(self, app_name: str, settings: dict = {}):
+        json_data = {"app": settings}
+
+        return self.patch(f"apps/{app_name}", json_data=json_data)
 
     ## App / addon related methods
     def app_addon_detail(self, app_name: str, addon_id: str) -> dict:
