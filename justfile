@@ -6,6 +6,9 @@ uv_run := if env("USE_UV", "false") == "true" { "uv run" } else { "" }
 default:
     just -l
 
+check:
+    {{uv_run}} python manage.py check
+
 collectstatic:
     {{uv_run}} python manage.py collectstatic --no-input
 
@@ -23,6 +26,7 @@ createsuperuser:
 encode_secrets type="":
     {{uv_run}} python manage.py encode_secrets --type {{type}}
 
+alias mess:=makemessages
 makemessages:
     {{uv_run}} django-admin makemessages -l fr --ignore=manage.py
 
@@ -55,3 +59,4 @@ update:
 upgrade:
     uv lock --upgrade
     uv export --no-dev -q -o requirements.txt
+    {{uv_run}} pre-commit autoupdate

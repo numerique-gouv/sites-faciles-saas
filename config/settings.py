@@ -174,9 +174,15 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 X_FRAME_OPTIONS = "DENY"
 
-CSP_DEFAULT_SRC = "'self'"
-CSP_STYLE_SRC = "'self'"
-CSP_IMG_SRC = "'self' data:"
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": ["/admin"],
+    "DIRECTIVES": {
+        "default-src": "'self'",
+        "img-src": "'self' data:",
+        "style-src": "'self'",
+    },
+}
+
 
 REFERRER_POLICY = "same-origin"
 
