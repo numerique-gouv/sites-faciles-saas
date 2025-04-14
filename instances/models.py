@@ -450,8 +450,9 @@ class Instance(BaseModel):
 
     def scalingo_create_app(self):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        app_name = str(self.scalingo_application_name)
 
-        result = sc.app_create(app_name=str(self.scalingo_application_name))
+        result = sc.app_create(app_name=app_name)
 
         if "errors" in result.keys():
             return {
@@ -462,6 +463,13 @@ class Instance(BaseModel):
         else:
             self.status = "SCALINGO_APP_CREATED"
             self.save()
+
+            # Immediately force HTTPS on the newly created app
+            settings = {
+                "force_https": True,
+            }
+            sc.app_settings_update(app_name=app_name, settings=settings)
+
             return {
                 "status": "success",
                 "message": "Application Scalingo créée avec succès.",
