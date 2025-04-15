@@ -21,6 +21,41 @@ from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
 
 
+class ScalingoAccount(BaseModel):
+    """
+    Scalingo account that owns the app
+    """
+
+    username = models.CharField(_("User name"), max_length=100, unique=True)
+    secrets_id = models.PositiveSmallIntegerField(_("Scalingo secrets ID"), unique=True)  # type: ignore
+
+    class Meta:
+        verbose_name = _("Scalingo account")
+        ordering = ["username"]
+
+    def __str__(self):
+        return str(self.username)
+
+    def get_absolute_url(self):
+        return reverse("instances:scalingo_account_detail", kwargs={"pk": self.pk})
+
+    def get_secrets(self):
+        # Secrets are base64 encoded to fit several configs in a single env variable
+        # due to a limit in Scalingo https://doc.scalingo.com/platform/app/environment
+        # See utils.py/encode_secrets() for encoding function
+        # Format: """1;username;token\n2;username;token"""
+
+        secrets = {}
+        secrets_raw = decode_secrets(settings.SCALINGO_API_SECRETS)
+        secrets_csv = csv.reader(secrets_raw.splitlines(), delimiter=";")
+
+        for row in secrets_csv:
+            row_id = row[0]
+            secrets[row_id] = {"username": row[1], "token": row[2]}
+
+        return secrets[str(self.secrets_id)]
+
+
 class EmailConfig(BaseModel):
     """
     Secrets are stored in an environment variable
@@ -154,6 +189,14 @@ class Instance(BaseModel):
         help_text=_("If empty, will default to sf-&lt;slug&gt;."),
         blank=True,
         unique=True,
+    )
+
+    scalingo_owner = models.ForeignKey(
+        ScalingoAccount,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name=_("Owner in Scalingo"),
     )
     scalingo_db_id = models.CharField(
         _("Scalingo database ID"), max_length=100, blank=True
@@ -406,7 +449,10 @@ class Instance(BaseModel):
 
             self.save()
 
-            sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+            sc = Scalingo(
+                use_secnumcloud=bool(self.use_secnumcloud),
+                scalingo_user=self.scalingo_owner,
+            )
 
             sc.app_domain_add(
                 app_name=str(self.scalingo_application_name),
@@ -449,7 +495,10 @@ class Instance(BaseModel):
             }
 
     def scalingo_create_app(self):
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         app_name = str(self.scalingo_application_name)
 
         result = sc.app_create(app_name=app_name)
@@ -481,14 +530,20 @@ class Instance(BaseModel):
 
         This command can be repeated
         """
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         return sc.app_restart(app_name=str(self.scalingo_application_name))
 
     def scalingo_app_delete(self):
         """
         Deletes the app from Scalingo
         """
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         sc.app_delete(app_name=str(self.scalingo_application_name))
 
     def scalingo_app_status(self):
@@ -499,7 +554,10 @@ class Instance(BaseModel):
         if self.status == "REQUEST":
             return ""
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_detail(app_name=str(self.scalingo_application_name))
 
         if "error" in result.keys():
@@ -511,7 +569,10 @@ class Instance(BaseModel):
             return f'<p class="fr-badge fr-badge--info">{result["app"]["status"]}</p>'
 
     def scalingo_provision_db(self):
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_addon_provision(app_name=str(self.scalingo_application_name))
 
         if "errors" in result.keys():
@@ -538,7 +599,10 @@ class Instance(BaseModel):
         if self.status in ["REQUEST", "SCALINGO_APP_CREATED"]:
             return ""
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_addon_detail(
             app_name=str(self.scalingo_application_name),
             addon_id=str(self.scalingo_db_id),
@@ -564,7 +628,10 @@ class Instance(BaseModel):
         """
         Checks the presence of the SECRET_KEY variable as a way to verify if env variables have been set
         """
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
 
         current_vars = sc.app_variables_dict(
             app_name=str(self.scalingo_application_name)
@@ -589,7 +656,10 @@ class Instance(BaseModel):
         """
         env_variables = self.get_env_variables()
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
 
         current_vars = sc.app_variables_dict(
             app_name=str(self.scalingo_application_name)
@@ -653,7 +723,10 @@ class Instance(BaseModel):
         Deploy the latest version of Sites Faciles
         """
         # This command can be repeated
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_deployment_trigger(
             app_name=str(self.scalingo_application_name),
             git_ref="production",
@@ -685,7 +758,10 @@ class Instance(BaseModel):
         if self.status == "REQUEST":
             return ""
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_deployment_list(app_name=str(self.scalingo_application_name))
 
         if "error" in result.keys():
@@ -713,7 +789,10 @@ class Instance(BaseModel):
         return {"date": date, "status": status, "badge": badge, "log_url": log_url}
 
     def scalingo_load_initial_data(self):
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result = sc.app_run(
             app_name=str(self.scalingo_application_name),
             command="make first-deploy",
@@ -744,7 +823,10 @@ class Instance(BaseModel):
             ]
         )
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result_main_contact = sc.app_run(
             app_name=str(self.scalingo_application_name),
             command=command,
@@ -761,7 +843,10 @@ class Instance(BaseModel):
             ]
         )
 
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        sc = Scalingo(
+            use_secnumcloud=bool(self.use_secnumcloud),
+            scalingo_user=self.scalingo_owner,
+        )
         result_sf_infra = sc.app_run(
             app_name=str(self.scalingo_application_name),
             command=command,

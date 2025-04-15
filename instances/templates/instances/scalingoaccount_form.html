@@ -6,7 +6,7 @@
     {% if object.name %}
       {{ object.name }}
     {% else %}
-      Ajouter une instance
+      Ajouter un compte Scalingo
     {% endif %}
   </h1>
 
@@ -19,7 +19,7 @@
       <button type="submit" class="fr-btn" title="Valider">
         Valider ce formulaire
       </button>
-      <a href="{% url 'instances:list' %}"
+      <a href="{% url 'instances:scalingo_account_list' %}"
          class="fr-btn fr-btn--secondary"
          title="Annuler">
         Annuler

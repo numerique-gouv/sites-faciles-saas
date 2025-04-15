@@ -10,12 +10,14 @@ SECNUMCLOUD_ENDPOINT = "api.osc-secnum-fr1.scalingo.com"
 
 
 class Scalingo:
-    def __init__(self, use_secnumcloud: bool = False):
+    def __init__(self, scalingo_user, use_secnumcloud: bool = False):
         if use_secnumcloud:
             self.endpoint_url = f"https://{SECNUMCLOUD_ENDPOINT}/v1/"
         else:
             self.endpoint_url = f"https://{STANDARD_ENDPOINT}/v1/"
         self.agent = USER_AGENT
+
+        self.scalingo_user = scalingo_user
 
         self.bearer_token = self.connect_session()
         self.bearer_token_time = timezone.now()
@@ -29,10 +31,15 @@ class Scalingo:
             "user-agent": self.agent,
         }
 
+        if self.scalingo_user:
+            token = self.scalingo_user.get_secrets()["token"]
+        else:
+            token = settings.SCALINGO_API_TOKEN
+
         response = requests.post(
             "https://auth.scalingo.com/v1/tokens/exchange",
             headers=headers,
-            auth=("", settings.SCALINGO_API_TOKEN),
+            auth=("", token),
             timeout=REQUEST_TIMEOUT,
         )
 

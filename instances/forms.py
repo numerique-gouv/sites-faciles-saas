@@ -2,12 +2,18 @@ from django import forms
 from django.forms import ModelForm
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import EmailConfig, Instance, StorageConfig
+from instances.models import EmailConfig, Instance, ScalingoAccount, StorageConfig
 
 
 class EmailConfigForm(ModelForm, DsfrBaseForm):
     class Meta:
         model = EmailConfig
+        fields = "__all__"  # NOSONAR
+
+
+class ScalingoAccountForm(ModelForm, DsfrBaseForm):
+    class Meta:
+        model = ScalingoAccount
         fields = "__all__"  # NOSONAR
 
 
@@ -24,6 +30,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "name",
             "slug",
             "scalingo_application_name",
+            "scalingo_owner",
             # "use_secnumcloud",
             "main_contact",
             "host_url",
