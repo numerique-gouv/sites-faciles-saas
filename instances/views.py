@@ -3,6 +3,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 
 from core.mixins import StaffOrAdminMixin
 from core.utils import init_context
@@ -10,9 +11,10 @@ from instances.forms import (
     EmailConfigForm,
     InstanceForm,
     InstanceActionForm,
+    ScalingoAccountForm,
     StorageConfigForm,
 )
-from instances.models import EmailConfig, Instance, StorageConfig
+from instances.models import EmailConfig, Instance, ScalingoAccount, StorageConfig
 
 
 class EmailConfigListView(StaffOrAdminMixin, ListView):
@@ -97,6 +99,89 @@ class EmailConfigDeleteView(StaffOrAdminMixin, DeleteView):
 
     def form_valid(self, form):
         messages.success(self.request, "Configuration email supprimée.")
+        return super().form_valid(form)
+
+
+class ScalingoAccountListView(StaffOrAdminMixin, ListView):
+    model = ScalingoAccount
+    paginate_by = 25
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        return init_context(context=context, title=_("Scalingo account management"))
+
+
+SCALINGOACCOUNT_LINKS = [
+    {
+        "title": _("Scalingo account management"),
+        "url": reverse_lazy(
+            "instances:scalingo_account_list",
+        ),
+    }
+]
+
+
+class ScalingoAccountCreateView(StaffOrAdminMixin, CreateView):
+    model = ScalingoAccount
+    form_class = ScalingoAccountForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=_("Create a Scalingo account"),
+            links=SCALINGOACCOUNT_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, _("Scalingo account successfully created"))
+        return super().form_valid(form)
+
+
+class ScalingoAccountDetailView(DetailView):
+    model = ScalingoAccount
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=_(f"Scalingo account {self.object.username}"),
+            links=SCALINGOACCOUNT_LINKS,
+        )
+
+
+class ScalingoAccountUpdateView(StaffOrAdminMixin, UpdateView):
+    model = ScalingoAccount
+    form_class = ScalingoAccountForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=_(f"Scalingo account {self.object.username}"),
+            links=SCALINGOACCOUNT_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, _("Scalingo account successfully updated"))
+        return super().form_valid(form)
+
+
+class ScalingoAccountDeleteView(StaffOrAdminMixin, DeleteView):
+    model = ScalingoAccount
+    success_url = reverse_lazy("instances:scalingo_account_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title=_(f"Deleting {self.object.username}"),
+            links=SCALINGOACCOUNT_LINKS,
+        )
+
+    def form_valid(self, form):
+        messages.success(self.request, _("Scalingo account deleted"))
         return super().form_valid(form)
 
 

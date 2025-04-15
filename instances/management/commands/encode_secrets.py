@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from instances.utils import encode_secrets
 
-ALLOWED_TYPES = ["email", "storage"]
+ALLOWED_TYPES = ["email", "storage", "scalingo"]
 
 
 class Command(BaseCommand):
