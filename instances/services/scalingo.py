@@ -287,7 +287,7 @@ class Scalingo:
         else:
             return {
                 "status": "error",
-                "message": "error when restarting appication",
+                "message": "error when restarting application",
             }
 
     def app_run(

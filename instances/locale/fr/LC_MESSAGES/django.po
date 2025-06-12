@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 17:44+0100\n"
-"PO-Revision-Date: 2025-01-29 17:46+0100\n"
+"POT-Creation-Date: 2025-04-22 11:48+0200\n"
+"PO-Revision-Date: 2025-04-22 11:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -59,137 +59,158 @@ msgstr "Comptes administrateurs créés"
 msgid "Deployment complete"
 msgstr "Déploiement terminé"
 
-#: instances/models.py:29
+#: instances/models.py:30
+#: instances/templates/instances/scalingoaccount_detail.html:21
+msgid "User name"
+msgstr "Nom d’utilisateur"
+
+#: instances/models.py:31
+msgid "Email"
+msgstr "Adresse e-mail"
+
+#: instances/models.py:32
+msgid "Scalingo secrets ID"
+msgstr "Identifiant des secrets Scalingo"
+
+#: instances/models.py:36
+msgid "Scalingo account"
+msgstr "Compte Scalingo"
+
+#: instances/models.py:81
 #: instances/templates/instances/emailconfig_detail.html:21
 msgid "Default from"
 msgstr "Expéditeur par défaut"
 
-#: instances/models.py:31
+#: instances/models.py:83
 #: instances/templates/instances/emailconfig_detail.html:33
 msgid "Host domain"
 msgstr "Domaine de l’hôte"
 
-#: instances/models.py:33
+#: instances/models.py:85
 msgid "Can only contain a domain name, without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine, sans le https://"
 
-#: instances/models.py:35
+#: instances/models.py:87
 #: instances/templates/instances/emailconfig_detail.html:43
 msgid "Port"
 msgstr "Port"
 
-#: instances/models.py:36
+#: instances/models.py:88
 #: instances/templates/instances/emailconfig_detail.html:53
 msgid "Email secrets ID"
 msgstr "Identifiant des secrets Email"
 
-#: instances/models.py:38
+#: instances/models.py:90
 #: instances/templates/instances/emailconfig_detail.html:63
 msgid "Use TLS"
 msgstr "Utiliser TLS"
 
-#: instances/models.py:39
+#: instances/models.py:91
 #: instances/templates/instances/emailconfig_detail.html:73
 msgid "Use SSL"
 msgstr "Utiliser SSL"
 
-#: instances/models.py:41
+#: instances/models.py:93
 #: instances/templates/instances/emailconfig_detail.html:83
 msgid "Timeout delay"
 msgstr "Délai d’expiration"
 
-#: instances/models.py:46
+#: instances/models.py:98
 #: instances/templates/instances/emailconfig_detail.html:93
 msgid "SSL keyfile"
 msgstr "SSL keyfile"
 
-#: instances/models.py:49 instances/models.py:57
+#: instances/models.py:101 instances/models.py:109
 msgid "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
 msgstr ""
 "Optionnel, peut être utilisé si EMAIL_USE_SSL ou EMAIL_USE_TLS est vrai."
 
-#: instances/models.py:54
+#: instances/models.py:106
 #: instances/templates/instances/emailconfig_detail.html:103
 msgid "SSL certfile"
 msgstr "SSL certfile"
 
-#: instances/models.py:63
+#: instances/models.py:115
 msgid "email config"
 msgstr "configuration e-mail"
 
-#: instances/models.py:95
+#: instances/models.py:147
 msgid "bucket name"
 msgstr "nom du bucket"
 
-#: instances/models.py:99
+#: instances/models.py:151
 msgid "bucket region"
 msgstr "région du bucket"
 
-#: instances/models.py:102
+#: instances/models.py:154
 msgid "host"
 msgstr "serveur"
 
-#: instances/models.py:104
+#: instances/models.py:156
 msgid "storage secrets ID"
 msgstr "identifiant des secrets de stockage"
 
-#: instances/models.py:107
+#: instances/models.py:159
 msgid "storage config"
 msgstr "configuration de stockage"
 
-#: instances/models.py:138
+#: instances/models.py:190
 msgid "name"
 msgstr "nom"
 
-#: instances/models.py:140
+#: instances/models.py:192
 msgid "identifiant"
 msgstr "identifiant"
 
-#: instances/models.py:141
+#: instances/models.py:193
 msgid "If empty, will be generated from the instance name."
 msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
 
-#: instances/models.py:147
+#: instances/models.py:199
 msgid "Main contact"
 msgstr "Contact principal"
 
-#: instances/models.py:150
+#: instances/models.py:202
 msgid "status"
 msgstr "statut"
 
-#: instances/models.py:153
+#: instances/models.py:205
 msgid "Scalingo application name"
 msgstr "Nom de l’application Scalingo"
 
-#: instances/models.py:154
+#: instances/models.py:206
 msgid "If empty, will default to sf-&lt;slug&gt;."
 msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
 
-#: instances/models.py:159
+#: instances/models.py:216
+msgid "Owner in Scalingo"
+msgstr "Propriétaire dans Scalingo"
+
+#: instances/models.py:219
 msgid "Scalingo database ID"
 msgstr "Identifiant base de données dans Scalingo"
 
-#: instances/models.py:161
+#: instances/models.py:221
 msgid "Use SecNumCloud?"
 msgstr "Utiliser SecNumCloud ?"
 
-#: instances/models.py:164
+#: instances/models.py:224
 msgid "Scaleway subdomain"
 msgstr "Sous-domaine Scaleway"
 
-#: instances/models.py:169
+#: instances/models.py:229
 msgid "Main URL domain"
 msgstr "Domaine principal"
 
-#: instances/models.py:172
+#: instances/models.py:232
 msgid "Can only contain a domain name without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
 
-#: instances/models.py:175
+#: instances/models.py:235
 msgid "All allowed domains"
 msgstr "Tous les domaines autorisés"
 
-#: instances/models.py:179
+#: instances/models.py:239
 msgid ""
 "Can only contain a list of domain names without the https://, separated by "
 "commas"
@@ -197,51 +218,87 @@ msgstr ""
 "Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
 "par des virgules"
 
-#: instances/models.py:187
+#: instances/models.py:247
 msgid "Email configuration"
 msgstr "Configuration email"
 
-#: instances/models.py:189
+#: instances/models.py:249
 msgid "Allow users to reset their password"
 msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
 
-#: instances/models.py:195
+#: instances/models.py:255
 msgid "Storage configuration"
 msgstr "Configuration de stockage"
 
-#: instances/models.py:199
+#: instances/models.py:259
 msgid "instance"
 msgstr "instance"
 
-#: instances/models.py:350
+#: instances/models.py:410
 msgid "(The value will be generated automatically.)"
 msgstr "(La valeur sera générée automatiquement.)"
 
-#: instances/models.py:419
+#: instances/models.py:482
 msgid "Domain added"
 msgstr "Domaine ajouté"
 
-#: instances/models.py:424
+#: instances/models.py:487
 msgid "Alwaysdata returned the following warning: "
 msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
 
-#: instances/models.py:430
+#: instances/models.py:493
 msgid "Alwaysdata returned the following error: "
 msgstr "Alwaysdata a renvoyé l’erreur suivante : "
 
-#: instances/models.py:459 instances/models.py:512 instances/models.py:629
-#: instances/models.py:658 instances/models.py:718 instances/models.py:766
-#: instances/models.py:772
+#: instances/models.py:526 instances/models.py:598 instances/models.py:724
+#: instances/models.py:756 instances/models.py:822 instances/models.py:876
+#: instances/models.py:882
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
 
-#: instances/models.py:685
+#: instances/models.py:786
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: instances/models.py:725
+#: instances/models.py:829
 msgid "Initial data deployment requested"
 msgstr "Chargement des données initiales demandé"
+
+#: instances/templates/instances/scalingoaccount_detail.html:33
+msgid "Secrets ID"
+msgstr "Identifiant des secrets"
+
+#: instances/templates/instances/scalingoaccount_list.html:14
+msgid "Create account"
+msgstr "Créer un compte"
+
+#: instances/templates/instances/scalingoaccount_list.html:24
+msgid "Accounts list"
+msgstr "Liste des comptes"
+
+#: instances/templates/instances/scalingoaccount_list.html:29
+msgid "Account"
+msgstr "Compte"
+
+#: instances/templates/instances/scalingoaccount_list.html:32
+msgid "Actions"
+msgstr "Actions"
+
+#: instances/templates/instances/scalingoaccount_list.html:45
+msgid "Manage account"
+msgstr "Gérer le compte"
+
+#: instances/templates/instances/scalingoaccount_list.html:52
+msgid "Modify account"
+msgstr "Modifier le compte"
+
+#: instances/templates/instances/scalingoaccount_list.html:59
+msgid "Delete account"
+msgstr "Supprimer le compte"
+
+#: instances/templates/instances/scalingoaccount_list.html:71
+msgid "There is currently no account."
+msgstr "Il n’y a actuellement aucun compte."
 
 #: instances/templates/instances/storageconfig_detail.html:21
 msgid "Bucket name"
@@ -259,11 +316,38 @@ msgstr "Serveur"
 msgid "Storage secrets ID"
 msgstr "Identifiant des secrets de stockage"
 
+#: instances/views.py:111 instances/views.py:116
+msgid "Scalingo account management"
+msgstr "Gestion des comptes Scalingo"
+
+#: instances/views.py:132
+msgid "Create a Scalingo account"
+msgstr "Créer un compte Scalingo"
+
+#: instances/views.py:137
+msgid "Scalingo account successfully created"
+msgstr "Compte Scalingo créé avec succès"
+
+#: instances/views.py:149 instances/views.py:162
+#, python-brace-format
+msgid "Scalingo account {self.object.username}"
+msgstr "Compte Scalingo {self.object.username}"
+
+#: instances/views.py:167
+msgid "Scalingo account successfully updated"
+msgstr "Compte Scalingo mis à jour avec succès"
+
+#: instances/views.py:179
+#, python-brace-format
+msgid "Deleting {self.object.username}"
+msgstr "Suppression de {self.object.username}"
+
+#: instances/views.py:184
+msgid "Scalingo account deleted"
+msgstr "Compte Scalingo supprimé"
+
 #~ msgid "Default sender domain"
 #~ msgstr "Domaine d’envoi par défaut"
-
-#~ msgid "Email port"
-#~ msgstr "Port du serveur de messagerie"
 
 #~ msgid "slug"
 #~ msgstr "slug"

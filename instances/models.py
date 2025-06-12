@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 import csv
 from datetime import datetime
 import secrets
@@ -27,7 +28,8 @@ class ScalingoAccount(BaseModel):
     """
 
     username = models.CharField(_("User name"), max_length=100, unique=True)
-    secrets_id = models.PositiveSmallIntegerField(_("Scalingo secrets ID"), unique=True)  # type: ignore
+    email = models.EmailField(_("Email"), unique=True)
+    encrypted_api_key = models.BinaryField(null=True, blank=True)
 
     class Meta:
         verbose_name = _("Scalingo account")
@@ -54,6 +56,20 @@ class ScalingoAccount(BaseModel):
             secrets[row_id] = {"username": row[1], "token": row[2]}
 
         return secrets[str(self.secrets_id)]
+
+    @property
+    def api_key(self) -> str:
+        cipher_suite = Fernet(settings.ENCRYPTION_KEY)
+        return (
+            cipher_suite.decrypt(self.encrypted_api_key).decode()
+            if self.encrypted_api_key
+            else ""
+        )
+
+    @api_key.setter
+    def api_key(self, value) -> None:
+        cipher_suite = Fernet(settings.ENCRYPTION_KEY)
+        self.encrypted_api_key = cipher_suite.encrypt(value.encode())
 
 
 class EmailConfig(BaseModel):

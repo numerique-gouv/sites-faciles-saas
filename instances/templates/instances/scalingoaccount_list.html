@@ -11,7 +11,7 @@
   <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-sm">
     <li>
       <a href="{% url 'instances:scalingo_account_create' %}"
-         class="fr-btn fr-icon-add-circle-line">Créer une configuration</a>
+         class="fr-btn fr-icon-add-circle-line">{% translate "Create account" %}</a>
     </li>
   </ul>
 
@@ -21,15 +21,15 @@
         <div class="fr-table__content">
           <table id="table-md">
             <caption>
-              Liste des configurations
+              {% translate "Accounts list" %}
             </caption>
             <thead>
               <tr>
                 <th scope="col">
-                  Compte
+                  {% translate "Account" %}
                 </th>
                 <th scope="col">
-                  Actions
+                  {% translate "Actions" %}
                 </th>
               </tr>
             </thead>
@@ -42,22 +42,25 @@
                   <td>
                     <ul class="fr-btns-group fr-btns-group--inline-md">
                       <li>
+                        {% translate "Manage account" as manage_account_label %}
                         <a class="fr-btn fr-icon-briefcase-line"
                            href="{% url 'instances:scalingo_account_detail' entry.pk %}"
-                           title="Gérer le compte"
-                           aria-describedby="instance-{{ entry.pk }}">Gérer le compte</a>
+                           title="{{ manage_account_label }}"
+                           aria-describedby="instance-{{ entry.pk }}">{{ manage_account_label }}</a>
                       </li>
                       <li>
+                        {% translate "Modify account" as modify_account_label %}
                         <a class="fr-btn fr-icon-edit-line  fr-btn--tertiary"
                            href="{% url 'instances:scalingo_account_update' entry.pk %}"
-                           title="Modifier le compte"
-                           aria-describedby="instance-{{ entry.pk }}">Modifier le compte</a>
+                           title="{{ modify_account_label }}"
+                           aria-describedby="instance-{{ entry.pk }}">{{ modify_account_label }}</a>
                       </li>
                       <li>
+                        {% translate "Delete account" as delete_account_label %}
                         <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
                            href="{% url 'instances:scalingo_account_delete' entry.pk %}"
-                           title="Supprimer le compte"
-                           aria-describedby="instance-{{ entry.pk }}">Supprimer le compte</a>
+                           title="{{ delete_account_label }}"
+                           aria-describedby="instance-{{ entry.pk }}">{{ delete_account_label }}</a>
                       </li>
                     </ul>
                   </td>
@@ -65,17 +68,15 @@
               {% empty %}
                 <tr>
                   <td>
-                    Il n’y a aucune configuration actuellement.
+                    {% translate "There is currently no account." %}
                   </td>
                 </tr>
               {% endfor %}
-
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-
   {% include "core/blocks/pagination.html" %}
 {% endblock content %}
