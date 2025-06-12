@@ -31,15 +31,15 @@ class Command(BaseCommand):
         action = kwargs.get("action", "add")
         emails = kwargs.get("emails", "")
 
-        if not emails:
+        if action == "add" and not emails:
             raise ValueError("Missing parameter: emails.")
 
-        email_list = emails.split(",")
-
         if action == "list":
+            email_list = []
             self.stdout.write("List all collaborators for all apps.")
         else:
-            print(f"List of email addresses to {action}: {email_list}")
+            email_list = emails.split(",")
+            self.stdout.write(f"List of email addresses to {action}: {email_list}")
 
         for snc in [True, False]:
             sc = Scalingo(use_secnumcloud=snc)
