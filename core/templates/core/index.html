@@ -16,11 +16,17 @@
           <a href="{% url 'instances:list' %}">Gérer les instances de Sites faciles</a>
         </strong>
       </li>
+    </ul>
+    <hr />
+    <ul>
       <li>
         <a href="{% url 'contacts:list' %}">Gérer les contacts</a>
       </li>
       <li>
         <a href="{% url 'instances:emailconfig_list' %}">Gérer les configurations d’envoi d’emails</a>
+      </li>
+      <li>
+        <a href="{% url 'instances:scalingo_account_list' %}">Gérer les comptes Scalingo</a>
       </li>
       <li>
         <a href="{% url 'instances:storageconfig_list' %}">Gérer les configurations de stockage</a>

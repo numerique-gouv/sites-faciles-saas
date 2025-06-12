@@ -1,14 +1,43 @@
+from cryptography.fernet import Fernet
+
 from django import forms
+from django.conf import settings
 from django.forms import ModelForm
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import EmailConfig, Instance, StorageConfig
+from instances.models import EmailConfig, Instance, ScalingoAccount, StorageConfig
 
 
 class EmailConfigForm(ModelForm, DsfrBaseForm):
     class Meta:
         model = EmailConfig
         fields = "__all__"  # NOSONAR
+
+
+class ScalingoAccountForm(ModelForm, DsfrBaseForm):
+    class Meta:
+        model = ScalingoAccount
+        fields = ["username", "email"]
+
+
+class ScalingoAccountApiKeyForm(forms.ModelForm):
+    api_key = forms.CharField(max_length=255, required=True)
+
+    class Meta:
+        model = ScalingoAccount
+        fields = []
+
+    def save(self, commit=True):
+        instance = super(ScalingoAccountApiKeyForm, self).save(commit=False)
+        api_key = self.cleaned_data.get("api_key")
+        cipher_suite = Fernet(settings.ENCRYPTION_KEY)
+        instance.encrypted_api_key = cipher_suite.encrypt(
+            api_key.encode()  # type:ignore
+        )
+
+        if commit:
+            instance.save()
+        return instance
 
 
 class StorageConfigForm(ModelForm, DsfrBaseForm):
@@ -24,6 +53,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "name",
             "slug",
             "scalingo_application_name",
+            "scalingo_owner",
             # "use_secnumcloud",
             "main_contact",
             "host_url",
