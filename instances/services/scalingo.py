@@ -243,6 +243,13 @@ class Scalingo:
         else:
             return {"error": "error when removing addon"}
 
+    def app_collaborators_list(self, app_name: str):
+        return self.get(f"apps/{app_name}/collaborators")
+
+    def app_collaborators_invite(self, app_name: str, email: str):
+        json_data = {"collaborator": {"email": email}}
+        return self.post(f"apps/{app_name}/collaborators", json_data=json_data)
+
     def app_deployment_list(self, app_name: str):
         return self.get(f"apps/{app_name}/deployments")
 
