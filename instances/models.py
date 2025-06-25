@@ -226,7 +226,8 @@ class Instance(BaseModel):
 
     @classmethod
     def get_auto_deployable_instances(cls):
-        return cls.get_deployable_instances().filter(auto_upgrade=True)
+        return []
+        # return cls.get_deployable_instances().filter(auto_upgrade=True)
 
     def get_steps(self):
         status_keys = list(STATUS_DETAILED)
