@@ -58,5 +58,4 @@ update:
 
 upgrade:
     uv lock --upgrade
-    uv export --no-dev -q -o requirements.txt
     {{uv_run}} pre-commit autoupdate
