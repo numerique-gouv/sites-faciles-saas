@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 17:44+0100\n"
-"PO-Revision-Date: 2025-01-29 17:46+0100\n"
+"POT-Creation-Date: 2025-06-25 15:24+0200\n"
+"PO-Revision-Date: 2025-06-25 15:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -48,16 +48,12 @@ msgid "Sites Faciles code deployed"
 msgstr "Code de Sites Faciles déployé"
 
 #: instances/constants.py:33
-msgid "Sites Faciles initial data deployed"
-msgstr "Données initiales de Sites faciles chargées"
-
-#: instances/constants.py:38
 msgid "Superusers created"
 msgstr "Comptes administrateurs créés"
 
-#: instances/constants.py:43
-msgid "Deployment complete"
-msgstr "Déploiement terminé"
+#: instances/constants.py:38
+msgid "Initial deployment complete"
+msgstr "Déploiement initial terminé"
 
 #: instances/models.py:29
 #: instances/templates/instances/emailconfig_detail.html:21
@@ -177,19 +173,35 @@ msgstr "Utiliser SecNumCloud ?"
 msgid "Scaleway subdomain"
 msgstr "Sous-domaine Scaleway"
 
-#: instances/models.py:169
+#: instances/models.py:168
+msgid "Git branch"
+msgstr "Branche git"
+
+#: instances/models.py:172
+msgid ""
+"Choose the version of Sites Faciles to deploy. Please leave the default "
+"value if you are not a dev."
+msgstr ""
+"Choisissez la version de Sites Faciles à déployer. Merci de laisser la "
+"valeur par défaut si vous n'êtes pas membre de l’équipe de développement."
+
+#: instances/models.py:176
+msgid "Automatically deploy new releases"
+msgstr "Déployer automatiquement les nouvelles versions"
+
+#: instances/models.py:180
 msgid "Main URL domain"
 msgstr "Domaine principal"
 
-#: instances/models.py:172
+#: instances/models.py:183
 msgid "Can only contain a domain name without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
 
-#: instances/models.py:175
+#: instances/models.py:186
 msgid "All allowed domains"
 msgstr "Tous les domaines autorisés"
 
-#: instances/models.py:179
+#: instances/models.py:190
 msgid ""
 "Can only contain a list of domain names without the https://, separated by "
 "commas"
@@ -197,51 +209,73 @@ msgstr ""
 "Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
 "par des virgules"
 
-#: instances/models.py:187
+#: instances/models.py:198
 msgid "Email configuration"
 msgstr "Configuration email"
 
-#: instances/models.py:189
+#: instances/models.py:200
 msgid "Allow users to reset their password"
 msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
 
-#: instances/models.py:195
+#: instances/models.py:206
 msgid "Storage configuration"
 msgstr "Configuration de stockage"
 
-#: instances/models.py:199
+#: instances/models.py:210
 msgid "instance"
 msgstr "instance"
 
-#: instances/models.py:350
+#: instances/models.py:370
 msgid "(The value will be generated automatically.)"
 msgstr "(La valeur sera générée automatiquement.)"
 
-#: instances/models.py:419
+#: instances/models.py:439
 msgid "Domain added"
 msgstr "Domaine ajouté"
 
-#: instances/models.py:424
+#: instances/models.py:444
 msgid "Alwaysdata returned the following warning: "
 msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
 
-#: instances/models.py:430
+#: instances/models.py:450
 msgid "Alwaysdata returned the following error: "
 msgstr "Alwaysdata a renvoyé l’erreur suivante : "
 
-#: instances/models.py:459 instances/models.py:512 instances/models.py:629
-#: instances/models.py:658 instances/models.py:718 instances/models.py:766
-#: instances/models.py:772
+#: instances/models.py:480 instances/models.py:540 instances/models.py:657
+#: instances/models.py:686 instances/models.py:773 instances/models.py:779
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
 
-#: instances/models.py:685
+#: instances/models.py:713
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: instances/models.py:725
-msgid "Initial data deployment requested"
-msgstr "Chargement des données initiales demandé"
+#: instances/templates/instances/instance_mass_deploy_list.html:6
+msgid "Batch redeploy instances"
+msgstr "Redéployer les instances en masse"
+
+#: instances/templates/instances/instance_mass_deploy_list.html:11
+msgid ""
+"Instances are checked here according to their 'Automatically deploy new "
+"releases' setting but this can be overriden if needed."
+msgstr ""
+"Les instances sont vérifiées ici en fonction de leur paramètre « Déployer "
+"automatiquement les nouvelles versions », mais cela peut être remplacé si "
+"nécessaire."
+
+#: instances/templates/instances/instance_mass_deploy_list.html:15
+msgid "Only instances where the first deployment is finished can appear here."
+msgstr ""
+"Seules les instances où le premier déploiement est terminé peuvent "
+"apparaître ici."
+
+#: instances/templates/instances/instance_mass_deploy_list.html:28
+msgid "Confirm deployment"
+msgstr "Confirmer le déploiement"
+
+#: instances/templates/instances/instance_mass_deploy_list.html:32
+msgid "Cancel"
+msgstr "Annuler"
 
 #: instances/templates/instances/storageconfig_detail.html:21
 msgid "Bucket name"
@@ -258,6 +292,16 @@ msgstr "Serveur"
 #: instances/templates/instances/storageconfig_detail.html:53
 msgid "Storage secrets ID"
 msgstr "Identifiant des secrets de stockage"
+
+#: instances/views.py:333
+msgid "Successful deployments for instances:"
+msgstr "Déploiements réussis pour les instances :"
+
+#~ msgid "Sites Faciles initial data deployed"
+#~ msgstr "Données initiales de Sites faciles chargées"
+
+#~ msgid "Initial data deployment requested"
+#~ msgstr "Chargement des données initiales demandé"
 
 #~ msgid "Default sender domain"
 #~ msgstr "Domaine d’envoi par défaut"

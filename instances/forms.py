@@ -31,6 +31,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "email_config",
             "wagtail_password_reset_enabled",
             "storage_config",
+            "git_branch",
         ]
 
 
@@ -55,9 +56,17 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_deploy_code()
         elif action == "alwaysdata_scalingo_set_subdomain":
             return self.instance.alwaysdata_scalingo_set_subdomain()
-        elif action == "scalingo_load_initial_data":
-            return self.instance.scalingo_load_initial_data()
         elif action == "scalingo_create_superusers":
             return self.instance.scalingo_create_superusers()
         elif action == "scalingo_app_restart":
             return self.instance.scalingo_app_restart()
+
+
+class InstanceMassDeployForm(DsfrBaseForm):
+    instances = forms.ModelMultipleChoiceField(
+        queryset=Instance.get_deployable_instances(),
+        widget=forms.CheckboxSelectMultiple,
+        initial=list(
+            Instance.get_auto_deployable_instances().values_list("id", flat=True)
+        ),
+    )

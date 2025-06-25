@@ -164,6 +164,17 @@ class Instance(BaseModel):
         _("Scaleway subdomain"), max_length=100, blank=True
     )
 
+    git_branch = models.CharField(
+        _("Git branch"),
+        max_length=100,
+        default="production",
+        help_text=_(
+            "Choose the version of Sites Faciles to deploy. Please leave the default value if you are not a dev."
+        ),
+    )
+
+    auto_upgrade = models.BooleanField(_("Automatically deploy new releases"), default=True)  # type: ignore
+
     # Env variables
     host_url = models.CharField(
         _("Main URL domain"),
@@ -209,6 +220,14 @@ class Instance(BaseModel):
     def current_status(self) -> dict:
         return STATUS_DETAILED[str(self.status)]
 
+    @classmethod
+    def get_deployable_instances(cls):
+        return cls.objects.filter(status="FINISHED")
+
+    @classmethod
+    def get_auto_deployable_instances(cls):
+        return cls.get_deployable_instances().filter(auto_upgrade=True)
+
     def get_steps(self):
         status_keys = list(STATUS_DETAILED)
         current_key = status_keys.index(str(self.status))
@@ -246,8 +265,9 @@ class Instance(BaseModel):
         return f"https://{self.scalingo_instance_host}/"
 
     def save(self, *args, **kwargs):
+        shortened_name = str(self.name)[:42]
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(shortened_name)
         if not self.scalingo_application_name:
             self.scalingo_application_name = (
                 f"{settings.SCALINGO_APPLICATION_PREFIX}-{self.slug}"
@@ -656,18 +676,18 @@ class Instance(BaseModel):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         result = sc.app_deployment_trigger(
             app_name=str(self.scalingo_application_name),
-            git_ref="production",
-            source_url="https://github.com/numerique-gouv/sites-faciles/archive/production.tar.gz",
+            git_ref=str(self.git_branch),
+            source_url=f"https://github.com/numerique-gouv/sites-faciles/archive/{self.git_branch}.tar.gz",
         )
 
         if "error" in result.keys():
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
-                + f"<code>{result['errors']}</code>",
+                + f"<code>{result['error']}</code>",
             }
         else:
-            # Only do it the first time
+            # Only update status the first time
             if self.status == "SCALINGO_ENV_VARS_SET":
                 self.status = "SF_CODE_DEPLOYED"
                 self.save()
@@ -711,27 +731,6 @@ class Instance(BaseModel):
             log_url = f"{self.scalingo_app_url}/deploy/{deployment_id}"
 
         return {"date": date, "status": status, "badge": badge, "log_url": log_url}
-
-    def scalingo_load_initial_data(self):
-        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
-        result = sc.app_run(
-            app_name=str(self.scalingo_application_name),
-            command="make first-deploy",
-            variables={},
-        )
-
-        if "error" in result.keys():
-            return {
-                "status": "error",
-                "message": _("Scalingo returned the following error: ")
-                + f"<code>{result['error']}</code>",
-            }
-        else:
-            self.status = "SF_INITIAL_DATA_DEPLOYED"
-            return {
-                "status": "success",
-                "message": _("Initial data deployment requested"),
-            }
 
     def scalingo_create_superusers(self):
         # Not using env var as they do not seem to be read
