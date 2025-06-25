@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% load static i18n dsfr_tags %}
+
+{% block content %}
+  <h1>
+    {% translate "Batch redeploy instances" %}
+  </h1>
+  <form method="post">
+    {% csrf_token %}
+    <p>
+      {% translate "Instances are checked here according to their 'Automatically deploy new releases' setting but this can be overriden if needed." %}
+    </p>
+
+    <p>
+      {% translate "Only instances where the first deployment is finished can appear here." %}
+    </p>
+
+    <ul>
+      {% for instance in instances %}
+        <li>
+          {{ instance }}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {{ form }}
+    <div class="fr-input-group fr-my-4w">
+      {% translate "Confirm deployment" as confirm_deployment %}
+      <button type="submit" class="fr-btn" title="{{ confirm_deployment }}">
+        {{ confirm_deployment }}
+      </button>
+      {% translate "Cancel" as cancel_label %}
+      <a href="{% url 'instances:list' %}"
+         class="fr-btn fr-btn--secondary"
+         title="{{ cancel_label }}">
+        {{ cancel_label }}
+      </a>
+    </div>
+  </form>
+{% endblock content %}

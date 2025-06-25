@@ -29,20 +29,15 @@ STATUS_DETAILED = {
         "color_class": "blue-cumulus",
         "rank": 4,
     },
-    "SF_INITIAL_DATA_DEPLOYED": {
-        "label": _("Sites Faciles initial data deployed"),
-        "color_class": "blue-cumulus",
-        "rank": 5,
-    },
     "SF_SUPERUSERS_CREATED": {
         "label": _("Superusers created"),
         "color_class": "blue-cumulus",
-        "rank": 6,
+        "rank": 5,
     },
     "FINISHED": {
-        "label": _("Deployment complete"),
+        "label": _("Initial deployment complete"),
         "color_class": "green-bourgeon",
-        "rank": 7,
+        "rank": 6,
     },
 }
 

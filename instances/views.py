@@ -1,8 +1,9 @@
 from django.contrib import messages
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 from core.mixins import StaffOrAdminMixin
 from core.utils import init_context
@@ -10,6 +11,7 @@ from instances.forms import (
     EmailConfigForm,
     InstanceForm,
     InstanceActionForm,
+    InstanceMassDeployForm,
     StorageConfigForm,
 )
 from instances.models import EmailConfig, Instance, StorageConfig
@@ -285,7 +287,7 @@ class InstanceDeleteView(StaffOrAdminMixin, DeleteView):
         return super().form_valid(form)
 
 
-class InstanceDetailView(DetailView):
+class InstanceDetailView(StaffOrAdminMixin, DetailView):
     model = Instance
 
     def get_context_data(self, **kwargs):
@@ -296,3 +298,42 @@ class InstanceDetailView(DetailView):
             title=f"Gérer l’instance {self.object.name}",
             links=INSTANCES_LINKS,
         )
+
+
+class InstanceMassDeployFormView(StaffOrAdminMixin, FormView):
+    template_name = "instances/instance_mass_deploy_list.html"
+    form_class = InstanceMassDeployForm
+    success_url = reverse_lazy("instances:list")
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        return init_context(
+            context=context,
+            title="Redéployer des instances en masse",
+            links=INSTANCES_LINKS,
+        )
+
+    def form_valid(self, form):
+        instances = form.cleaned_data["instances"]
+
+        successful_deployments = []
+        for instance in instances:
+            result = instance.scalingo_deploy_code()
+
+            if result["status"] == "success":
+                successful_deployments.append(instance.name)
+            elif result["status"] == "warning":
+                messages.warning(self.request, result["message"])
+            else:
+                messages.error(self.request, result["message"])
+
+        successful_deployments_list = ", ".join(successful_deployments)
+
+        success_message = _("Successful deployments for instances:")
+        messages.success(
+            self.request,
+            f"{success_message} {successful_deployments_list}.",
+        )
+
+        return super().form_valid(form)
