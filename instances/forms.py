@@ -46,8 +46,6 @@ class InstanceForm(ModelForm, DsfrBaseForm):
                 )
             )
 
-        # Always return a value to use as the new cleaned data, even if
-        # this method didn't change it.
         return allowed_hosts
 
 
