@@ -39,7 +39,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
     def clean_allowed_hosts(self):
         host_url = self.cleaned_data["host_url"]
         allowed_hosts = self.cleaned_data["allowed_hosts"]
-        if host_url not in allowed_hosts:
+        if host_url not in allowed_hosts.split(","):
             raise ValidationError(
                 _(
                     "The value of this field must include the value defined in the field 'Main URL domain'."
