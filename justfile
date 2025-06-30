@@ -47,7 +47,7 @@ runserver:
     {{uv_run}} python manage.py runserver $HOST_URL:$HOST_PORT
 
 shell:
-    {{uv_run}} python manage.py {{ if env("DEBUG") == "True" { "shell_plus" } else { "shell" } }}
+    {{uv_run}} python manage.py shell
 
 test app="":
     {{uv_run}} python manage.py test {{app}}

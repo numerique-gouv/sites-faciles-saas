@@ -608,12 +608,16 @@ class Instance(BaseModel):
         This command can be repeated
         """
         env_variables = self.get_env_variables()
+        local_host_url = [
+            d["value"] for d in env_variables if d["name"] == "HOST_URL"
+        ].pop()
 
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
 
         current_vars = sc.app_variables_dict(
             app_name=str(self.scalingo_application_name)
         )
+        scalingo_host_url = current_vars["HOST_URL"]
 
         if "SECRET_KEY" not in current_vars:
             env_variables += [
@@ -662,10 +666,34 @@ class Instance(BaseModel):
             if self.status == "SCALINGO_DB_PROVISIONED":
                 self.status = "SCALINGO_ENV_VARS_SET"
                 self.save()
+            elif local_host_url != scalingo_host_url:
+                # Only do this on redeploys
+                self.scalingo_set_config()
 
             return {
                 "status": "success",
                 "message": "Variables d’environnements mises à jour avec succès dans Scalingo.",
+            }
+
+    def scalingo_set_config(self):
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_run(
+            app_name=str(self.scalingo_application_name),
+            command="python manage.py set_config",
+            variables={},
+        )
+
+        if "error" in result.keys():
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{result['error']}</code>",
+            }
+        else:
+            self.status = "SF_INITIAL_DATA_DEPLOYED"
+            return {
+                "status": "success",
+                "message": _("Initial data deployment requested"),
             }
 
     def scalingo_deploy_code(self):

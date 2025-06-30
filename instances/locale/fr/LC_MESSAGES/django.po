@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-25 15:24+0200\n"
-"PO-Revision-Date: 2025-06-25 15:24+0200\n"
+"POT-Creation-Date: 2025-06-30 15:45+0200\n"
+"PO-Revision-Date: 2025-06-30 15:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -54,6 +54,13 @@ msgstr "Comptes administrateurs créés"
 #: instances/constants.py:38
 msgid "Initial deployment complete"
 msgstr "Déploiement initial terminé"
+
+#: instances/forms.py:45
+msgid ""
+"The value of this field must include the value defined in the field 'Main "
+"URL domain'."
+msgstr ""
+"La valeur de ce champ doit inclure celle du champ « Domaine principal »."
 
 #: instances/models.py:29
 #: instances/templates/instances/emailconfig_detail.html:21
@@ -241,12 +248,17 @@ msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
 msgid "Alwaysdata returned the following error: "
 msgstr "Alwaysdata a renvoyé l’erreur suivante : "
 
-#: instances/models.py:480 instances/models.py:540 instances/models.py:657
-#: instances/models.py:686 instances/models.py:773 instances/models.py:779
+#: instances/models.py:480 instances/models.py:540 instances/models.py:661
+#: instances/models.py:689 instances/models.py:714 instances/models.py:801
+#: instances/models.py:807
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
 
-#: instances/models.py:713
+#: instances/models.py:696
+msgid "Initial data deployment requested"
+msgstr "Chargement des données initiales demandé"
+
+#: instances/models.py:741
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -299,9 +311,6 @@ msgstr "Déploiements réussis pour les instances :"
 
 #~ msgid "Sites Faciles initial data deployed"
 #~ msgstr "Données initiales de Sites faciles chargées"
-
-#~ msgid "Initial data deployment requested"
-#~ msgstr "Chargement des données initiales demandé"
 
 #~ msgid "Default sender domain"
 #~ msgstr "Domaine d’envoi par défaut"
