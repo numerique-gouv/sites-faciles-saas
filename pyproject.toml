@@ -21,7 +21,6 @@ dependencies = [
 dev = [
     "black>=24.10.0",
     "django-debug-toolbar>=4.4.6",
-    "django-extensions>=3.2.3",
     "djlint>=1.36.4",
     "ipython>=8.31.0",
     "pre-commit>=4.0.1",
