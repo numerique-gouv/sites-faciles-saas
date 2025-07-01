@@ -617,7 +617,7 @@ class Instance(BaseModel):
         current_vars = sc.app_variables_dict(
             app_name=str(self.scalingo_application_name)
         )
-        scalingo_host_url = current_vars["HOST_URL"]
+        scalingo_host_url = current_vars.get("HOST_URL", "")
 
         if "SECRET_KEY" not in current_vars:
             env_variables += [
