@@ -666,7 +666,7 @@ class Instance(BaseModel):
             if self.status == "SCALINGO_DB_PROVISIONED":
                 self.status = "SCALINGO_ENV_VARS_SET"
                 self.save()
-            elif local_host_url != scalingo_host_url:
+            elif self.status == "FINISHED" and local_host_url != scalingo_host_url:
                 # Only do this on redeploys
                 self.scalingo_set_config()
 
