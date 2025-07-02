@@ -173,7 +173,7 @@ class Instance(BaseModel):
         ),
     )
 
-    auto_upgrade = models.BooleanField(_("Automatically deploy new releases"), default=True)  # type: ignore
+    auto_upgrade = models.BooleanField(_("Automatically deploy new releases"), help_text=_("Uncheck this box for headless instances."), default=True)  # type: ignore
 
     # Env variables
     host_url = models.CharField(
