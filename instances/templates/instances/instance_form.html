@@ -1,12 +1,12 @@
 {% extends "core/base.html" %}
-{% load static dsfr_tags %}
+{% load static i18n dsfr_tags %}
 
 {% block content %}
   <h1>
     {% if object.name %}
       {{ object.name }}
     {% else %}
-      Ajouter une instance
+      {% translate "Add a new instance" %}
     {% endif %}
   </h1>
 
@@ -14,15 +14,42 @@
 
   <form method="post">
     {% csrf_token %}
-    {{ form }}
+
+    <fieldset class="fr-input-group">
+      <legend>
+        {% translate "Base fields" %}
+      </legend>
+      {% dsfr_form_field form.name %}
+      {% dsfr_form_field form.main_contact %}
+      {% dsfr_form_field form.email_config %}
+      {% dsfr_form_field form.storage_config %}
+      {% dsfr_form_field form.auto_upgrade %}
+    </fieldset>
+
+    <fieldset class="fr-input-group">
+      <legend>
+        {% translate "Extra fields" %}
+      </legend>
+      <p>
+        {% translate "These fields will be auto-filled but can be customized if need be." %}
+      </p>
+      {% dsfr_form_field form.slug %}
+      {% dsfr_form_field form.scalingo_application_name %}
+      {% dsfr_form_field form.host_url %}
+      {% dsfr_form_field form.allowed_hosts %}
+      {% dsfr_form_field form.wagtail_password_reset_enabled %}
+      {% dsfr_form_field form.git_branch %}
+    </fieldset>
     <div class="fr-input-group fr-my-4w">
-      <button type="submit" class="fr-btn" title="Valider">
-        Valider ce formulaire
+      {% translate "Validate this form" as validate_label %}
+      <button type="submit" class="fr-btn" title="{{ validate_label }}">
+        {{ validate_label }}
       </button>
+      {% translate "Cancel" as cancel_label %}
       <a href="{% url 'instances:list' %}"
          class="fr-btn fr-btn--secondary"
-         title="Annuler">
-        Annuler
+         title="{{ cancel_label }}">
+        {{ cancel_label }}
       </a>
     </div>
   </form>

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-30 15:45+0200\n"
-"PO-Revision-Date: 2025-06-30 15:46+0200\n"
+"POT-Creation-Date: 2025-07-02 09:54+0200\n"
+"PO-Revision-Date: 2025-07-02 09:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -55,7 +55,7 @@ msgstr "Comptes administrateurs créés"
 msgid "Initial deployment complete"
 msgstr "Déploiement initial terminé"
 
-#: instances/forms.py:45
+#: instances/forms.py:46
 msgid ""
 "The value of this field must include the value defined in the field 'Main "
 "URL domain'."
@@ -166,7 +166,7 @@ msgstr "Nom de l’application Scalingo"
 
 #: instances/models.py:154
 msgid "If empty, will default to sf-&lt;slug&gt;."
-msgstr "Si vide, prendra par défaut la valeur sf-&lt;slug&gt;."
+msgstr "Si vide, prendra par défaut la valeur sf-&lt;identifiant&gt;."
 
 #: instances/models.py:159
 msgid "Scalingo database ID"
@@ -195,6 +195,10 @@ msgstr ""
 #: instances/models.py:176
 msgid "Automatically deploy new releases"
 msgstr "Déployer automatiquement les nouvelles versions"
+
+#: instances/models.py:176
+msgid "Uncheck this box for headless instances."
+msgstr "Décocher cette case pour les instances « headless »."
 
 #: instances/models.py:180
 msgid "Main URL domain"
@@ -262,6 +266,31 @@ msgstr "Chargement des données initiales demandé"
 msgid "Unknown"
 msgstr "Inconnu"
 
+#: instances/templates/instances/instance_form.html:9
+msgid "Add a new instance"
+msgstr "Ajouter une instance"
+
+#: instances/templates/instances/instance_form.html:20
+msgid "Base fields"
+msgstr "Champs de base"
+
+#: instances/templates/instances/instance_form.html:31
+msgid "Extra fields"
+msgstr "Champs supplémentaires"
+
+#: instances/templates/instances/instance_form.html:34
+msgid "These fields will be auto-filled but can be customized if need be."
+msgstr "Ces champs sont pré-remplis mais peuvent être personnalisés au besoin."
+
+#: instances/templates/instances/instance_form.html:44
+msgid "Validate this form"
+msgstr "Valider ce formulaire"
+
+#: instances/templates/instances/instance_form.html:48
+#: instances/templates/instances/instance_mass_deploy_list.html:32
+msgid "Cancel"
+msgstr "Annuler"
+
 #: instances/templates/instances/instance_mass_deploy_list.html:6
 msgid "Batch redeploy instances"
 msgstr "Redéployer les instances en masse"
@@ -284,10 +313,6 @@ msgstr ""
 #: instances/templates/instances/instance_mass_deploy_list.html:28
 msgid "Confirm deployment"
 msgstr "Confirmer le déploiement"
-
-#: instances/templates/instances/instance_mass_deploy_list.html:32
-msgid "Cancel"
-msgstr "Annuler"
 
 #: instances/templates/instances/storageconfig_detail.html:21
 msgid "Bucket name"

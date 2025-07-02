@@ -173,7 +173,7 @@ class Instance(BaseModel):
         ),
     )
 
-    auto_upgrade = models.BooleanField(_("Automatically deploy new releases"), default=True)  # type: ignore
+    auto_upgrade = models.BooleanField(_("Automatically deploy new releases"), help_text=_("Uncheck this box for headless instances."), default=True)  # type: ignore
 
     # Env variables
     host_url = models.CharField(
@@ -617,7 +617,7 @@ class Instance(BaseModel):
         current_vars = sc.app_variables_dict(
             app_name=str(self.scalingo_application_name)
         )
-        scalingo_host_url = current_vars["HOST_URL"]
+        scalingo_host_url = current_vars.get("HOST_URL", "")
 
         if "SECRET_KEY" not in current_vars:
             env_variables += [
@@ -666,7 +666,7 @@ class Instance(BaseModel):
             if self.status == "SCALINGO_DB_PROVISIONED":
                 self.status = "SCALINGO_ENV_VARS_SET"
                 self.save()
-            elif local_host_url != scalingo_host_url:
+            elif self.status == "FINISHED" and local_host_url != scalingo_host_url:
                 # Only do this on redeploys
                 self.scalingo_set_config()
 

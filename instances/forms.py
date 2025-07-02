@@ -34,6 +34,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "wagtail_password_reset_enabled",
             "storage_config",
             "git_branch",
+            "auto_upgrade",
         ]
 
     def clean_allowed_hosts(self):

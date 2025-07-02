@@ -15,10 +15,14 @@ credentials = (
 )
 
 
-def domain_record_list() -> dict:
+def domain_record_list() -> dict | list:
     response = requests.get(
         f"{ENDPOINT}record/", auth=credentials, timeout=REQUEST_TIMEOUT
     )
+
+    if response.status_code == 401:
+        # Happens if the IP is not allowed for the API token
+        return [{"name": "", "domain": ""}]
 
     return response.json()
 
