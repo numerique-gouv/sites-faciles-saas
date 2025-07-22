@@ -43,6 +43,11 @@ STATUS_DETAILED = {
 
 STATUS_CHOICES = [(k, v["label"]) for (k, v) in STATUS_DETAILED.items()]
 
+# Partial list. Source:
+# sc = Scalingo()
+# providers = sc.get("addon_providers")
+# pg_provider = [x for x in providers["addon_providers"] if x["id"] == "postgresql"][0]
+# [(x["name"],x["display_name"], x["id"]) for x in pg_provider["plans"]]
 POSTGRESQL_PLAN = {
     "provider_id": "postgresql",
     "sandbox_plan": {
@@ -52,5 +57,9 @@ POSTGRESQL_PLAN = {
     "starter_plan": {
         "id": "5cc45d223e6b3b001249e5a3",
         "name": "postgresql-starter-512",
+    },
+    "starter_1024_plan": {
+        "id": "5d6642a13e6b3b000ee6f223",
+        "name": "postgresql-starter-1024",
     },
 }

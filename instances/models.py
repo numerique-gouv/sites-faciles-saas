@@ -7,7 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from contacts.models import Contact
 from instances.abstract import BaseModel
@@ -280,7 +280,7 @@ class Instance(BaseModel):
 
         super().save(*args, **kwargs)
 
-        if self.current_status["rank"] >= 3:
+        if self.status in ["SCALINGO_DB_PROVISIONED", "FINISHED"]:
             self.scalingo_set_env()
 
     def generate_secret_key(self):
@@ -532,7 +532,10 @@ class Instance(BaseModel):
 
     def scalingo_provision_db(self):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
-        result = sc.app_addon_provision(app_name=str(self.scalingo_application_name))
+        result = sc.app_addon_provision(
+            app_name=str(self.scalingo_application_name),
+            plan=settings.DEFAULT_POSTGRESQL_PLAN,
+        )
 
         if "errors" in result.keys():
             return {
@@ -601,12 +604,20 @@ class Instance(BaseModel):
                 "badge": '<p class="fr-badge fr-badge--warning">Variables d’environnement absentes dans Scalingo</p>',
             }
 
-    def scalingo_set_env(self):
+    def scalingo_set_env(self) -> dict:
         """
         Set the env variables in Scalingo.
 
         This command can be repeated
         """
+        if self.status not in ["SCALINGO_DB_PROVISIONED", "FINISHED"]:
+            return {
+                "status": "error",
+                "message": _(
+                    "Please only change the env variables at the relevant step or after finishing initial deployment."
+                ),
+            }
+
         env_variables = self.get_env_variables()
         local_host_url = [
             d["value"] for d in env_variables if d["name"] == "HOST_URL"
@@ -811,5 +822,5 @@ class Instance(BaseModel):
             self.status = "FINISHED"
             return {
                 "status": "success",
-                "message": f"{_('Account creation requested for users:')} {self.main_contact.email}, {sf_infra_email}.",
+                "message": f"{gettext('Account creation requested for users:')} {self.main_contact.email}, {sf_infra_email}.",
             }

@@ -5,6 +5,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+from contacts.models import Contact
 from core.mixins import StaffOrAdminMixin
 from core.utils import init_context
 from instances.forms import (
@@ -217,6 +218,25 @@ class InstanceCreateView(StaffOrAdminMixin, CreateView):
         return init_context(
             context=context, title="Créer une instance", links=INSTANCES_LINKS
         )
+
+    def get_initial(self):
+        initial = super().initial.copy()
+
+        user = self.request.user
+        contact = Contact.objects.filter(email=user.email).first()
+
+        if contact:
+            initial["main_contact"] = contact
+
+        email_config = EmailConfig.objects.first()
+        if email_config:
+            initial["email_config"] = email_config
+
+        storage_config = StorageConfig.objects.first()
+        if storage_config:
+            initial["storage_config"] = storage_config
+
+        return initial
 
     def form_valid(self, form):
         messages.success(self.request, "Instance créée avec succès.")
