@@ -1,0 +1,7 @@
+{
+    "jobs": [
+        {
+            "command": "0 1 * * * python manage.py scalingo_collaborators --action add"
+        }
+    ]
+}
