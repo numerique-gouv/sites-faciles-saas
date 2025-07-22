@@ -47,7 +47,9 @@ class Command(BaseCommand):
         for snc in snc_options:
             sc = Scalingo(use_secnumcloud=snc)
 
-            apps = instances.filter(use_secnumcloud=snc).values_list("name", flat=True)
+            apps = instances.filter(use_secnumcloud=snc).values_list(
+                "scalingo_application_name", flat=True
+            )
 
             if action == "list":
                 for app in apps:
