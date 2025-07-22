@@ -5,7 +5,7 @@ repos:
       - id: djlint-reformat-django
       - id: djlint-django
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.1
+    rev: v0.12.4
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -18,18 +18,12 @@ repos:
     rev: 25.1.0
     hooks:
       - id: black
-        language_version: python3.12
+        language_version: python3.13
         args:
           - --line-length=88
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.8.5
+    rev: 1.8.6
     hooks:
       - id: bandit
         language_version: python3
         exclude: /tests/
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.7.17
-    hooks:
-      - id: uv-lock
-      - id: uv-export
-        args: ["--no-dev"]
