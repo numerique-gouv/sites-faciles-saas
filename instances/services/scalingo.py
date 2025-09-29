@@ -192,8 +192,13 @@ class Scalingo:
         json_data = {
             "app": {
                 "name": app_name,
+                "force_https": True,
             },
         }
+
+        if settings.SCALINGO_PROJECT:
+            json_data["app"]["project_id"] = settings.SCALINGO_PROJECT
+
         new_app = self.post("apps/", json_data=json_data)
         return new_app
 
@@ -362,6 +367,12 @@ class Scalingo:
         json_data = {"variables": variables}
         result = self.put(f"apps/{app_name}/variables", json_data=json_data)
         return result
+
+    ## Project-related methods
+    def projects_list(self):
+        res = self.get("projects/")
+
+        return [(x["name"], x["id"]) for x in res["projects"]]
 
     ## User related methods
     def user_info(self):
