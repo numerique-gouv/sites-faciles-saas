@@ -15,6 +15,7 @@ puis modifier en le contenu pour correspondre à votre configuration.
 - `DEBUG` : `True` en développement, `False` en production
 - `HOST_PORT` : le port sur lequel tourne le site (8000 par défaut)
 - `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+- `ALWAYSDATA_ROOT_DOMAIN` : le domaine dans lequel vont être créés les sous-domaines chez Alwaysdata
 - `EMAIL_SECRETS`:
   - Créer un fichier `.secrets_email.txt` avec le format suivant : """
    1;email;password

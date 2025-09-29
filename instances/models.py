@@ -407,7 +407,7 @@ class Instance(BaseModel):
 
     @property
     def alwaysdata_sites_beta_host(self) -> str:
-        return f"{self.slug}.sites.beta.gouv.fr"
+        return f"{self.slug}.{settings.ALWAYSDATA_ROOT_DOMAIN}"
 
     @property
     def alwaysdata_sites_beta_url(self) -> str:
