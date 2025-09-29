@@ -20,6 +20,7 @@ coverage app="":
     {{uv_run}} coverage html
     firefox htmlcov/index.html
 
+alias cs:=createsuperuser
 createsuperuser:
     {{uv_run}} python manage.py createsuperuser
 
