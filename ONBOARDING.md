@@ -15,6 +15,7 @@ puis modifier en le contenu pour correspondre à votre configuration.
 - `DEBUG` : `True` en développement, `False` en production
 - `HOST_PORT` : le port sur lequel tourne le site (8000 par défaut)
 - `SCALINGO_API_TOKEN` : à générer via https://dashboard.scalingo.com/account/tokens
+- `ALWAYSDATA_ROOT_DOMAIN` : le domaine dans lequel vont être créés les sous-domaines chez Alwaysdata
 - `EMAIL_SECRETS`:
   - Créer un fichier `.secrets_email.txt` avec le format suivant : """
    1;email;password
@@ -33,6 +34,7 @@ Note : pour pouvoir créer des instances SecNumCloud, l’authentification à de
 
 - Optionnels:
   - `SCALINGO_APPLICATION_PREFIX` : permet de remplacer le préfixe par défaut ajouté au nom des applications Scalingo (par défaut, "sf")
+  - `SCALINGO_PROJECT`: permet de définir l’identifiant d’un projet Scalingo dans lequel créer l’application (si vide, utilise le projet par défaut de l’utilisateur)
   - `USE_UV` : mettre à `true` en mode développement pour préfixer les recettes `just` avec `env run`.
 
 ### Installer l’environnement et les dépendances

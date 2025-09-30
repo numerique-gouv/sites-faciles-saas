@@ -20,6 +20,8 @@ from instances.services.alwaysdata import (
 from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
 
+from core.utils import migrations_applied
+
 
 class EmailConfig(BaseModel):
     """
@@ -226,7 +228,10 @@ class Instance(BaseModel):
 
     @classmethod
     def get_auto_deployable_instances(cls):
-        return cls.get_deployable_instances().filter(auto_upgrade=True)
+        if migrations_applied("myapp"):
+            return cls.objects.filter(status="FINISHED").filter(auto_upgrade=True)
+        else:
+            return cls.objects.none()
 
     def get_steps(self):
         status_keys = list(STATUS_DETAILED)
@@ -402,7 +407,7 @@ class Instance(BaseModel):
 
     @property
     def alwaysdata_sites_beta_host(self) -> str:
-        return f"{self.slug}.sites.beta.gouv.fr"
+        return f"{self.slug}.{settings.ALWAYSDATA_ROOT_DOMAIN}"
 
     @property
     def alwaysdata_sites_beta_url(self) -> str:
@@ -483,12 +488,6 @@ class Instance(BaseModel):
         else:
             self.status = "SCALINGO_APP_CREATED"
             self.save()
-
-            # Immediately force HTTPS on the newly created app
-            settings = {
-                "force_https": True,
-            }
-            sc.app_settings_update(app_name=app_name, settings=settings)
 
             return {
                 "status": "success",
