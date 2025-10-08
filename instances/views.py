@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from contacts.models import Contact
-from core.mixins import StaffOrAdminMixin
+from core.mixins import OTPRequiredStaffOrAdminMixin
 from core.utils import init_context
 from instances.forms import (
     EmailConfigForm,
@@ -18,7 +18,7 @@ from instances.forms import (
 from instances.models import EmailConfig, Instance, StorageConfig
 
 
-class EmailConfigListView(StaffOrAdminMixin, ListView):
+class EmailConfigListView(OTPRequiredStaffOrAdminMixin, ListView):
     model = EmailConfig
     paginate_by = 25
 
@@ -39,7 +39,7 @@ EMAILCONFIG_LINKS = [
 ]
 
 
-class EmailConfigCreateView(StaffOrAdminMixin, CreateView):
+class EmailConfigCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
     model = EmailConfig
     form_class = EmailConfigForm
 
@@ -69,7 +69,7 @@ class EmailConfigDetailView(DetailView):
         )
 
 
-class EmailConfigUpdateView(StaffOrAdminMixin, UpdateView):
+class EmailConfigUpdateView(OTPRequiredStaffOrAdminMixin, UpdateView):
     model = EmailConfig
     form_class = EmailConfigForm
 
@@ -86,7 +86,7 @@ class EmailConfigUpdateView(StaffOrAdminMixin, UpdateView):
         return super().form_valid(form)
 
 
-class EmailConfigDeleteView(StaffOrAdminMixin, DeleteView):
+class EmailConfigDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
     model = EmailConfig
     success_url = reverse_lazy("instances:emailconfig_list")
 
@@ -103,7 +103,7 @@ class EmailConfigDeleteView(StaffOrAdminMixin, DeleteView):
         return super().form_valid(form)
 
 
-class StorageConfigListView(StaffOrAdminMixin, ListView):
+class StorageConfigListView(OTPRequiredStaffOrAdminMixin, ListView):
     model = StorageConfig
     paginate_by = 25
 
@@ -124,7 +124,7 @@ STORAGECONFIG_LINKS = [
 ]
 
 
-class StorageConfigCreateView(StaffOrAdminMixin, CreateView):
+class StorageConfigCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
     model = StorageConfig
     form_class = StorageConfigForm
 
@@ -154,7 +154,7 @@ class StorageConfigDetailView(DetailView):
         )
 
 
-class StorageConfigUpdateView(StaffOrAdminMixin, UpdateView):
+class StorageConfigUpdateView(OTPRequiredStaffOrAdminMixin, UpdateView):
     model = StorageConfig
     form_class = StorageConfigForm
 
@@ -173,7 +173,7 @@ class StorageConfigUpdateView(StaffOrAdminMixin, UpdateView):
         return super().form_valid(form)
 
 
-class StorageConfigDeleteView(StaffOrAdminMixin, DeleteView):
+class StorageConfigDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
     model = StorageConfig
     success_url = reverse_lazy("instances:storageconfig_list")
 
@@ -190,7 +190,7 @@ class StorageConfigDeleteView(StaffOrAdminMixin, DeleteView):
         return super().form_valid(form)
 
 
-class InstanceListView(StaffOrAdminMixin, ListView):
+class InstanceListView(OTPRequiredStaffOrAdminMixin, ListView):
     model = Instance
     paginate_by = 25
 
@@ -209,7 +209,7 @@ INSTANCES_LINKS = [
 ]
 
 
-class InstanceCreateView(StaffOrAdminMixin, CreateView):
+class InstanceCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
     model = Instance
     form_class = InstanceForm
 
@@ -243,7 +243,7 @@ class InstanceCreateView(StaffOrAdminMixin, CreateView):
         return super().form_valid(form)
 
 
-class InstanceUpdateView(StaffOrAdminMixin, UpdateView):
+class InstanceUpdateView(OTPRequiredStaffOrAdminMixin, UpdateView):
     model = Instance
     form_class = InstanceForm
 
@@ -260,7 +260,7 @@ class InstanceUpdateView(StaffOrAdminMixin, UpdateView):
         return super().form_valid(form)
 
 
-class InstanceActionView(StaffOrAdminMixin, UpdateView):
+class InstanceActionView(OTPRequiredStaffOrAdminMixin, UpdateView):
     model = Instance
     form_class = InstanceActionForm
 
@@ -286,7 +286,7 @@ class InstanceActionView(StaffOrAdminMixin, UpdateView):
         return super().form_valid(form)
 
 
-class InstanceDeleteView(StaffOrAdminMixin, DeleteView):
+class InstanceDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
     model = Instance
     success_url = reverse_lazy("instances:list")
 
@@ -307,7 +307,7 @@ class InstanceDeleteView(StaffOrAdminMixin, DeleteView):
         return super().form_valid(form)
 
 
-class InstanceDetailView(StaffOrAdminMixin, DetailView):
+class InstanceDetailView(OTPRequiredStaffOrAdminMixin, DetailView):
     model = Instance
 
     def get_context_data(self, **kwargs):
@@ -320,7 +320,7 @@ class InstanceDetailView(StaffOrAdminMixin, DetailView):
         )
 
 
-class InstanceMassDeployFormView(StaffOrAdminMixin, FormView):
+class InstanceMassDeployFormView(OTPRequiredStaffOrAdminMixin, FormView):
     template_name = "instances/instance_mass_deploy_list.html"
     form_class = InstanceMassDeployForm
     success_url = reverse_lazy("instances:list")

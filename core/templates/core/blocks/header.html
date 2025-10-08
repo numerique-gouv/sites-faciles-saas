@@ -40,7 +40,7 @@
         </button>
       </form>
     {% else %}
-      <a class="fr-icon-lock-line fr-btn" href="{% url 'login' %}">{% translate "Log in" %}</a>
+      <a class="fr-icon-lock-line fr-btn" href="{% url 'two_factor:login' %}">{% translate "Log in" %}</a>
     {% endif %}
   </li>
 {% endblock header_tools %}

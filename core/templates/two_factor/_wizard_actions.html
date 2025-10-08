@@ -1,0 +1,32 @@
+{% load i18n %}
+<div class="fr-fieldset__element">
+  <ul class="fr-btns-group fr-btns-group--inline">
+
+    {% if cancel_url %}
+      <li>
+        <a href="{{ cancel_url }}" class="fr-btn fr-btn--secondary">{% trans "Cancel" %}</a>
+      </li>
+    {% endif %}
+    {% if wizard.steps.prev %}
+      <li>
+        <button name="wizard_goto_step"
+                type="submit"
+                value="{{ wizard.steps.prev }}"
+                class="fr-btn fr-btn--secondary">
+          {% trans "Back" %}
+        </button>
+      </li>
+    {% else %}
+      <li>
+        <button disabled name="" type="button" class="fr-btn fr-btn--secondary">
+          {% trans "Back" %}
+        </button>
+      </li>
+    {% endif %}
+    <li>
+      <button type="submit" class="fr-btn">
+        {% trans "Next" %}
+      </button>
+    </li>
+  </ul>
+</div>

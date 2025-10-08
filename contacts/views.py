@@ -4,12 +4,12 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
 from contacts.forms import ContactForm
-from core.mixins import StaffOrAdminMixin
+from core.mixins import OTPRequiredStaffOrAdminMixin
 from contacts.models import Contact
 from core.utils import init_context
 
 
-class ContactListView(StaffOrAdminMixin, ListView):
+class ContactListView(OTPRequiredStaffOrAdminMixin, ListView):
     model = Contact
     paginate_by = 25
 
@@ -28,7 +28,7 @@ CONTACTS_LINKS = [
 ]
 
 
-class ContactCreateView(StaffOrAdminMixin, CreateView):
+class ContactCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
     model = Contact
     form_class = ContactForm
 
@@ -43,7 +43,7 @@ class ContactCreateView(StaffOrAdminMixin, CreateView):
         return super().form_valid(form)
 
 
-class ContactUpdateView(StaffOrAdminMixin, UpdateView):
+class ContactUpdateView(OTPRequiredStaffOrAdminMixin, UpdateView):
     model = Contact
     form_class = ContactForm
 
@@ -60,7 +60,7 @@ class ContactUpdateView(StaffOrAdminMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ContactDeleteView(StaffOrAdminMixin, DeleteView):
+class ContactDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
     model = Contact
     success_url = reverse_lazy("contacts:list")
 
