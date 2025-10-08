@@ -5,7 +5,10 @@ from django.contrib.auth.views import LogoutView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
+from two_factor.admin import AdminSiteOTPRequired
 from two_factor.urls import urlpatterns as tf_urls
+
+admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     path(
@@ -18,11 +21,7 @@ urlpatterns = [
         "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
-    path(
-        "account/logout/",
-        LogoutView.as_view(),
-        name="logout",
-    ),
+    path("account/logout/", LogoutView.as_view(), name="logout"),
     path("contacts/", include("contacts.urls")),
     path("instances/", include("instances.urls")),
     path("admin/", admin.site.urls),
