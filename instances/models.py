@@ -228,7 +228,7 @@ class Instance(BaseModel):
 
     @classmethod
     def get_auto_deployable_instances(cls):
-        if migrations_applied("myapp"):
+        if migrations_applied("instances"):
             return cls.objects.filter(status="FINISHED").filter(auto_upgrade=True)
         else:
             return cls.objects.none()

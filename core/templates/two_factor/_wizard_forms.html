@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+
+{{ wizard.management_form }}
+
+{% for field in wizard.form %}
+  <div class="fr-input-group">
+    <label class="fr-label" for="{{ field.id_for_label }}">
+      {{ field.label }}
+      {% if field.help_text %}
+        <span class="fr-hint-text">{{ field.help_text }}</span>
+      {% endif %}
+    </label>
+    {{ field|add_class:"fr-input" }}
+    {% for error in field.errors %}
+      <div class="fr-messages-group" id="input-messages" aria-live="polite">
+        {{ error }}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}

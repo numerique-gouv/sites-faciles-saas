@@ -1,12 +1,13 @@
 [project]
 name = "sites-faciles-saas"
-version = "1.1.1"
+version = "1.2.0"
 description = "Gestionnaire de déploiement pour Sites Faciles"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "dj-database-url>=2.3.0",
     "dj-static>=0.0.6",
+    "django-two-factor-auth>=1.18.1",
     "django>=5.1.4",
     "django-csp>=3.8",
     "django-dsfr>=2.0.0",
