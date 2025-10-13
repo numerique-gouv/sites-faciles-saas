@@ -28,4 +28,4 @@ def init_context(context: dict | None = None, title: str = "", links: list = [])
 def migrations_applied(app_label, migration_name="0001_initial"):
     recorder = MigrationRecorder(connection)
     applied = recorder.applied_migrations()
-    return (app_label, migration_name) in applied
+    return (app_label, migration_name) in applied.keys()
