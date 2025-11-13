@@ -11,20 +11,18 @@
 # opi → new storage
 # cf. https://help.ovhcloud.com/csm/fr-public-cloud-storage-s3-rclone?id=kb_article_view&sysparm_article=KB0047465 for config
 
-CLEVER="clever:storage-demo"
-OVH="ovh:suite-numerique-staging"
 
 echo "Please choose a source to sync:"
 echo "1) Clever Cloud"
 echo "2) OVH"
-read -p "Enter your choice [1 or 2]: " choice
+read -p "Enter your choice [1 or 2]: " CHOICE
 
-case "$choice" in
+case "${CHOICE}" in
     1)
-        STORAGE=${CLEVER}
+        STORAGE="clever:storage-demo"
         ;;
     2)
-        STORAGE=${OVH}
+        STORAGE="ovh:suite-numerique-staging"
         ;;
     *)
         echo "Invalid choice. Please run the script again."
