@@ -22,7 +22,6 @@
       {% dsfr_form_field form.name %}
       {% dsfr_form_field form.main_contact %}
       {% dsfr_form_field form.email_config %}
-      {% dsfr_form_field form.storage_config %}
       {% dsfr_form_field form.auto_upgrade %}
     </fieldset>
 
@@ -39,6 +38,14 @@
       {% dsfr_form_field form.allowed_hosts %}
       {% dsfr_form_field form.wagtail_password_reset_enabled %}
       {% dsfr_form_field form.git_branch %}
+
+      {% dsfr_form_field form.s3_bucket_name %}
+      {% dsfr_form_field form.s3_bucket_region %}
+      {% dsfr_form_field form.s3_host %}
+      {% dsfr_form_field form.s3_location %}
+      {% dsfr_form_field form.s3_key_id %}
+      {% dsfr_form_field form.s3_key_secret %}
+
     </fieldset>
     <div class="fr-input-group fr-my-4w">
       {% translate "Validate this form" as validate_label %}

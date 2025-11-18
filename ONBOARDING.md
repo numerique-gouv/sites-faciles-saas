@@ -23,13 +23,6 @@ puis modifier en le contenu pour correspondre à votre configuration.
    """
   - Lancer la commande `just encode_secrets email` et copier-coller le résultat
 
-- `STORAGE_SECRETS`:
-  - Créer un fichier `.secrets_storage.txt` avec le format suivant : """
-   1;key_id;key_secret;commentaire (par ex: bucket_name@host)
-   2;key_id;key_secret;commentaire (par ex: bucket_name@host)
-   """
-  - Lancer la commande `just encode_secrets storage` et copier-coller le résultat
-
 Note : pour pouvoir créer des instances SecNumCloud, l’authentification à deux facteurs doit être activée sur le compte Scalingo utilisé.
 
 - Optionnels:

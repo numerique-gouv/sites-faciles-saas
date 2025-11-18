@@ -1,5 +1,7 @@
 {% extends "core/base.html" %}
-{% load humanize static dsfr_tags %}
+{% load humanize static dsfr_tags dsfr_tags wagtail_dsfr_gestion_tags %}
+
+{% settings_value "INSTANCES_ALLOW_DELETE" as instances_allow_delete %}
 
 {% block content %}
   <h1>
@@ -176,12 +178,14 @@
               </form>
             </li>
           {% endif %}
-          <li>
-            <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
-               href="{% url 'instances:delete' object.slug %}"
-               title="Supprimer l’instance"
-               aria-describedby="instance-{{ object.slug }}">Supprimer l’instance</a>
-          </li>
+          {% if instances_allow_delete %}
+            <li>
+              <a class="fr-btn fr-icon-delete-line fr-btn--tertiary"
+                 href="{% url 'instances:delete' object.slug %}"
+                 title="Supprimer l’instance"
+                 aria-describedby="instance-{{ object.slug }}">Supprimer l’instance</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>

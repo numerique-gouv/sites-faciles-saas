@@ -4,18 +4,12 @@ from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
 from dsfr.forms import DsfrBaseForm
 
-from instances.models import EmailConfig, Instance, StorageConfig
+from instances.models import EmailConfig, Instance
 
 
 class EmailConfigForm(ModelForm, DsfrBaseForm):
     class Meta:
         model = EmailConfig
-        fields = "__all__"  # NOSONAR
-
-
-class StorageConfigForm(ModelForm, DsfrBaseForm):
-    class Meta:
-        model = StorageConfig
         fields = "__all__"  # NOSONAR
 
 
@@ -32,7 +26,6 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "allowed_hosts",
             "email_config",
             "wagtail_password_reset_enabled",
-            "storage_config",
             "git_branch",
             "auto_upgrade",
         ]
