@@ -13,9 +13,8 @@ from instances.forms import (
     InstanceForm,
     InstanceActionForm,
     InstanceMassDeployForm,
-    StorageConfigForm,
 )
-from instances.models import EmailConfig, Instance, StorageConfig
+from instances.models import EmailConfig, Instance
 
 
 class EmailConfigListView(OTPRequiredStaffOrAdminMixin, ListView):
@@ -103,93 +102,6 @@ class EmailConfigDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
         return super().form_valid(form)
 
 
-class StorageConfigListView(OTPRequiredStaffOrAdminMixin, ListView):
-    model = StorageConfig
-    paginate_by = 25
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(object_list=object_list, **kwargs)
-        return init_context(
-            context=context, title="Gestion des configurations de stockage"
-        )
-
-
-STORAGECONFIG_LINKS = [
-    {
-        "title": "Configurations de stockage",
-        "url": reverse_lazy(
-            "instances:storageconfig_list",
-        ),
-    }
-]
-
-
-class StorageConfigCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
-    model = StorageConfig
-    form_class = StorageConfigForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return init_context(
-            context=context,
-            title="Créer une configuration email",
-            links=STORAGECONFIG_LINKS,
-        )
-
-    def form_valid(self, form):
-        messages.success(self.request, "Configuration de stockage créée avec succès.")
-        return super().form_valid(form)
-
-
-class StorageConfigDetailView(DetailView):
-    model = StorageConfig
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        return init_context(
-            context=context,
-            title=f"Configuration de stockage {self.object.bucket_name}",
-            links=STORAGECONFIG_LINKS,
-        )
-
-
-class StorageConfigUpdateView(OTPRequiredStaffOrAdminMixin, UpdateView):
-    model = StorageConfig
-    form_class = StorageConfigForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return init_context(
-            context=context,
-            title=f"Configuration de stockage {self.object.bucket_name}",
-            links=STORAGECONFIG_LINKS,
-        )
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, "Configuration de stockage modifiée avec succès."
-        )
-        return super().form_valid(form)
-
-
-class StorageConfigDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
-    model = StorageConfig
-    success_url = reverse_lazy("instances:storageconfig_list")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return init_context(
-            context=context,
-            title=f"Suppression de {self.object.bucket_name}",
-            links=STORAGECONFIG_LINKS,
-        )
-
-    def form_valid(self, form):
-        messages.success(self.request, "Configuration de stockage supprimée.")
-        return super().form_valid(form)
-
-
 class InstanceListView(OTPRequiredStaffOrAdminMixin, ListView):
     model = Instance
     paginate_by = 25
@@ -231,10 +143,6 @@ class InstanceCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
         email_config = EmailConfig.objects.first()
         if email_config:
             initial["email_config"] = email_config
-
-        storage_config = StorageConfig.objects.first()
-        if storage_config:
-            initial["storage_config"] = storage_config
 
         return initial
 

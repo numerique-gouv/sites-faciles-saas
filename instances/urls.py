@@ -27,31 +27,6 @@ urlpatterns = [
         views.EmailConfigDeleteView.as_view(),
         name="emailconfig_delete",
     ),
-    path(
-        "storageconfig/",
-        views.StorageConfigListView.as_view(),
-        name="storageconfig_list",
-    ),
-    path(
-        "storageconfig/create/",
-        views.StorageConfigCreateView.as_view(),
-        name="storageconfig_create",
-    ),
-    path(
-        "storageconfig/<int:pk>/",
-        views.StorageConfigDetailView.as_view(),
-        name="storageconfig_detail",
-    ),
-    path(
-        "storageconfig/<int:pk>/update/",
-        views.StorageConfigUpdateView.as_view(),
-        name="storageconfig_update",
-    ),
-    path(
-        "storageconfig/<int:pk>/delete/",
-        views.StorageConfigDeleteView.as_view(),
-        name="storageconfig_delete",
-    ),
     path("", views.InstanceListView.as_view(), name="list"),
 ]
 
