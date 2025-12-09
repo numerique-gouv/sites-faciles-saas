@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path
 
 from instances import views
@@ -26,33 +27,15 @@ urlpatterns = [
         views.EmailConfigDeleteView.as_view(),
         name="emailconfig_delete",
     ),
-    path(
-        "storageconfig/",
-        views.StorageConfigListView.as_view(),
-        name="storageconfig_list",
-    ),
-    path(
-        "storageconfig/create/",
-        views.StorageConfigCreateView.as_view(),
-        name="storageconfig_create",
-    ),
-    path(
-        "storageconfig/<int:pk>/",
-        views.StorageConfigDetailView.as_view(),
-        name="storageconfig_detail",
-    ),
-    path(
-        "storageconfig/<int:pk>/update/",
-        views.StorageConfigUpdateView.as_view(),
-        name="storageconfig_update",
-    ),
-    path(
-        "storageconfig/<int:pk>/delete/",
-        views.StorageConfigDeleteView.as_view(),
-        name="storageconfig_delete",
-    ),
     path("", views.InstanceListView.as_view(), name="list"),
-    path("create/", views.InstanceCreateView.as_view(), name="create"),
+]
+
+if settings.INSTANCES_ALLOW_CREATE:
+    urlpatterns += [
+        path("create/", views.InstanceCreateView.as_view(), name="create"),
+    ]
+
+urlpatterns += [
     path(
         "mass_deploy/",
         views.InstanceMassDeployFormView.as_view(),
@@ -65,5 +48,9 @@ urlpatterns = [
         views.InstanceActionView.as_view(),
         name="action",
     ),
-    path("<str:slug>/delete/", views.InstanceDeleteView.as_view(), name="delete"),
 ]
+
+if settings.INSTANCES_ALLOW_DELETE:
+    urlpatterns += [
+        path("<str:slug>/delete/", views.InstanceDeleteView.as_view(), name="delete"),
+    ]

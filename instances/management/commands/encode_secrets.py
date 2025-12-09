@@ -1,11 +1,11 @@
 from django.core.management.base import BaseCommand
 from instances.utils import encode_secrets
 
-ALLOWED_TYPES = ["email", "storage"]
+ALLOWED_TYPES = ["email"]
 
 
 class Command(BaseCommand):
-    help = "Encode the email or storage configuration"
+    help = "Encode the email configuration"
 
     def add_arguments(self, parser):
         parser.add_argument(
