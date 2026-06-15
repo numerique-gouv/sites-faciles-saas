@@ -16,6 +16,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
     "python-dotenv>=1.0.1",
     "rust-just>=1.39.0",
+    "requests>=2.34.2",
 ]
 
 [dependency-groups]
