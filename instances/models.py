@@ -239,6 +239,9 @@ class Instance(BaseModel):
         if not self.allowed_hosts:
             self.allowed_hosts = self.scalingo_instance_host
 
+        if self.status == "FINISHED" and not self.scalingo_db_id:
+            self.scalingo_db_id = self.scalingo_get_db_id()
+
         super().save(*args, **kwargs)
 
         if self.status in ["SCALINGO_DB_PROVISIONED", "FINISHED"]:
@@ -476,6 +479,22 @@ class Instance(BaseModel):
                 "message": "Base de donnée ajouée avec succès à l’instance Scalingo.",
             }
 
+    def scalingo_get_db_id(self):
+        """
+        Try and get the DB ID
+        """
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        addons = sc.app_addon_list(app_name=str(self.scalingo_application_name))
+
+        for addon in addons.get("addons", []):
+            provider = addon.get("addon_provider", {})
+            provider_id = provider.get("id", "")
+
+            if provider_id == "postgresql":
+                return addon["id"]
+
+        return ""
+
     def scalingo_db_status(self):
         """
         Returns the status of the database in Scalingo
@@ -485,6 +504,14 @@ class Instance(BaseModel):
             return ""
 
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+
+        if not self.scalingo_db_id:
+            return {
+                "status": "missing",
+                "badge": '<p class="fr-badge fr-badge--warning">ID BDD manquant</p>',
+            }
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+
         result = sc.app_addon_detail(
             app_name=str(self.scalingo_application_name),
             addon_id=str(self.scalingo_db_id),
