@@ -60,3 +60,28 @@ update:
 upgrade:
     uv lock --upgrade
     {{uv_run}} pre-commit autoupdate
+
+# Get the latest local PostgreSQL backup
+[group('Dev DB and medias management')]
+backup-local:
+    cd scripts && bash backup_local.sh
+
+# Clears the local database
+[group('Dev DB and medias management')]
+clear-local-db:
+    cd scripts && bash clear_local_db.sh
+
+# Descend the latest DB backup of the production database
+[group('Dev DB management')]
+descend-prod-db:
+    cd scripts && bash descend_prod_db.sh
+
+# Restore the last local database backup
+[group('Dev DB and medias management')]
+restore-local-db:
+    cd scripts && bash restore_local_db.sh
+
+# Restore the last downloaded backup of the production database
+[group('Dev DB and medias management')]
+restore-prod-db:
+    cd scripts && bash restore_prod_db.sh
