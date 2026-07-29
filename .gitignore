@@ -164,5 +164,8 @@ cython_debug/
 .vscode/
 .claude/
 
+# AI stuff
+.claude/
+
 # Projet specific
 .secrets_*.txt

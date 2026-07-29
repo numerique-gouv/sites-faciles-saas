@@ -1,11 +1,11 @@
 from django.contrib import messages
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.list import ListView
 
 from contacts.forms import ContactForm
-from core.mixins import OTPRequiredStaffOrAdminMixin
 from contacts.models import Contact
+from core.mixins import OTPRequiredStaffOrAdminMixin
 from core.utils import init_context
 
 

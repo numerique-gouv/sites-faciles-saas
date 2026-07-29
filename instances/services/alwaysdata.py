@@ -1,9 +1,7 @@
-#!/usr/bin/python
-
-from django.conf import settings
-
 import json
+
 import requests
+from django.conf import settings
 
 from instances.constants import REQUEST_TIMEOUT
 

@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = """Add a collaborator for all apps, or list collaborators.
 
     CAUTION: it will act on all Scalingo apps for which the user has access.
-    Use it EXCLUSIVELY with an user who ONLY MANAGES SITES FACILES-RELATED APPS.
+    Use it EXCLUSIVELY with an user who ONLY MANAGES SITES CONFORMES-RELATED APPS.
     """
 
     def add_arguments(self, parser):
