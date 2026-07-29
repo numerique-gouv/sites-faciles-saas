@@ -7,7 +7,6 @@ import requests
 
 from instances.constants import REQUEST_TIMEOUT
 
-
 ENDPOINT = "https://api.alwaysdata.com/v1/"
 credentials = (
     f"{settings.ALWAYSDATA_API_KEY} account={settings.ALWAYSDATA_ACCOUNT}",

@@ -344,7 +344,7 @@ class Scalingo:
         raw_variables = self.get(f"apps/{app_name}/variables")
         variables_dict = {}
 
-        for ev in raw_variables["variables"]:
+        for ev in raw_variables.get("variables", {}):
             k = ev["name"]
             v = ev["value"]
             variables_dict[k] = v

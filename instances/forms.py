@@ -28,6 +28,12 @@ class InstanceForm(ModelForm, DsfrBaseForm):
             "wagtail_password_reset_enabled",
             "git_branch",
             "auto_upgrade",
+            "s3_bucket_name",
+            "s3_bucket_region",
+            "s3_host",
+            "s3_location",
+            "s3_key_id",
+            "s3_key_secret",
         ]
 
     def clean_allowed_hosts(self):
