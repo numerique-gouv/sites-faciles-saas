@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-USER_AGENT = "Sites faciles SAAS"
+USER_AGENT = "Sites Conformes SAAS"
 REQUEST_TIMEOUT = (3.05, 27)
 
 STATUS_DETAILED = {
@@ -25,7 +25,7 @@ STATUS_DETAILED = {
         "rank": 3,
     },
     "SF_CODE_DEPLOYED": {
-        "label": _("Sites Faciles code deployed"),
+        "label": _("Sites Conformes code deployed"),
         "color_class": "blue-cumulus",
         "rank": 4,
     },

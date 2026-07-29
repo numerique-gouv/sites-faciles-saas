@@ -13,7 +13,7 @@
     <ul>
       <li>
         <strong>
-          <a href="{% url 'instances:list' %}">Gérer les instances de Sites faciles</a>
+          <a href="{% url 'instances:list' %}">Gérer les instances de Sites Conformes</a>
         </strong>
       </li>
       <li>
@@ -22,6 +22,11 @@
       <li>
         <a href="{% url 'instances:emailconfig_list' %}">Gérer les configurations d’envoi d’emails</a>
       </li>
+      {% if request.user.is_superuser %}
+        <li>
+          <a href="{% url 'admin:index' %}">Administration Django</a>
+        </li>
+      {% endif %}
     </ul>
   {% else %}
     <div role="alert" class="fr-alert fr-alert--error">

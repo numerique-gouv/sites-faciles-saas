@@ -2,6 +2,14 @@
 
 {{ wizard.management_form }}
 
+{% if wizard.form.non_field_errors %}
+  <div class="fr-alert fr-alert--error fr-alert--sm fr-mb-2w">
+    {% for error in wizard.form.non_field_errors %}
+      <p>{{ error }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% for field in wizard.form %}
   <div class="fr-input-group">
     <label class="fr-label" for="{{ field.id_for_label }}">

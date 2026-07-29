@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-02 09:54+0200\n"
-"PO-Revision-Date: 2025-07-02 09:55+0200\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2026-07-29 16:12+0200\n"
+"PO-Revision-Date: 2026-07-29 16:20+0200\n"
+"Last-Translator: Sylvain Boissel <sylvain@boissel.dev>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: instances/abstract.py:6
 msgid "created at"
@@ -44,8 +44,8 @@ msgid "Environment variables set in Scalingo"
 msgstr "Variables d’environnement créées dans Scalingo"
 
 #: instances/constants.py:28
-msgid "Sites Faciles code deployed"
-msgstr "Code de Sites Faciles déployé"
+msgid "Sites Conformes code deployed"
+msgstr "Code de Sites Conformes déployé"
 
 #: instances/constants.py:33
 msgid "Superusers created"
@@ -55,164 +55,168 @@ msgstr "Comptes administrateurs créés"
 msgid "Initial deployment complete"
 msgstr "Déploiement initial terminé"
 
-#: instances/forms.py:46
+#: instances/forms.py:45
 msgid ""
 "The value of this field must include the value defined in the field 'Main "
 "URL domain'."
 msgstr ""
 "La valeur de ce champ doit inclure celle du champ « Domaine principal »."
 
-#: instances/models.py:29
+#: instances/models.py:31
 #: instances/templates/instances/emailconfig_detail.html:21
 msgid "Default from"
 msgstr "Expéditeur par défaut"
 
-#: instances/models.py:31
+#: instances/models.py:33
 #: instances/templates/instances/emailconfig_detail.html:33
 msgid "Host domain"
 msgstr "Domaine de l’hôte"
 
-#: instances/models.py:33
+#: instances/models.py:35
 msgid "Can only contain a domain name, without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine, sans le https://"
 
-#: instances/models.py:35
+#: instances/models.py:37
 #: instances/templates/instances/emailconfig_detail.html:43
 msgid "Port"
 msgstr "Port"
 
-#: instances/models.py:36
+#: instances/models.py:38
 #: instances/templates/instances/emailconfig_detail.html:53
 msgid "Email secrets ID"
 msgstr "Identifiant des secrets Email"
 
-#: instances/models.py:38
+#: instances/models.py:40
 #: instances/templates/instances/emailconfig_detail.html:63
 msgid "Use TLS"
 msgstr "Utiliser TLS"
 
-#: instances/models.py:39
+#: instances/models.py:41
 #: instances/templates/instances/emailconfig_detail.html:73
 msgid "Use SSL"
 msgstr "Utiliser SSL"
 
-#: instances/models.py:41
+#: instances/models.py:43
 #: instances/templates/instances/emailconfig_detail.html:83
 msgid "Timeout delay"
 msgstr "Délai d’expiration"
 
-#: instances/models.py:46
+#: instances/models.py:48
 #: instances/templates/instances/emailconfig_detail.html:93
 msgid "SSL keyfile"
 msgstr "SSL keyfile"
 
-#: instances/models.py:49 instances/models.py:57
+#: instances/models.py:51 instances/models.py:59
 msgid "Optional, can be used if either EMAIL_USE_SSL or EMAIL_USE_TLS is true."
 msgstr ""
 "Optionnel, peut être utilisé si EMAIL_USE_SSL ou EMAIL_USE_TLS est vrai."
 
-#: instances/models.py:54
+#: instances/models.py:56
 #: instances/templates/instances/emailconfig_detail.html:103
 msgid "SSL certfile"
 msgstr "SSL certfile"
 
-#: instances/models.py:63
+#: instances/models.py:65
 msgid "email config"
 msgstr "configuration e-mail"
 
-#: instances/models.py:95
-msgid "bucket name"
-msgstr "nom du bucket"
-
-#: instances/models.py:99
-msgid "bucket region"
-msgstr "région du bucket"
-
-#: instances/models.py:102
-msgid "host"
-msgstr "serveur"
-
-#: instances/models.py:104
-msgid "storage secrets ID"
-msgstr "identifiant des secrets de stockage"
-
-#: instances/models.py:107
-msgid "storage config"
-msgstr "configuration de stockage"
-
-#: instances/models.py:138
+#: instances/models.py:92
 msgid "name"
 msgstr "nom"
 
-#: instances/models.py:140
+#: instances/models.py:94
 msgid "identifiant"
 msgstr "identifiant"
 
-#: instances/models.py:141
+#: instances/models.py:95
 msgid "If empty, will be generated from the instance name."
 msgstr "Si laissé vide, sera généré depuis le nom de l’instance."
 
-#: instances/models.py:147
+#: instances/models.py:101
 msgid "Main contact"
 msgstr "Contact principal"
 
-#: instances/models.py:150
+#: instances/models.py:104
 msgid "status"
 msgstr "statut"
 
-#: instances/models.py:153
+#: instances/models.py:107
 msgid "Scalingo application name"
 msgstr "Nom de l’application Scalingo"
 
-#: instances/models.py:154
+#: instances/models.py:108
 msgid "If empty, will default to sf-&lt;slug&gt;."
 msgstr "Si vide, prendra par défaut la valeur sf-&lt;identifiant&gt;."
 
-#: instances/models.py:159
+#: instances/models.py:113
 msgid "Scalingo database ID"
 msgstr "Identifiant base de données dans Scalingo"
 
-#: instances/models.py:161
+#: instances/models.py:115
 msgid "Use SecNumCloud?"
 msgstr "Utiliser SecNumCloud ?"
 
-#: instances/models.py:164
+#: instances/models.py:118
 msgid "Scaleway subdomain"
 msgstr "Sous-domaine Scaleway"
 
-#: instances/models.py:168
+#: instances/models.py:122
 msgid "Git branch"
 msgstr "Branche git"
 
-#: instances/models.py:172
+#: instances/models.py:126
 msgid ""
-"Choose the version of Sites Faciles to deploy. Please leave the default "
+"Choose the version of Sites Conformes to deploy. Please leave the default "
 "value if you are not a dev."
 msgstr ""
-"Choisissez la version de Sites Faciles à déployer. Merci de laisser la "
+"Choisissez la version de Sites Conformes à déployer. Merci de laisser la "
 "valeur par défaut si vous n'êtes pas membre de l’équipe de développement."
 
-#: instances/models.py:176
+#: instances/models.py:130
+msgid "S3 bucket name"
+msgstr "Nom du bucket S3"
+
+#: instances/models.py:132
+msgid "S3 bucket region"
+msgstr "Région du bucket S3"
+
+#: instances/models.py:134
+msgid "S3 host"
+msgstr "Serveur S3"
+
+#: instances/models.py:136
+msgid "S3 location"
+msgstr "Dossier dans le bucket S3"
+
+#: instances/models.py:138
+msgid "S3 key ID"
+msgstr "ID de clef d'accès S3"
+
+#: instances/models.py:139
+msgid "S3 key secret"
+msgstr "Clef secrète S3"
+
+#: instances/models.py:141
 msgid "Automatically deploy new releases"
 msgstr "Déployer automatiquement les nouvelles versions"
 
-#: instances/models.py:176
+#: instances/models.py:141
 msgid "Uncheck this box for headless instances."
 msgstr "Décocher cette case pour les instances « headless »."
 
-#: instances/models.py:180
+#: instances/models.py:145
 msgid "Main URL domain"
 msgstr "Domaine principal"
 
-#: instances/models.py:183
+#: instances/models.py:148
 msgid "Can only contain a domain name without the https://"
 msgstr "Ne peut contenir qu’un nom de domaine sans le https://"
 
-#: instances/models.py:186
+#: instances/models.py:151
 msgid "All allowed domains"
 msgstr "Tous les domaines autorisés"
 
-#: instances/models.py:190
+#: instances/models.py:155
 msgid ""
 "Can only contain a list of domain names without the https://, separated by "
 "commas"
@@ -220,51 +224,59 @@ msgstr ""
 "Ne peut contenir qu’une liste de noms de domaine sans le https://, séparés "
 "par des virgules"
 
-#: instances/models.py:198
+#: instances/models.py:163
 msgid "Email configuration"
 msgstr "Configuration email"
 
-#: instances/models.py:200
+#: instances/models.py:165
 msgid "Allow users to reset their password"
 msgstr "Autoriser les utilisateurs à réinialiser leur mot de passe"
 
-#: instances/models.py:206
-msgid "Storage configuration"
-msgstr "Configuration de stockage"
-
-#: instances/models.py:210
+#: instances/models.py:168
 msgid "instance"
 msgstr "instance"
 
-#: instances/models.py:370
+#: instances/models.py:314
 msgid "(The value will be generated automatically.)"
 msgstr "(La valeur sera générée automatiquement.)"
 
-#: instances/models.py:439
+#: instances/models.py:371
 msgid "Domain added"
 msgstr "Domaine ajouté"
 
-#: instances/models.py:444
+#: instances/models.py:376
 msgid "Alwaysdata returned the following warning: "
 msgstr "Alwaysdata a renvoyé l’avertissement suivant : "
 
-#: instances/models.py:450
+#: instances/models.py:382
 msgid "Alwaysdata returned the following error: "
 msgstr "Alwaysdata a renvoyé l’erreur suivante : "
 
-#: instances/models.py:480 instances/models.py:540 instances/models.py:661
-#: instances/models.py:689 instances/models.py:714 instances/models.py:801
-#: instances/models.py:807
+#: instances/models.py:412 instances/models.py:469 instances/models.py:610
+#: instances/models.py:638 instances/models.py:664 instances/models.py:751
+#: instances/models.py:757
 msgid "Scalingo returned the following error: "
 msgstr "Scalingo a renvoyé l’erreur suivante : "
 
-#: instances/models.py:696
+#: instances/models.py:567
+msgid ""
+"Please only change the env variables at the relevant step or after finishing "
+"initial deployment."
+msgstr ""
+"Merci de ne changer les variables d'environnement qu'à l'étape pertinente ou "
+"après le déploiement initial."
+
+#: instances/models.py:645
 msgid "Initial data deployment requested"
 msgstr "Chargement des données initiales demandé"
 
-#: instances/models.py:741
+#: instances/models.py:691
 msgid "Unknown"
 msgstr "Inconnu"
+
+#: instances/models.py:764
+msgid "Account creation requested for users:"
+msgstr "Création de compte demandée pour les utilisateurs :"
 
 #: instances/templates/instances/instance_form.html:9
 msgid "Add a new instance"
@@ -274,19 +286,19 @@ msgstr "Ajouter une instance"
 msgid "Base fields"
 msgstr "Champs de base"
 
-#: instances/templates/instances/instance_form.html:31
+#: instances/templates/instances/instance_form.html:30
 msgid "Extra fields"
 msgstr "Champs supplémentaires"
 
-#: instances/templates/instances/instance_form.html:34
+#: instances/templates/instances/instance_form.html:33
 msgid "These fields will be auto-filled but can be customized if need be."
 msgstr "Ces champs sont pré-remplis mais peuvent être personnalisés au besoin."
 
-#: instances/templates/instances/instance_form.html:44
+#: instances/templates/instances/instance_form.html:51
 msgid "Validate this form"
 msgstr "Valider ce formulaire"
 
-#: instances/templates/instances/instance_form.html:48
+#: instances/templates/instances/instance_form.html:55
 #: instances/templates/instances/instance_mass_deploy_list.html:32
 msgid "Cancel"
 msgstr "Annuler"
@@ -314,25 +326,30 @@ msgstr ""
 msgid "Confirm deployment"
 msgstr "Confirmer le déploiement"
 
-#: instances/templates/instances/storageconfig_detail.html:21
-msgid "Bucket name"
-msgstr "Nom du bucket"
-
-#: instances/templates/instances/storageconfig_detail.html:33
-msgid "Bucket region"
-msgstr "Région du bucket"
-
-#: instances/templates/instances/storageconfig_detail.html:43
-msgid "Host"
-msgstr "Serveur"
-
-#: instances/templates/instances/storageconfig_detail.html:53
-msgid "Storage secrets ID"
-msgstr "Identifiant des secrets de stockage"
-
-#: instances/views.py:333
+#: instances/views.py:261
 msgid "Successful deployments for instances:"
 msgstr "Déploiements réussis pour les instances :"
+
+#~ msgid "storage secrets ID"
+#~ msgstr "identifiant des secrets de stockage"
+
+#~ msgid "storage config"
+#~ msgstr "configuration de stockage"
+
+#~ msgid "Storage configuration"
+#~ msgstr "Configuration de stockage"
+
+#~ msgid "Bucket name"
+#~ msgstr "Nom du bucket"
+
+#~ msgid "Bucket region"
+#~ msgstr "Région du bucket"
+
+#~ msgid "Host"
+#~ msgstr "Serveur"
+
+#~ msgid "Storage secrets ID"
+#~ msgstr "Identifiant des secrets de stockage"
 
 #~ msgid "Sites Faciles initial data deployed"
 #~ msgstr "Données initiales de Sites faciles chargées"
