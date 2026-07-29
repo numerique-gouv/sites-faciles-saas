@@ -1,9 +1,10 @@
-from django.conf import settings
-from django.utils import timezone
-import requests
 import re
 
-from instances.constants import USER_AGENT, POSTGRESQL_PLAN, REQUEST_TIMEOUT
+import requests
+from django.conf import settings
+from django.utils import timezone
+
+from instances.constants import POSTGRESQL_PLAN, REQUEST_TIMEOUT, USER_AGENT
 
 STANDARD_ENDPOINT = "api.osc-fr1.scalingo.com"
 SECNUMCLOUD_ENDPOINT = "api.osc-secnum-fr1.scalingo.com"
@@ -49,10 +50,12 @@ class Scalingo:
             self.bearer_token_time = timezone.now()
 
     ## HTTP methods
-    def delete(self, query_path: str, params: dict = {}) -> int:
+    def delete(self, query_path: str, params: dict | None = None) -> int:
         """
         Makes a DELETE query to the endpoint and returns the result
         """
+        if params is None:
+            params = {}
         self.check_session()
 
         headers = {
@@ -217,7 +220,9 @@ class Scalingo:
     def app_detail(self, app_name: str) -> dict:
         return self.get(f"apps/{app_name}")
 
-    def app_settings_update(self, app_name: str, settings: dict = {}):
+    def app_settings_update(self, app_name: str, settings: dict | None = None):
+        if settings is None:
+            settings = {}
         json_data = {"app": settings}
 
         return self.patch(f"apps/{app_name}", json_data=json_data)
@@ -272,12 +277,14 @@ class Scalingo:
     def app_restart(
         self,
         app_name: str,
-        scope: list = ["web"],
+        scope: list | None = None,
     ):
         """
         Runs a command in a one-off container
 
         """
+        if scope is None:
+            scope = ["web"]
         json_data = {"scope": scope}
 
         result = self.post(
@@ -299,7 +306,7 @@ class Scalingo:
         self,
         app_name: str,
         command: str,
-        variables: dict = {},
+        variables: dict | None = None,
         size: str = "M",
         is_detached: bool = True,
     ):
@@ -307,6 +314,8 @@ class Scalingo:
         Runs a command in a one-off container
 
         """
+        if variables is None:
+            variables = {}
         json_data = {
             "command": command,
             "env": variables,
@@ -351,7 +360,9 @@ class Scalingo:
 
         return variables_dict
 
-    def app_variables_bulk_update(self, app_name: str, variables: list = []) -> dict:
+    def app_variables_bulk_update(
+        self, app_name: str, variables: list | None = None
+    ) -> dict:
         """
         Takes a list of dicts formatted like:
         [
@@ -364,6 +375,8 @@ class Scalingo:
             }
         ]
         """
+        if variables is None:
+            variables = []
         json_data = {"variables": variables}
         result = self.put(f"apps/{app_name}/variables", json_data=json_data)
         return result

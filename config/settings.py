@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 import sys
-import dj_database_url
 from pathlib import Path
+
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,13 +23,21 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def getenv_bool(key: str, default: bool):
+    try:
+        value = os.environ[key]
+    except KeyError:
+        return default
+    return value.casefold() in ["1", "true"]
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.getenv("DEBUG") == "True" else False
+DEBUG = getenv_bool("DEBUG", False)
 
 ALLOWED_HOSTS = (
     os.getenv("ALLOWED_HOSTS", "127.0.0.1, localhost").replace(" ", "").split(",")
@@ -205,8 +214,8 @@ SF_ADMIN_EMAILS = os.getenv("SF_ADMIN_EMAILS", "")
 SF_INFRA_EMAIL = os.getenv("SF_INFRA_EMAIL", "")
 DEFAULT_POSTGRESQL_PLAN = os.getenv("DEFAULT_POSTGRESQL_PLAN", "starter_plan")
 
-INSTANCES_ALLOW_CREATE = os.getenv("INSTANCES_ALLOW_CREATE", False)
-INSTANCES_ALLOW_DELETE = os.getenv("IINSTANCES_ALLOW_DELETE", False)
+INSTANCES_ALLOW_CREATE = getenv_bool("INSTANCES_ALLOW_CREATE", False)
+INSTANCES_ALLOW_DELETE = getenv_bool("INSTANCES_ALLOW_DELETE", False)
 
 # MFA
 TWO_FACTOR_REMEMBER_COOKIE_AGE = 1209600  # 14 days

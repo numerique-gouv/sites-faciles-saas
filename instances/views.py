@@ -1,17 +1,17 @@
 from django.contrib import messages
-from django.views.generic import DetailView, FormView
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import DetailView, FormView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.list import ListView
 
 from contacts.models import Contact
 from core.mixins import OTPRequiredStaffOrAdminMixin
 from core.utils import init_context
 from instances.forms import (
     EmailConfigForm,
-    InstanceForm,
     InstanceActionForm,
+    InstanceForm,
     InstanceMassDeployForm,
 )
 from instances.models import EmailConfig, Instance
