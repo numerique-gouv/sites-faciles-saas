@@ -1,15 +1,17 @@
 import csv
-from datetime import datetime
 import secrets
+from datetime import datetime
 
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from contacts.models import Contact
+from core.utils import migrations_applied
 from instances.abstract import BaseModel
 from instances.constants import STATUS_CHOICES, STATUS_DETAILED
 from instances.services.alwaysdata import (
@@ -19,8 +21,6 @@ from instances.services.alwaysdata import (
 )
 from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
-
-from core.utils import migrations_applied
 
 
 class EmailConfig(BaseModel):
@@ -123,7 +123,7 @@ class Instance(BaseModel):
         max_length=100,
         default="production",
         help_text=_(
-            "Choose the version of Sites Faciles to deploy. Please leave the default value if you are not a dev."
+            "Choose the version of Sites Conformes to deploy. Please leave the default value if you are not a dev."
         ),
     )
 
@@ -406,7 +406,7 @@ class Instance(BaseModel):
 
         result = sc.app_create(app_name=app_name)
 
-        if "errors" in result.keys():
+        if "errors" in result:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
@@ -448,7 +448,7 @@ class Instance(BaseModel):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         result = sc.app_detail(app_name=str(self.scalingo_application_name))
 
-        if "error" in result.keys():
+        if "error" in result:
             return f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
         else:
             status = result["app"]["status"]
@@ -463,7 +463,7 @@ class Instance(BaseModel):
             plan=settings.DEFAULT_POSTGRESQL_PLAN,
         )
 
-        if "errors" in result.keys():
+        if "errors" in result:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
@@ -517,7 +517,7 @@ class Instance(BaseModel):
             addon_id=str(self.scalingo_db_id),
         )
 
-        if "error" in result.keys():
+        if "error" in result:
             return f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
         else:
             status = result["addon"]["status"]
@@ -604,7 +604,7 @@ class Instance(BaseModel):
             app_name=str(self.scalingo_application_name), variables=env_variables
         )
 
-        if "error" in result.keys():
+        if "error" in result:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
@@ -632,7 +632,7 @@ class Instance(BaseModel):
             variables={},
         )
 
-        if "error" in result.keys():
+        if "error" in result:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
@@ -647,17 +647,18 @@ class Instance(BaseModel):
 
     def scalingo_deploy_code(self):
         """
-        Deploy the latest version of Sites Faciles
+        Deploy the latest version of Sites Conformes
         """
+
         # This command can be repeated
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         result = sc.app_deployment_trigger(
             app_name=str(self.scalingo_application_name),
             git_ref=str(self.git_branch),
-            source_url=f"https://github.com/numerique-gouv/sites-faciles/archive/{self.git_branch}.tar.gz",
+            source_url=f"https://github.com/numerique-gouv/sites-conformes/archive/{self.git_branch}.tar.gz",
         )
 
-        if "error" in result.keys():
+        if "error" in result:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
@@ -685,7 +686,7 @@ class Instance(BaseModel):
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         result = sc.app_deployment_list(app_name=str(self.scalingo_application_name))
 
-        if "error" in result.keys():
+        if "error" in result:
             badge = f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
             date = _("Unknown")
             status = "error"
@@ -744,13 +745,13 @@ class Instance(BaseModel):
             variables={},
         )
 
-        if "error" in result_main_contact.keys():
+        if "error" in result_main_contact:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")
                 + f"<code>{result_main_contact['error']}</code>",
             }
-        if "error" in result_sf_infra.keys():
+        if "error" in result_sf_infra:
             return {
                 "status": "error",
                 "message": _("Scalingo returned the following error: ")

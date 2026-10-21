@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-29 17:44+0100\n"
-"PO-Revision-Date: 2025-01-29 17:45+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2026-07-29 16:12+0200\n"
+"PO-Revision-Date: 2026-07-29 16:25+0200\n"
+"Last-Translator: Sylvain Boissel <sylvain@boissel.dev>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: core/templates/core/blocks/footer.html:12
 msgid "Display settings"
@@ -36,7 +36,7 @@ msgstr "Accueil"
 msgid "Log out"
 msgstr "Déconnexion"
 
-#: core/templates/core/blocks/header.html:43 core/templates/core/index.html:37
+#: core/templates/core/blocks/header.html:43 core/templates/core/index.html:39
 #: core/templates/registration/login.html:12
 #: core/templates/registration/login.html:117
 msgid "Log in"
@@ -95,3 +95,16 @@ msgstr "vous êtes ici :"
 #: core/templates/registration/login.html:109
 msgid "See breadcrumb"
 msgstr "Voir le fil d’Ariane"
+
+#: core/templates/two_factor/_wizard_actions.html:7
+msgid "Cancel"
+msgstr "Annuler"
+
+#: core/templates/two_factor/_wizard_actions.html:16
+#: core/templates/two_factor/_wizard_actions.html:22
+msgid "Back"
+msgstr "Précédent"
+
+#: core/templates/two_factor/_wizard_actions.html:28
+msgid "Next"
+msgstr "Suivant"
