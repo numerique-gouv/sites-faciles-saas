@@ -20,9 +20,7 @@
     </label>
     {{ field|add_class:"fr-input" }}
     {% for error in field.errors %}
-      <div class="fr-messages-group" id="input-messages" aria-live="polite">
-        {{ error }}
-      </div>
+      <div class="fr-messages-group" id="input-messages" aria-live="polite">{{ error }}</div>
     {% endfor %}
   </div>
 {% endfor %}

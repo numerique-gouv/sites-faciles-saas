@@ -5,9 +5,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1>
-    Accueil
-  </h1>
+  <h1>Accueil</h1>
 
   {% if user.is_authenticated %}
     <ul>
@@ -31,9 +29,7 @@
   {% else %}
     <div role="alert" class="fr-alert fr-alert--error">
 
-      <h3 class="fr-alert__title">
-        Site de maintenance réservé aux personnes autorisées.
-      </h3>
+      <h3 class="fr-alert__title">Site de maintenance réservé aux personnes autorisées.</h3>
 
       <p>
         <a href="{% url 'two_factor:login' %}">{% translate "Log in" %}</a>

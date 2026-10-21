@@ -2,9 +2,7 @@
 {% load i18n static dsfr_tags %}
 
 {% block content %}
-  <h1>
-    Gestion des configurations d’envoi d’emails
-  </h1>
+  <h1>Gestion des configurations d’envoi d’emails</h1>
 
   {% dsfr_django_messages %}
 
@@ -25,26 +23,16 @@
             </caption>
             <thead>
               <tr>
-                <th scope="col">
-                  Adresse d’envoi
-                </th>
-                <th scope="col">
-                  Serveur
-                </th>
-                <th scope="col">
-                  Actions
-                </th>
+                <th scope="col">Adresse d’envoi</th>
+                <th scope="col">Serveur</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {% for entry in object_list %}
                 <tr id="table-md-row-key-1" data-row-key="1">
-                  <td id="instance-{{ entry.slug }}">
-                    {{ entry.default_from_email }}
-                  </td>
-                  <td>
-                    {{ entry.email_host }}
-                  </td>
+                  <td id="instance-{{ entry.slug }}">{{ entry.default_from_email }}</td>
+                  <td>{{ entry.email_host }}</td>
                   <td>
                     <ul class="fr-btns-group fr-btns-group--inline-md">
                       <li>
@@ -54,7 +42,7 @@
                            aria-describedby="instance-{{ entry.pk }}">Gérer la configuration</a>
                       </li>
                       <li>
-                        <a class="fr-btn fr-icon-edit-line  fr-btn--tertiary"
+                        <a class="fr-btn fr-icon-edit-line fr-btn--tertiary"
                            href="{% url 'instances:emailconfig_update' entry.pk %}"
                            title="Modifier la configuration"
                            aria-describedby="instance-{{ entry.pk }}">Modifier la configuration</a>
@@ -70,9 +58,7 @@
                 </tr>
               {% empty %}
                 <tr>
-                  <td>
-                    Il n’y a aucune configuration actuellement.
-                  </td>
+                  <td>Il n’y a aucune configuration actuellement.</td>
                 </tr>
               {% endfor %}
 

@@ -16,9 +16,7 @@
     {% csrf_token %}
 
     <fieldset class="fr-input-group">
-      <legend>
-        {% translate "Base fields" %}
-      </legend>
+      <legend>{% translate "Base fields" %}</legend>
       {% dsfr_form_field form.name %}
       {% dsfr_form_field form.main_contact %}
       {% dsfr_form_field form.email_config %}
@@ -26,12 +24,8 @@
     </fieldset>
 
     <fieldset class="fr-input-group">
-      <legend>
-        {% translate "Extra fields" %}
-      </legend>
-      <p>
-        {% translate "These fields will be auto-filled but can be customized if need be." %}
-      </p>
+      <legend>{% translate "Extra fields" %}</legend>
+      <p>{% translate "These fields will be auto-filled but can be customized if need be." %}</p>
       {% dsfr_form_field form.slug %}
       {% dsfr_form_field form.scalingo_application_name %}
       {% dsfr_form_field form.host_url %}
@@ -49,9 +43,7 @@
     </fieldset>
     <div class="fr-input-group fr-my-4w">
       {% translate "Validate this form" as validate_label %}
-      <button type="submit" class="fr-btn" title="{{ validate_label }}">
-        {{ validate_label }}
-      </button>
+      <button type="submit" class="fr-btn" title="{{ validate_label }}">{{ validate_label }}</button>
       {% translate "Cancel" as cancel_label %}
       <a href="{% url 'instances:list' %}"
          class="fr-btn fr-btn--secondary"

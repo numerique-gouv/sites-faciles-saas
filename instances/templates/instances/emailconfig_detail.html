@@ -2,18 +2,14 @@
 {% load i18n static dsfr_tags %}
 
 {% block content %}
-  <h1>
-    Gérer la configuration email « {{ object.default_from_email }} »
-  </h1>
+  <h1>Gérer la configuration email « {{ object.default_from_email }} »</h1>
 
   {% dsfr_django_messages %}
 
   <div class="fr-card fr-card--horizontal">
     <div class="fr-card__body">
       <div class="fr-card__content">
-        <h2 class="fr-card__title">
-          Informations de base
-        </h2>
+        <h2 class="fr-card__title">Informations de base</h2>
         <div class="fr-card__desc">
           <dl>
             <dt>
@@ -22,16 +18,12 @@
               </strong>
             </dt>
             <dd>
-              <span id="instance-{{ object.pk }}">
-                {{ object.default_from_email }}
-              </span>
+              <span id="instance-{{ object.pk }}">{{ object.default_from_email }}</span>
             </dd>
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Host domain" %}
-              </strong>
+              <strong>{% translate "Host domain" %}</strong>
             </dt>
             <dd>
               {{ object.email_host }}
@@ -39,9 +31,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Port" %}
-              </strong>
+              <strong>{% translate "Port" %}</strong>
             </dt>
             <dd>
               {{ object.email_port }}
@@ -49,9 +39,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Email secrets ID" %}
-              </strong>
+              <strong>{% translate "Email secrets ID" %}</strong>
             </dt>
             <dd>
               {{ object.email_secrets_id }} ({{ object.get_secrets.email }})
@@ -59,9 +47,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Use TLS" %}
-              </strong>
+              <strong>{% translate "Use TLS" %}</strong>
             </dt>
             <dd>
               {{ object.email_use_tls }}
@@ -69,9 +55,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Use SSL" %}
-              </strong>
+              <strong>{% translate "Use SSL" %}</strong>
             </dt>
             <dd>
               {{ object.email_use_ssl }}
@@ -79,9 +63,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "Timeout delay" %}
-              </strong>
+              <strong>{% translate "Timeout delay" %}</strong>
             </dt>
             <dd>
               {{ object.email_timeout }}
@@ -89,9 +71,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "SSL keyfile" %}
-              </strong>
+              <strong>{% translate "SSL keyfile" %}</strong>
             </dt>
             <dd>
               {{ object.email_ssl_keyfile }}
@@ -99,9 +79,7 @@
           </dl>
           <dl>
             <dt>
-              <strong>
-                {% translate "SSL certfile" %}
-              </strong>
+              <strong>{% translate "SSL certfile" %}</strong>
             </dt>
             <dd>
               {{ object.email_ssl_certfile }}
