@@ -63,6 +63,12 @@
                        href="{{ object.scalingo_instance_url }}">Lien public de l’instance</a>
                   </li>
                   <li>État : {{ object.scalingo_app_status|safe }}</li>
+                  {% if object.scalingo_web_containers is not None %}
+                    <li>
+                      Conteneurs web : {{ object.scalingo_web_containers }}
+                      {% if object.scalingo_web_containers == 0 %}<span class="fr-badge fr-badge--warning">Arrêtée</span>{% endif %}
+                    </li>
+                  {% endif %}
                   {% if object.current_status.rank >= 4 %}
                     <li>
                       Dernier déploiement :
@@ -164,6 +170,44 @@
                 </button>
               </form>
             </li>
+            {% if object.scalingo_web_containers == 0 %}
+              <li>
+                <form method="post" action="{% url 'instances:action' object.slug %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="scalingo_app_start">
+                  <input type="hidden" name="name" value="{{ object.name }}">
+                  <button class="fr-btn fr-icon-play-circle-line fr-btn--secondary"
+                          type="submit"
+                          title="Remettre en service l’instance"
+                          aria-describedby="instance-{{ object.slug }}">
+                    Remettre en service
+                  </button>
+                </form>
+              </li>
+            {% else %}
+              <li>
+                <form method="post" action="{% url 'instances:action' object.slug %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="scalingo_app_stop">
+                  <input type="hidden" name="name" value="{{ object.name }}">
+                  <div class="fr-select-group">
+                    <label class="fr-label" for="stop-reason-{{ object.slug }}">Motif de l’arrêt</label>
+                    <select class="fr-select"
+                            id="stop-reason-{{ object.slug }}"
+                            name="stop_reason"
+                            required>
+                      {% for value, label in stop_reasons %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+                    </select>
+                  </div>
+                  <button class="fr-btn fr-icon-pause-circle-line fr-btn--secondary"
+                          type="submit"
+                          title="Arrêter l’instance"
+                          aria-describedby="instance-{{ object.slug }}">
+                    Arrêter l’instance
+                  </button>
+                </form>
+              </li>
+            {% endif %}
           {% endif %}
           {% if instances_allow_delete %}
             <li>

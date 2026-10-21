@@ -8,6 +8,11 @@ Le projet implémente des librairies d’interfaçage avec les APIs de Scalingo 
 
 L’essentiel de la progression du déploiement se fait via un formulaire `instances/forms.py` > `InstanceActionForm` avec un champ caché `action` qui appelle la prochaine étape du déploiement, dont la logique est gérée dans le modèle `instances/models.py` > `Instance`.
 
+## Pages statiques
+
+Le projet abrite dans `core/static/pages` des pages statiques pouvant être configurées comme pages d’erreur ou de maintenance
+depuis une instance Scalingo (cf. [Documentation de Scalingo](https://doc.scalingo.com/platform/app/custom-error-page).)
+
 ## Documentation
 
 * Une documentation détaillée de l’installation en local est disponible sur [ONBOARDING.md](./ONBOARDING.md).

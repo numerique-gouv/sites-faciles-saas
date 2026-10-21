@@ -302,6 +302,33 @@ class Scalingo:
                 "message": "error when restarting appication",
             }
 
+    def app_containers(self, app_name: str) -> dict:
+        return self.get(f"apps/{app_name}/containers")
+
+    def app_scale(self, app_name: str, containers: list):
+        """
+        Scales the containers of the app
+
+        Takes a list of dicts formatted like:
+        [{"name": "web", "amount": 0}]
+        """
+        json_data = {"containers": containers}
+
+        result = self.post(
+            f"apps/{app_name}/scale", json_data=json_data, empty_response=True
+        )
+
+        if result["status_code"] == 202:
+            return {
+                "status": "success",
+                "message": "application successfully scaled",
+            }
+        else:
+            return {
+                "status": "error",
+                "message": "error when scaling application",
+            }
+
     def app_run(
         self,
         app_name: str,

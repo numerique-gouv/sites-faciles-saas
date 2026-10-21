@@ -63,3 +63,17 @@ POSTGRESQL_PLAN = {
         "name": "postgresql-starter-1024",
     },
 }
+
+# Pages displayed by Scalingo (through SCALINGO_STOPPED_PAGE_URL) when an app is scaled to zero
+STOPPED_PAGES = {
+    "maintenance": {
+        "path": "pages/maintenance.html",
+        "label": "Mettre en maintenance (temporaire)",
+    },
+    "disabled": {
+        "path": "pages/disabled.html",
+        "label": "Désactiver (définitif)",
+    },
+}
+
+STOPPED_PAGES_CHOICES = [(k, v["label"]) for (k, v) in STOPPED_PAGES.items()]

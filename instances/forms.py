@@ -4,6 +4,7 @@ from django.forms import ModelForm
 from django.utils.translation import gettext_lazy as _
 from dsfr.forms import DsfrBaseForm
 
+from instances.constants import STOPPED_PAGES_CHOICES
 from instances.models import EmailConfig, Instance
 
 
@@ -51,6 +52,7 @@ class InstanceForm(ModelForm, DsfrBaseForm):
 
 class InstanceActionForm(ModelForm, DsfrBaseForm):
     action = forms.CharField()
+    stop_reason = forms.ChoiceField(choices=STOPPED_PAGES_CHOICES, required=False)
 
     class Meta:
         model = Instance
@@ -74,6 +76,10 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_create_superusers()
         elif action == "scalingo_app_restart":
             return self.instance.scalingo_app_restart()
+        elif action == "scalingo_app_stop":
+            return self.instance.scalingo_app_stop(self.cleaned_data["stop_reason"])
+        elif action == "scalingo_app_start":
+            return self.instance.scalingo_app_start()
 
 
 class InstanceMassDeployForm(DsfrBaseForm):
