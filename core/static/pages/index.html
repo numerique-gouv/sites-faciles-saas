@@ -1,80 +1,298 @@
 <!DOCTYPE html>
-<html data-fr-theme="light" lang="fr">
+<html lang="fr">
 
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Pages statiques</title>
+    <style>
+        /*!
+ * DSFR v1.10.2 | SPDX-License-Identifier: Etalab-2.0 | License-Filename: LICENSE.md | restricted use (see terms and conditions)
+ */
+        @charset "UTF-8";
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="favicon/favicon.ico" type="image/x-icon">
+        /* ¯¯¯¯¯¯¯¯¯ *\
+  CONNECT
+\* ˍˍˍˍˍˍˍˍˍ */
+        html {
+            height: 100%;
+        }
 
-    <title>Pages de site arrêté</title>
+        body {
+            min-height: 100%;
+            font-family: "Marianne", arial, sans-serif;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            margin: 0;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5fe;
+        }
+
+        body::before,
+        body::after {
+            box-sizing: inherit;
+        }
+
+        body *,
+        body *::before,
+        body *::after {
+            box-sizing: inherit;
+        }
+
+        main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+        }
+
+        a {
+            text-decoration: var(--text-decoration);
+            outline-offset: 2px;
+            outline-width: 2px;
+            outline-color: #0a76f6;
+        }
+
+        *:focus-visible {
+            z-index: 500;
+            outline-style: solid;
+        }
+
+        .fr-container {
+            width: 100%;
+            max-width: 78rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex: 1;
+        }
+
+        .fr-grid-row {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+        }
+
+        .fr-container>.fr-grid-row {
+            flex: 1;
+        }
+
+        .fr-grid-row--center {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fr-grid-row--gutters {
+            margin: -0.5rem;
+        }
+
+        .fr-grid-row--gutters>[class^=fr-col-],
+        .fr-grid-row--gutters>[class*=" fr-col-"] {
+            padding: 0.5rem;
+        }
+
+        .fr-col-12 {
+            flex: 0 0 100%;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .fr-btns-group {
+            list-style: none;
+            padding: 0;
+            margin-top: -0.5rem;
+            margin-bottom: -0.5rem;
+        }
+
+        .fr-btns-group .fr-btn>span {
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .fr-btns-group--inline {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+
+        .fr-btns-group--inline .fr-btn {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .fr-btns-group--sm .fr-btn {
+            font-size: 0.875rem;
+            line-height: 1.5rem;
+        }
+
+        .fr-btn {
+            border-radius: 0;
+            padding: 0.25rem 0.75rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: transparent;
+            overflow: initial;
+            max-width: 100%;
+            max-height: none;
+            font-weight: 500;
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .fr-btn svg {
+            width: 1rem;
+            height: 1rem;
+            margin-left: -0.125rem;
+            margin-right: 0.5rem;
+            fill: #000091;
+        }
+
+        .fr-server__body {
+            margin-top: 3.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .fr-server__footer {
+            margin-top: 3.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .fr-server__image {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .fr-server__image img {
+            width: 13.25rem;
+            margin: 0 auto;
+        }
+
+        .fr-h1 {
+            font-size: 2rem;
+            line-height: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .fr-text--xl {
+            font-size: 1.25rem;
+            line-height: 2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .fr-text--sm {
+            font-size: 0.875rem;
+            line-height: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .fr-btn--tertiary {
+            background-color: #f6f6f6;
+            box-shadow: inset 0 0 0 1px #ddd;
+            color: #000091;
+        }
+
+        .fr-btn--tertiary:hover {
+            background-color: #dfdfdf;
+        }
+
+        .fr-btn--tertiary:active {
+            background-color: #cfcfcf;
+        }
+
+        @media (min-width: 48em) {
+            .fr-container {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .fr-col-offset-md-1 {
+                margin-left: 8.3333333333%;
+            }
+
+            .fr-col-md-6 {
+                flex: 0 0 50%;
+                width: 50%;
+                max-width: 50%;
+            }
+
+            .fr-col-md-3 {
+                flex: 0 0 25%;
+                width: 25%;
+                max-width: 25%;
+            }
+
+            .fr-server__image {
+                margin-top: 3.5rem;
+                margin-bottom: 3.5rem;
+            }
+
+            .fr-server__image img {
+                width: 100%;
+            }
+
+            .fr-h1 {
+                font-size: 2.5rem;
+                line-height: 3rem;
+            }
+        }
+
+    </style>
   </head>
 
   <body>
-    <main id="content">
-
-      <header role="banner" class="fr-header">
-        <div class="fr-header__body">
-          <div class="fr-container">
-            <div class="fr-header__body-row">
-              <div class="fr-header__brand fr-enlarge-link">
-                <div class="fr-header__brand-top">
-                  <div class="fr-header__logo">
-                    <p class="fr-logo" title="Gouvernement">Gouvernement</p>
-                  </div>
-                </div>
-                <div class="fr-header__service">
-                  <p class="fr-header__service-title">Pages de site arrêté</p>
-                </div>
-              </div>
-            </div>
+    <main role="main" id="content">
+      <div class="fr-container">
+        <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters">
+          <div class="fr-server__body fr-col-12 fr-col-md-6">
+            <h1 class="fr-h1">Pages statiques</h1>
+            <p class="fr-text--xl">Pages affichées à la place des sites hébergés (arrêt, erreurs).</p>
+            <ul class="fr-btns-group fr-btns-group--inline fr-btns-group--sm">
+              <li><a class="fr-btn fr-btn--tertiary" href="maintenance.html">Site en maintenance</a></li>
+              <li><a class="fr-btn fr-btn--tertiary" href="disabled.html">Site désactivé</a></li>
+              <li><a class="fr-btn fr-btn--tertiary" href="403.html">Erreur 403</a></li>
+              <li><a class="fr-btn fr-btn--tertiary" href="503.html">Erreur 503</a></li>
+            </ul>
           </div>
-        </div>
-      </header>
 
-      <div class="fr-container fr-mt-4w fr-mb-6w">
-        <h1>Pages de site arrêté</h1>
-        <ul>
-          <li>
-            <a href="maintenance.html">Site en maintenance</a>
-          </li>
-          <li>
-            <a href="disabled.html">Site désactivé</a>
-          </li>
-        </ul>
+        </div>
       </div>
-
-      <footer class="fr-footer fr-pb-4w" role="contentinfo" id="footer">
-        <div class="fr-container">
-          <div class="fr-footer__body">
-            <div class="fr-footer__brand fr-enlarge-link">
-              <p class="fr-logo" title="Gouvernement">Gouvernement</p>
-            </div>
-            <div class="fr-footer__content">
-              <ul class="fr-footer__content-list">
-                <li class="fr-footer__content-item">
-                  <a class="fr-footer__content-link" href="https://legifrance.gouv.fr/">legifrance.gouv.fr</a>
-                </li>
-                <li class="fr-footer__content-item">
-                  <a class="fr-footer__content-link" href="https://www.info.gouv.fr/">info.gouv.fr</a>
-                </li>
-                <li class="fr-footer__content-item">
-                  <a class="fr-footer__content-link"
-                     href="https://www.service-public.gouv.fr/">service-public.gouv.fr</a>
-                </li>
-                <li class="fr-footer__content-item">
-                  <a class="fr-footer__content-link" href="https://data.gouv.fr/">data.gouv.fr</a>
-                </li>
-              </ul>
-            </div>
-          </div>
+      <div class="fr-server__footer">
+        <div class="fr-grid-row fr-grid-row--center">
+          <img width="66"
+               height="24"
+               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIQAAAAwCAMAAADnwSL2AAAAflBMVEUAAJHhAA////8QEJjv7/gwMKYgIJ+/v+RwcMFAQK1QULPf3/GPj8+vr92AgMhgYLr4v8Ofn9bPz+rjEB739/f0n6X73+HwgIfnMDz97/D5z9KoqKiKioqAgIDl5eXKysr2r7Tyj5bsYGnpQEvAwMC4uLjucHjqUFrlIC2YmJgpfk6NAAACI0lEQVRYw73YaWObMAwGYFe+zWGOQJK2uZpe+/9/cJjMW7sVlKwW+pKPPIgXWYR9p2Qu4O+qznc31zcIVsOXdWyXQxiYqmoxhIPpWgrBxQTgHmC9FKKEieqfqIOJG0IvqIOJByIoNu9kCDwQsar+nR6RA1JP9J1QgFVLj6hRxCs9QqCIIz2iAbRackSBI97IESWOWJMj7Dxg/3zYV+QIPiNYPT+8PDzu6BEsm0GsYPWyO3T0CA1zvXjc/Vid6BFmzjA8jAP0Sxxg84o9wDo9wnp72wkGsEmM4HnBb55X92kRsvGMea2L0vDYEZ6lnFdXGETNWF17ZzSEskw6XWoUUSVESCEUU0yaXMc4ZoDX9rRJh5AiD7ceP/t+XV+gji7h2+EaOZ7d4efP4VUrNJh9OkSpw2uhQgK0uTissZxxgSYiGYLnn8Z0Vqprt8ztJhnCxmBArJyPBjyax9QTU/5ufpaPvTCooW+TIuJgEroIqYh9aLBcpkXIRnvOHI+kMvTFeJivtAhV2MvFLz8+tEE4KZAxkRYhP8+NwSBKbgZDo/45xrohCe153VWvpCu/LZ3kTgOE/hjk9okQ0pT68jy++BrsW0qEy8dcqPiHYeF4MCCf4kkRXoBW4/iELHdycs/c3tEhFDSecT5cVZiPNOS0SIuofehCuHU7a4ATZSdiJtXH2YGuc9QrvxojSfs4cMJEdW8LIWwxu0V0G3qEumLHPv8H4idR9Cak2+TKegAAAABJRU5ErkJggg=="
+               alt="Marianne">
         </div>
-      </footer>
+      </div>
     </main>
-
   </body>
 
 </html>
