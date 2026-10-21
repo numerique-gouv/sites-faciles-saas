@@ -41,7 +41,11 @@ migrate app="" version="":
 
 alias checkfiles := quality
 quality:
-    {{uv_run}} pre-commit run --all-files
+    {{uv_run}} prek run --all-files
+
+# Check that all imported packages are declared as dependencies (and vice versa)
+deps-check:
+    {{uv_run}} deptry .
 
 alias rs := runserver
 runserver:
@@ -59,7 +63,7 @@ update:
 
 upgrade:
     uv lock --upgrade
-    {{uv_run}} pre-commit autoupdate
+    {{uv_run}} prek update --cooldown-days 7
 
 # Get the latest local PostgreSQL backup
 [group('Dev DB and medias management')]

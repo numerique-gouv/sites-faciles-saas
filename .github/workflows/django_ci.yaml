@@ -18,13 +18,15 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install just
-        uses: extractions/setup-just@v2
+        uses: extractions/setup-just@v4
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v10.3.0
         with:
           python-version: ${{ matrix.python-version }}
+          # `just test` runs `python` directly, so it needs the project venv on PATH
+          activate-environment: true
       - name: Install dependencies
         run: |
           uv sync --no-group dev

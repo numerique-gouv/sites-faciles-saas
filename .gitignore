@@ -160,8 +160,9 @@ cython_debug/
 #.idea/
 .ruff_cache
 
-# VS Code/Codium
+# Dev tools
 .vscode/
+.claude/
 
 # Projet specific
 .secrets_*.txt
