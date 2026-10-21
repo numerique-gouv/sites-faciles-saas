@@ -8,31 +8,23 @@
         <div class="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
           <div class="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
             <div class="fr-col-12 fr-col-md-9 fr-col-lg-8">
-              <h1>
-                {% translate "Log in" %}
-              </h1>
+              <h1>{% translate "Log in" %}</h1>
               <div>
                 <form id="login-form" method="post">
                   <fieldset class="fr-fieldset"
                             id="login-form-fieldset"
                             aria-labelledby="login-form-fieldset-legend login-form-fieldset-messages">
                     <legend class="fr-fieldset__legend" id="login-form-fieldset-legend">
-                      <h2>
-                        {% translate "Log in with your account" %}
-                      </h2>
+                      <h2>{% translate "Log in with your account" %}</h2>
                     </legend>
                     <div class="fr-fieldset__element">
-                      <p class="fr-text--sm">
-                        {% translate "Unless otherwise stated, all fields are mandatory." %}
-                      </p>
+                      <p class="fr-text--sm">{% translate "Unless otherwise stated, all fields are mandatory." %}</p>
                       <div class="fr-messages-group"
                            id="login-form-fieldset-messages"
                            aria-live="assertive">
                         {% if form.errors %}
                           <div class="fr-alert fr-alert--error fr-alert--sm">
-                            <p>
-                              {% translate "Error: Your username and password do not match, please try again." %}
-                            </p>
+                            <p>{% translate "Error: Your username and password do not match, please try again." %}</p>
                           </div>
                         {% endif %}
                         {% if next %}
@@ -50,17 +42,13 @@
                     <div class="fr-fieldset__element">
                       {% csrf_token %}
                       <div class="fr-input-group">
-                        <label class="fr-label" for="id_username">
-                          {% translate "Username:" %}
-                        </label>
+                        <label class="fr-label" for="id_username">{% translate "Username:" %}</label>
                         {{ form.username |add_class:"fr-input" }}
                       </div>
                     </div>
                     <div class="fr-fieldset__element">
                       <div class="fr-password">
-                        <label class="fr-label" for="id_password">
-                          {% translate "Password:" %}
-                        </label>
+                        <label class="fr-label" for="id_password">{% translate "Password:" %}</label>
                         {{ form.password |add_class:"fr-password__input fr-input" }}
                         <div class="fr-password__checkbox fr-checkbox-group fr-checkbox-group--sm">
                           {% translate "Show password" as show_password %}
@@ -68,13 +56,11 @@
                                  id="id_password-show"
                                  type="checkbox"
                                  aria-describedby="id_password-show-messages">
-                          <label class="fr-password__checkbox fr-label" for="id_password-show">
-                            {% translate "Show" %}
-                          </label>
+                          <label class="fr-password__checkbox fr-label"
+                                 for="id_password-show">{% translate "Show" %}</label>
                           <div class="fr-messages-group"
                                id="id_password-show-messages"
-                               aria-live="assertive">
-                          </div>
+                               aria-live="assertive"></div>
                         </div>
                       </div>
                     </div>

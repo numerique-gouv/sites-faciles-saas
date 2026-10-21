@@ -5,9 +5,7 @@
 {% settings_value "INSTANCES_ALLOW_DELETE" as instances_allow_delete %}
 
 {% block content %}
-  <h1>
-    Gestion des instances
-  </h1>
+  <h1>Gestion des instances</h1>
 
   {% dsfr_django_messages %}
 
@@ -34,18 +32,10 @@
             </caption>
             <thead>
               <tr>
-                <th scope="col">
-                  Nom
-                </th>
-                <th scope="col">
-                  Contact principal
-                </th>
-                <th scope="col">
-                  Statut
-                </th>
-                <th scope="col">
-                  Actions
-                </th>
+                <th scope="col">Nom</th>
+                <th scope="col">Contact principal</th>
+                <th scope="col">Statut</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -66,9 +56,7 @@
                     ({{ entry.main_contact.email }})
                   </td>
                   <td>
-                    <p class="fr-badge fr-badge--{{ entry.current_status.color_class }}">
-                      {{ entry.current_status.label }}
-                    </p>
+                    <p class="fr-badge fr-badge--{{ entry.current_status.color_class }}">{{ entry.current_status.label }}</p>
                     {% if entry.status == "FINISHED" %}
                       <br />
                       {{ entry.scalingo_app_status|safe }}
@@ -83,7 +71,7 @@
                            aria-describedby="instance-{{ entry.slug }}">Gérer l’instance</a>
                       </li>
                       <li>
-                        <a class="fr-btn fr-icon-edit-line  fr-btn--tertiary"
+                        <a class="fr-btn fr-icon-edit-line fr-btn--tertiary"
                            href="{% url 'instances:update' entry.slug %}"
                            title="Modifier l’instance"
                            aria-describedby="instance-{{ entry.slug }}">Modifier l’instance</a>
@@ -101,9 +89,7 @@
                 </tr>
               {% empty %}
                 <tr>
-                  <td colspan="4">
-                    Il n’y a aucune instance actuellement.
-                  </td>
+                  <td colspan="4">Il n’y a aucune instance actuellement.</td>
                 </tr>
               {% endfor %}
 

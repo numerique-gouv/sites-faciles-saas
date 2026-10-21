@@ -16,9 +16,7 @@
     {% csrf_token %}
     {{ form }}
     <div class="fr-input-group fr-my-4w">
-      <button type="submit" class="fr-btn" title="Valider">
-        Valider ce formulaire
-      </button>
+      <button type="submit" class="fr-btn" title="Valider">Valider ce formulaire</button>
       <a href="{% url 'instances:emailconfig_list' %}"
          class="fr-btn fr-btn--secondary"
          title="Annuler">

@@ -2,9 +2,7 @@
 {% load i18n static dsfr_tags %}
 
 {% block content %}
-  <h1>
-    Gestion des contacts
-  </h1>
+  <h1>Gestion des contacts</h1>
 
   {% dsfr_django_messages %}
 
@@ -25,15 +23,9 @@
             </caption>
             <thead>
               <tr>
-                <th scope="col">
-                  Nom
-                </th>
-                <th scope="col">
-                  Organisation
-                </th>
-                <th scope="col">
-                  Actions
-                </th>
+                <th scope="col">Nom</th>
+                <th scope="col">Organisation</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -44,9 +36,7 @@
                     <br />
                     {{ entry.email }}
                   </td>
-                  <td>
-                    {{ entry.organization }}
-                  </td>
+                  <td>{{ entry.organization }}</td>
                   <td>
                     <ul class="fr-btns-group fr-btns-group--inline-md">
                       <li>
@@ -66,9 +56,7 @@
                 </tr>
               {% empty %}
                 <tr>
-                  <td colspan="3">
-                    Il n’y a aucun contact actuellement.
-                  </td>
+                  <td colspan="3">Il n’y a aucun contact actuellement.</td>
                 </tr>
               {% endfor %}
 

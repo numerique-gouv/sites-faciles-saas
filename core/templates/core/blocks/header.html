@@ -35,9 +35,7 @@
     {% if user.is_authenticated %}
       <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
-        <button class="fr-icon-logout-box-r-line fr-btn" type="submit">
-          {% translate "Log out" %}
-        </button>
+        <button class="fr-icon-logout-box-r-line fr-btn" type="submit">{% translate "Log out" %}</button>
       </form>
     {% else %}
       <a class="fr-icon-lock-line fr-btn" href="{% url 'two_factor:login' %}">{% translate "Log in" %}</a>
