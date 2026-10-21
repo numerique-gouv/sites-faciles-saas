@@ -59,14 +59,14 @@ Cette commande peut être passée à chaque mise à jour.
 just createsuperuser
 ```
 
-### Installation de pre-commit
+### Installation de prek
 
-[Pre-commit](https://pre-commit.com/) permet de linter et formater votre code avant chaque commit. Il exécute les commandes définies dans le fichier `.pre-commit-config.yaml`
+[prek](https://prek.j178.dev/) permet de linter et formater votre code avant chaque commit. C’est une alternative plus rapide à pre-commit, qui exécute les commandes définies dans le fichier `.pre-commit-config.yaml`
 
 Pour l’installer :
 
 ```bash
-pre-commit install
+uv run prek install
 ```
 
 Vous pouvez effectuer un premier passage sur tous les fichiers du repo avec :
