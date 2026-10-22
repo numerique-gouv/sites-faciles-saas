@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, FormView
@@ -56,7 +57,7 @@ class EmailConfigCreateView(OTPRequiredStaffOrAdminMixin, CreateView):
         return super().form_valid(form)
 
 
-class EmailConfigDetailView(DetailView):
+class EmailConfigDetailView(OTPRequiredStaffOrAdminMixin, DetailView):
     model = EmailConfig
 
     def get_context_data(self, **kwargs):
@@ -182,17 +183,18 @@ class InstanceActionView(OTPRequiredStaffOrAdminMixin, UpdateView):
         )
 
     def form_valid(self, form):
-        if form.is_valid():
-            result = form.take_action()
+        result = form.take_action()
 
-            if result["status"] == "success":
-                messages.success(self.request, result["message"])
-            elif result["status"] == "warning":
-                messages.warning(self.request, result["message"])
-            else:
-                messages.error(self.request, result["message"])
+        if result["status"] == "success":
+            messages.success(self.request, result["message"])
+        elif result["status"] == "warning":
+            messages.warning(self.request, result["message"])
+        else:
+            messages.error(self.request, result["message"])
 
-        return super().form_valid(form)
+        # The actions save the instance themselves when needed: saving the form
+        # again would push the env variables of finished instances once more
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class InstanceDeleteView(OTPRequiredStaffOrAdminMixin, DeleteView):
@@ -258,12 +260,13 @@ class InstanceMassDeployFormView(OTPRequiredStaffOrAdminMixin, FormView):
             else:
                 messages.error(self.request, result["message"])
 
-        successful_deployments_list = ", ".join(successful_deployments)
+        if successful_deployments:
+            successful_deployments_list = ", ".join(successful_deployments)
 
-        success_message = _("Successful deployments for instances:")
-        messages.success(
-            self.request,
-            f"{success_message} {successful_deployments_list}.",
-        )
+            success_message = _("Successful deployments for instances:")
+            messages.success(
+                self.request,
+                f"{success_message} {successful_deployments_list}.",
+            )
 
         return super().form_valid(form)

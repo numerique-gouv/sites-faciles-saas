@@ -14,10 +14,11 @@ class Command(BaseCommand):
             type=str,
             help="Type of secrets to encode (default: email)",
             choices=ALLOWED_TYPES,
+            default="email",
         )
 
     def handle(self, *args, **kwargs):
-        secrets_type = kwargs.get("type", "email")
+        secrets_type = kwargs.get("type") or "email"
         with open(f".secrets_{secrets_type}.txt", "r") as secrets_file:
             secrets = secrets_file.read()
 
