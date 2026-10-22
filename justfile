@@ -18,7 +18,7 @@ compilemessages:
 coverage app="":
     {{uv_run}} coverage run --source='.' manage.py test {{app}}
     {{uv_run}} coverage html
-    firefox htmlcov/index.html
+    {{uv_run}} python -m webbrowser "file://{{justfile_directory()}}/htmlcov/index.html"
 
 alias cs:=createsuperuser
 createsuperuser:
