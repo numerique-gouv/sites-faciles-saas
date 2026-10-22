@@ -17,6 +17,7 @@ dependencies = [
     "rust-just>=1.39.0",
     "requests>=2.34.2",
     "whitenoise>=6.12.0",
+    "django-otp>=1.7.4",
 ]
 
 [dependency-groups]
