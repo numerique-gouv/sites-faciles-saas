@@ -6,14 +6,16 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.templatetags.static import static
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from contacts.models import Contact
 from core.utils import migrations_applied
 from instances.abstract import BaseModel
-from instances.constants import STATUS_CHOICES, STATUS_DETAILED
+from instances.constants import STATUS_CHOICES, STATUS_DETAILED, STOPPED_PAGES
 from instances.services.alwaysdata import (
     domain_record_add,
     domain_record_check,
@@ -429,6 +431,96 @@ class Instance(BaseModel):
         """
         sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
         return sc.app_restart(app_name=str(self.scalingo_application_name))
+
+    def scalingo_app_stop(self, reason: str) -> dict:
+        """
+        Scale the app to zero containers in Scalingo, and set the page
+        displayed instead of the site according to the reason
+
+        This command can be repeated
+        """
+        if reason not in STOPPED_PAGES:
+            return {
+                "status": "error",
+                "message": "Motif d’arrêt de l’instance invalide.",
+            }
+
+        stopped_page_url = (
+            f"https://{settings.HOST_URL}{static(STOPPED_PAGES[reason]['path'])}"
+        )
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        app_name = str(self.scalingo_application_name)
+
+        result = sc.app_variables_bulk_update(
+            app_name=app_name,
+            variables=[
+                {"name": "SCALINGO_STOPPED_PAGE_URL", "value": stopped_page_url}
+            ],
+        )
+
+        if "error" in result or "errors" in result:
+            error = result.get("error", result.get("errors"))
+            return {
+                "status": "error",
+                "message": _("Scalingo returned the following error: ")
+                + f"<code>{error}</code>",
+            }
+
+        result = sc.app_scale(
+            app_name=app_name, containers=[{"name": "web", "amount": 0}]
+        )
+
+        if result["status"] == "error":
+            return {
+                "status": "error",
+                "message": "Erreur lors de l’arrêt de l’instance dans Scalingo.",
+            }
+
+        return {
+            "status": "success",
+            "message": "Instance arrêtée avec succès dans Scalingo.",
+        }
+
+    def scalingo_app_start(self) -> dict:
+        """
+        Scale the app back to one web container in Scalingo
+
+        This command can be repeated
+        """
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_scale(
+            app_name=str(self.scalingo_application_name),
+            containers=[{"name": "web", "amount": 1}],
+        )
+
+        if result["status"] == "error":
+            return {
+                "status": "error",
+                "message": "Erreur lors de la remise en service de l’instance dans Scalingo.",
+            }
+
+        return {
+            "status": "success",
+            "message": "Instance remise en service avec succès dans Scalingo.",
+        }
+
+    @cached_property
+    def scalingo_web_containers(self) -> int | None:
+        """
+        Returns the number of web containers of the app in Scalingo
+        """
+        if self.status == "REQUEST":
+            return None
+
+        sc = Scalingo(use_secnumcloud=bool(self.use_secnumcloud))
+        result = sc.app_containers(app_name=str(self.scalingo_application_name))
+
+        for container in result.get("containers", []):
+            if container["name"] == "web":
+                return container["amount"]
+
+        return None
 
     def scalingo_app_delete(self):
         """

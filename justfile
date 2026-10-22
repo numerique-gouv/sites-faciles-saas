@@ -89,3 +89,7 @@ restore-local-db:
 [group('Dev DB and medias management')]
 restore-prod-db:
     cd scripts && bash restore_prod_db.sh
+
+# Serve the static pages displayed by Scalingo for stopped instances
+static_pages_server:
+    uv run python -m http.server 1${HOST_PORT} -d core/static/pages/

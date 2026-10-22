@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from contacts.models import Contact
 from core.mixins import OTPRequiredStaffOrAdminMixin
 from core.utils import init_context
+from instances.constants import STOPPED_PAGES_CHOICES
 from instances.forms import (
     EmailConfigForm,
     InstanceActionForm,
@@ -221,6 +222,7 @@ class InstanceDetailView(OTPRequiredStaffOrAdminMixin, DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
+        context["stop_reasons"] = STOPPED_PAGES_CHOICES
         return init_context(
             context=context,
             title=f"Gérer l’instance {self.object.name}",

@@ -16,6 +16,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "rust-just>=1.39.0",
     "requests>=2.34.2",
+    "whitenoise>=6.12.0",
 ]
 
 [dependency-groups]
@@ -56,6 +57,7 @@ DEP002 = [
     "gunicorn",               # WSGI server, run as a subprocess (Procfile), never imported
     "django-csp",             # referenced by string as "csp" in INSTALLED_APPS/MIDDLEWARE
     "psycopg2-binary",        # DB driver loaded by Django from DATABASE_URL, not imported directly
+    "whitenoise",             # referenced by string in MIDDLEWARE
     "rust-just",              # installs the `just` CLI binary, no Python import
 ]
 # Dev-only import, guarded by DEBUG/localhost checks in config/urls.py
@@ -69,6 +71,7 @@ malware-check = true
 line_break_after_multiline_tag = true
 max_blank_lines = 1
 ignore = "H006"
+per-file-ignores = { "core/static/pages/" = "H030" }
 indent = 2
 
 [tool.pyright]
