@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.decorators import login_not_required
 from django.contrib.auth.views import LogoutView
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.urls import include, path
@@ -13,13 +14,17 @@ admin.site.__class__ = AdminSiteOTPRequired
 urlpatterns = [
     path(
         "favicon.ico",
-        RedirectView.as_view(
-            url=staticfiles_storage.url("dsfr/dist/favicon/favicon.ico")
+        login_not_required(
+            RedirectView.as_view(
+                url=staticfiles_storage.url("dsfr/dist/favicon/favicon.ico")
+            )
         ),
     ),
     path(
         "robots.txt",
-        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+        login_not_required(
+            TemplateView.as_view(template_name="robots.txt", content_type="text/plain")
+        ),
     ),
     path("account/logout/", LogoutView.as_view(), name="logout"),
     path("contacts/", include("contacts.urls")),

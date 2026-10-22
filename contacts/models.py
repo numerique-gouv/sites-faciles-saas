@@ -18,10 +18,7 @@ class Contact(models.Model):
 
     @property
     def full_name(self):
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        else:
-            return ""
+        return f"{self.first_name} {self.last_name}".strip()
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"

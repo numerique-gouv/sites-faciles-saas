@@ -18,13 +18,13 @@ compilemessages:
 coverage app="":
     {{uv_run}} coverage run --source='.' manage.py test {{app}}
     {{uv_run}} coverage html
-    firefox htmlcov/index.html
+    {{uv_run}} python -m webbrowser "file://{{justfile_directory()}}/htmlcov/index.html"
 
 alias cs:=createsuperuser
 createsuperuser:
     {{uv_run}} python manage.py createsuperuser
 
-encode_secrets type="":
+encode_secrets type="email":
     {{uv_run}} python manage.py encode_secrets --type {{type}}
 
 alias mess:=makemessages

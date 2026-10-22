@@ -25,6 +25,11 @@ from instances.services.scalingo import Scalingo
 from instances.utils import decode_secrets
 
 
+def remove_empty_variables(env_variables: list) -> list:
+    # False is a meaningful value (e.g. EMAIL_USE_TLS), only drop missing ones
+    return [{**row} for row in env_variables if row["value"] not in (None, "")]
+
+
 class EmailConfig(BaseModel):
     """
     Secrets are stored in an environment variable
@@ -329,8 +334,7 @@ class Instance(BaseModel):
                 },
             ]
 
-        # Remove empty variables
-        env_variables = [{**row} for row in env_variables if row["value"]]
+        env_variables = remove_empty_variables(env_variables)
 
         return sorted(env_variables, key=lambda d: d["name"])
 
@@ -610,7 +614,10 @@ class Instance(BaseModel):
         )
 
         if "error" in result:
-            return f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
+            return {
+                "status": "error",
+                "badge": f'<p class="fr-badge fr-badge--error">{result["error"]}</p>',
+            }
         else:
             status = result["addon"]["status"]
             if status == "provisioning":
@@ -689,8 +696,7 @@ class Instance(BaseModel):
                 },
             ]
 
-        # Remove empty variables
-        env_variables = [{**row} for row in env_variables if row["value"]]
+        env_variables = remove_empty_variables(env_variables)
 
         result = sc.app_variables_bulk_update(
             app_name=str(self.scalingo_application_name), variables=env_variables
@@ -731,7 +737,6 @@ class Instance(BaseModel):
                 + f"<code>{result['error']}</code>",
             }
         else:
-            self.status = "SF_INITIAL_DATA_DEPLOYED"
             return {
                 "status": "success",
                 "message": _("Initial data deployment requested"),
@@ -782,6 +787,11 @@ class Instance(BaseModel):
             badge = f'<p class="fr-badge fr-badge--error">{result["error"]}</p>'
             date = _("Unknown")
             status = "error"
+            log_url = None
+        elif not result.get("deployments"):
+            badge = '<span class="fr-badge">Aucun déploiement</span>'
+            date = _("Unknown")
+            status = "none"
             log_url = None
         else:
             status = result["deployments"][0]["status"]
@@ -851,6 +861,7 @@ class Instance(BaseModel):
             }
         else:
             self.status = "FINISHED"
+            self.save()
             return {
                 "status": "success",
                 "message": f"{gettext('Account creation requested for users:')} {self.main_contact.email}, {sf_infra_email}.",

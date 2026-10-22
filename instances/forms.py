@@ -38,9 +38,10 @@ class InstanceForm(ModelForm, DsfrBaseForm):
         ]
 
     def clean_allowed_hosts(self):
-        host_url = self.cleaned_data["host_url"]
+        host_url = self.cleaned_data.get("host_url")
         allowed_hosts = self.cleaned_data["allowed_hosts"]
-        if host_url not in allowed_hosts.split(","):
+        # host_url has its own error if it failed validation
+        if host_url is not None and host_url not in allowed_hosts.split(","):
             raise ValidationError(
                 _(
                     "The value of this field must include the value defined in the field 'Main URL domain'."
@@ -62,7 +63,8 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
         action = self.cleaned_data["action"]
         if action == "create_app_and_subdomain":
             main_command = self.instance.scalingo_create_app()
-            self.instance.alwaysdata_scalingo_set_subdomain()
+            if main_command["status"] == "success":
+                self.instance.alwaysdata_scalingo_set_subdomain()
             return main_command
         elif action == "scalingo_provision_db":
             return self.instance.scalingo_provision_db()
@@ -80,13 +82,22 @@ class InstanceActionForm(ModelForm, DsfrBaseForm):
             return self.instance.scalingo_app_stop(self.cleaned_data["stop_reason"])
         elif action == "scalingo_app_start":
             return self.instance.scalingo_app_start()
+        else:
+            return {
+                "status": "error",
+                "message": "Action inconnue.",
+            }
 
 
 class InstanceMassDeployForm(DsfrBaseForm):
     instances = forms.ModelMultipleChoiceField(
         queryset=Instance.get_deployable_instances(),
         widget=forms.CheckboxSelectMultiple,
-        initial=list(
-            Instance.get_auto_deployable_instances().values_list("id", flat=True)
-        ),
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Computed per form, as instances can be added after startup
+        self.fields["instances"].initial = list(
+            Instance.get_auto_deployable_instances().values_list("id", flat=True)
+        )

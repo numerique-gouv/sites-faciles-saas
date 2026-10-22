@@ -71,7 +71,7 @@ class Command(BaseCommand):
         if not emails:
             emails = settings.SF_ADMIN_EMAILS
 
-        return emails.split(",")
+        return [email.strip() for email in emails.split(",") if email.strip()]
 
     def get_snc_options(self, instances) -> list:
         snc_options = []

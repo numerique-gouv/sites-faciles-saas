@@ -17,11 +17,13 @@ dependencies = [
     "rust-just>=1.39.0",
     "requests>=2.34.2",
     "whitenoise>=6.12.0",
+    "django-otp>=1.7.4",
 ]
 
 [dependency-groups]
 dev = [
     "black>=24.10.0",
+    "coverage>=7.16.2",
     "deptry>=0.25.1",
     "django-debug-toolbar>=4.4.6",
     "djlint>=1.36.4",
@@ -38,6 +40,24 @@ exclude-newer = "7 days"
 # exclude-newer-package = { django = false }
 # certifi: GHSA-6q48-6c7w-9gw2, fixed in 2026.10.19 (remove after 2026-10-26)
 exclude-newer-package = { certifi = false }
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+    "*/tests.py",
+    "*/apps.py",
+    "*/migrations/*",
+    "*manage.py",
+    "*__init__.py",
+    "/factories.py",
+    "*/settings/*",
+    "*asgi*",
+    "*wsgi*",
+    "*/admin.py",
+    "*/urls.py",
+    "*/management/commands/*",
+]
+
 
 [tool.deptry]
 # Migrations only re-import what the corresponding models.py already imports.
